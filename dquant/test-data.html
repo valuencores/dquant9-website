@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터 테스트</title>
+</head>
+<body>
+    <h1>회원 데이터 테스트</h1>
+    <div id="result"></div>
+    <div id="members"></div>
+
+    <script>
+        async function testData() {
+            try {
+                console.log('데이터 로딩 시작...');
+                const response = await fetch('../tables/members_v2?limit=1000');
+                const result = await response.json();
+                
+                document.getElementById('result').innerHTML = `
+                    <h2>API 응답 성공!</h2>
+                    <p>회원 수: ${result.data ? result.data.length : 0}명</p>
+                    <pre>${JSON.stringify(result, null, 2)}</pre>
+                `;
+                
+                if (result.data && result.data.length > 0) {
+                    const membersList = result.data.map((m, i) => `
+                        <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+                            <strong>${i + 1}. ${m.memberName || m.name}</strong><br>
+                            이메일: ${m.email}<br>
+                            투자금액: ${(m.investmentAmount || 0).toLocaleString()}원<br>
+                            레벨: ${m.investorLevel || 'N/A'}
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById('members').innerHTML = `<h2>회원 목록</h2>${membersList}`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h2 style="color: red;">오류 발생!</h2>
+                    <p>${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
+                console.error('오류:', error);
+            }
+        }
+        
+        testData();
+    </script>
+</body>
+</html>

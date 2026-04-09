@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도메인 연결 테스트 - D-QUANT 9.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00F2FF 0%, #0099FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #b0b0b0;
+            font-size: 1rem;
+        }
+        
+        .status-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 242, 255, 0.05);
+            border-left: 4px solid #00F2FF;
+            border-radius: 8px;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-label {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+        
+        .status-value {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .status-success {
+            color: #10b981;
+        }
+        
+        .status-pending {
+            color: #f59e0b;
+        }
+        
+        .status-error {
+            color: #ef4444;
+        }
+        
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.1) 0%, rgba(0, 153, 255, 0.1) 100%);
+            color: #00F2FF;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.2) 0%, rgba(0, 153, 255, 0.2) 100%);
+            border-color: #00F2FF;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 242, 255, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00F2FF 0%, #0099FF 100%);
+            color: #0a0a0a;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #00D9E6 0%, #0088EE 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 242, 255, 0.4);
+        }
+        
+        .info-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+        }
+        
+        .info-box h3 {
+            color: #10b981;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-box p {
+            color: #b0b0b0;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .url-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .url-list li {
+            padding: 0.5rem 0;
+            color: #00F2FF;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .btn-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">D-QUANT 9.0</div>
+            <div class="subtitle">도메인 연결 상태 테스트</div>
+        </div>
+        
+        <div class="status-section">
+            <h2 style="color: #00F2FF; margin-bottom: 1rem; font-size: 1.3rem;">🌐 연결 상태</h2>
+            
+            <div class="status-item">
+                <span class="status-label">도메인:</span>
+                <span class="status-value" id="domain">www.dquant9.com</span>
+            </div>
+            
+            <div class="status-item">
+                <span class="status-label">접속 경로:</span>
+                <span class="status-value" id="currentPath" style="font-family: 'Courier New', monospace; font-size: 0.85rem;">-</span>
+            </div>
+            
+            <div class="status-item">
+                <span class="status-label">프로토콜:</span>
+                <span class="status-value status-success" id="protocol">-</span>
+            </div>
+            
+            <div class="status-item">
+                <span class="status-label">상태:</span>
+                <span class="status-value status-success" id="status">✅ 정상 작동</span>
+            </div>
+            
+            <div class="status-item">
+                <span class="status-label">서버 시간:</span>
+                <span class="status-value" id="serverTime">-</span>
+            </div>
+        </div>
+        
+        <div class="btn-group">
+            <a href="/dquant/index.html" class="btn btn-primary">🏠 메인 페이지</a>
+            <a href="/dquant/admin-login.html" class="btn">👔 관리자 로그인</a>
+            <a href="/dquant/signup.html" class="btn">✍️ 회원가입</a>
+            <a href="Documentation/DOMAIN_SETUP_GUIDE.md" class="btn">📖 도메인 가이드</a>
+        </div>
+        
+        <div class="info-box">
+            <h3>✅ 도메인 연결 성공!</h3>
+            <p>
+                <strong>www.dquant9.com</strong>이 정상적으로 연결되었습니다.<br>
+                아래 링크를 통해 각 페이지에 접속할 수 있습니다.
+            </p>
+            
+            <ul class="url-list">
+                <li>📱 사용자 페이지: /dquant/index.html</li>
+                <li>👔 관리자 대시보드: /dquant/admin-dashboard.html</li>
+                <li>✍️ 회원가입: /dquant/signup.html</li>
+                <li>🔐 로그인: /dquant/login.html</li>
+            </ul>
+            
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #707070;">
+                💡 도메인 루트 (/) 접속 시 자동으로 메인 페이지로 리다이렉트됩니다.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // 현재 URL 정보 표시
+        document.addEventListener('DOMContentLoaded', function() {
+            const protocol = window.location.protocol.replace(':', '');
+            const currentPath = window.location.pathname;
+            const hostname = window.location.hostname;
+            
+            document.getElementById('domain').textContent = hostname;
+            document.getElementById('currentPath').textContent = currentPath || '/';
+            document.getElementById('protocol').textContent = protocol.toUpperCase() + (protocol === 'https' ? ' 🔒' : '');
+            
+            // 서버 시간 표시
+            const now = new Date();
+            const timeString = now.toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            document.getElementById('serverTime').textContent = timeString;
+            
+            // 프로토콜 체크
+            if (protocol !== 'https') {
+                document.getElementById('protocol').classList.remove('status-success');
+                document.getElementById('protocol').classList.add('status-pending');
+            }
+        });
+    </script>
+</body>
+</html>

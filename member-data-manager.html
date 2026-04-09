@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 데이터 관리 도구</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #12162e 100%);
+            color: #ffffff;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(18, 22, 46, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        h1 {
+            color: #00f2ff;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            color: #00ff88;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .section {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #f43f5e, #ff6b35);
+            color: white;
+        }
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: #0a0e27;
+        }
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+        }
+        .error {
+            background: rgba(244, 63, 94, 0.2);
+            border: 1px solid #f43f5e;
+        }
+        .info {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid #a855f7;
+        }
+        .warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid #f59e0b;
+        }
+        pre {
+            background: #0a0e27;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        .member-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .member-item {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛠️ 회원 데이터 관리 도구</h1>
+        
+        <!-- localStorage 관리 -->
+        <div class="section">
+            <h2>📦 localStorage 데이터</h2>
+            <p>브라우저에 임시 저장된 회원 데이터를 관리합니다.</p>
+            
+            <button class="btn" onclick="checkLocalStorage()">localStorage 확인</button>
+            <button class="btn btn-danger" onclick="clearLocalStorage()">localStorage 전체 삭제</button>
+            <button class="btn btn-warning" onclick="clearSpecificEmail()">특정 이메일 삭제</button>
+            
+            <div id="localStorageResult"></div>
+        </div>
+
+        <!-- DB 데이터 관리 -->
+        <div class="section">
+            <h2>💾 DB 데이터</h2>
+            <p>실제 데이터베이스에 저장된 회원 데이터를 관리합니다.</p>
+            
+            <input type="email" id="searchEmail" placeholder="검색할 이메일 (예: crenah@naver.com)">
+            <button class="btn" onclick="checkDB()">DB 조회</button>
+            <button class="btn btn-danger" onclick="deleteFromDB()">DB에서 삭제</button>
+            
+            <div id="dbResult"></div>
+        </div>
+
+        <!-- 완전 초기화 -->
+        <div class="section">
+            <h2>🔥 완전 초기화</h2>
+            <p style="color: #f43f5e;">⚠️ 주의: 모든 회원 데이터가 삭제됩니다!</p>
+            
+            <button class="btn btn-danger" onclick="resetAll()">모든 데이터 삭제 (localStorage + DB)</button>
+        </div>
+    </div>
+
+    <script>
+        // localStorage 확인
+        function checkLocalStorage() {
+            const resultDiv = document.getElementById('localStorageResult');
+            const membersData = localStorage.getItem('members_v2');
+            
+            if (!membersData) {
+                resultDiv.innerHTML = '<div class="info result">📭 localStorage에 저장된 회원 데이터가 없습니다.</div>';
+                return;
+            }
+            
+            try {
+                const members = JSON.parse(membersData);
+                
+                let html = `<div class="success result">
+                    <h3>✅ localStorage에 ${members.length}명의 회원이 있습니다.</h3>
+                    <div class="member-list">`;
+                
+                members.forEach((member, index) => {
+                    html += `
+                        <div class="member-item">
+                            <div>
+                                <strong>${index + 1}. ${member.memberName || 'N/A'}</strong><br>
+                                ${member.email || 'N/A'}
+                            </div>
+                            <button class="btn" onclick="deleteMemberByIndex(${index})">삭제</button>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div>`;
+                resultDiv.innerHTML = html;
+                
+            } catch (e) {
+                resultDiv.innerHTML = `<div class="error result">❌ 데이터 파싱 오류: ${e.message}</div>`;
+            }
+        }
+
+        // localStorage 전체 삭제
+        function clearLocalStorage() {
+            if (confirm('⚠️ localStorage의 모든 회원 데이터를 삭제하시겠습니까?')) {
+                localStorage.removeItem('members_v2');
+                document.getElementById('localStorageResult').innerHTML = 
+                    '<div class="success result">✅ localStorage가 삭제되었습니다.</div>';
+                console.log('✅ localStorage 삭제 완료');
+            }
+        }
+
+        // 특정 이메일 삭제
+        function clearSpecificEmail() {
+            const email = prompt('삭제할 이메일을 입력하세요:');
+            if (!email) return;
+            
+            const membersData = localStorage.getItem('members_v2');
+            if (!membersData) {
+                alert('저장된 데이터가 없습니다.');
+                return;
+            }
+            
+            try {
+                let members = JSON.parse(membersData);
+                const originalLength = members.length;
+                members = members.filter(m => m.email !== email);
+                
+                if (members.length < originalLength) {
+                    localStorage.setItem('members_v2', JSON.stringify(members));
+                    alert(`✅ ${email}이 삭제되었습니다.`);
+                    checkLocalStorage();
+                } else {
+                    alert(`❌ ${email}을 찾을 수 없습니다.`);
+                }
+            } catch (e) {
+                alert('오류: ' + e.message);
+            }
+        }
+
+        // 인덱스로 회원 삭제
+        function deleteMemberByIndex(index) {
+            const membersData = localStorage.getItem('members_v2');
+            if (!membersData) return;
+            
+            try {
+                let members = JSON.parse(membersData);
+                const removed = members.splice(index, 1);
+                localStorage.setItem('members_v2', JSON.stringify(members));
+                alert(`✅ ${removed[0].memberName} (${removed[0].email})이 삭제되었습니다.`);
+                checkLocalStorage();
+            } catch (e) {
+                alert('오류: ' + e.message);
+            }
+        }
+
+        // DB 조회
+        async function checkDB() {
+            const email = document.getElementById('searchEmail').value.trim();
+            const resultDiv = document.getElementById('dbResult');
+            
+            if (!email) {
+                resultDiv.innerHTML = '<div class="error result">❌ 이메일을 입력해주세요.</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="info result">🔄 조회 중...</div>';
+            
+            try {
+                const response = await fetch(`tables/members_v2?search=${encodeURIComponent(email)}&limit=100`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                console.log('DB 조회 결과:', result);
+                
+                if (!result.data || result.data.length === 0) {
+                    resultDiv.innerHTML = `
+                        <div class="info result">
+                            <h3>📭 DB에 해당 회원이 없습니다.</h3>
+                            <p>이메일: ${email}</p>
+                            <p>✅ 이제 회원가입이 가능합니다!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = `<div class="warning result">
+                    <h3>⚠️ DB에 ${result.data.length}건의 일치하는 회원이 있습니다.</h3>`;
+                
+                result.data.forEach((member, index) => {
+                    html += `
+                        <div style="margin: 1rem 0; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                            <p><strong>ID:</strong> ${member.id}</p>
+                            <p><strong>성명:</strong> ${member.memberName}</p>
+                            <p><strong>이메일:</strong> ${member.email}</p>
+                            <p><strong>가입일:</strong> ${new Date(member.signupDate).toLocaleString('ko-KR')}</p>
+                            <button class="btn btn-danger" onclick="deleteFromDBById('${member.id}', '${member.email}')">이 회원 삭제</button>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+                resultDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('DB 조회 오류:', error);
+                resultDiv.innerHTML = `
+                    <div class="error result">
+                        <h3>❌ DB 조회 실패</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // DB에서 삭제 (이메일 검색)
+        async function deleteFromDB() {
+            const email = document.getElementById('searchEmail').value.trim();
+            
+            if (!email) {
+                alert('이메일을 입력해주세요.');
+                return;
+            }
+            
+            if (!confirm(`⚠️ 정말로 "${email}" 회원을 DB에서 삭제하시겠습니까?`)) {
+                return;
+            }
+            
+            try {
+                // 먼저 회원 정보 조회
+                const response = await fetch(`tables/members_v2?search=${encodeURIComponent(email)}&limit=100`);
+                const result = await response.json();
+                
+                if (!result.data || result.data.length === 0) {
+                    alert('해당 이메일의 회원이 없습니다.');
+                    return;
+                }
+                
+                // 각 회원 삭제
+                for (const member of result.data) {
+                    await deleteFromDBById(member.id, member.email, false);
+                }
+                
+                alert(`✅ ${result.data.length}명의 회원이 삭제되었습니다.`);
+                checkDB();
+                
+            } catch (error) {
+                alert('삭제 중 오류: ' + error.message);
+            }
+        }
+
+        // DB에서 ID로 삭제
+        async function deleteFromDBById(id, email, showAlert = true) {
+            try {
+                const response = await fetch(`tables/members_v2/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`삭제 실패 (${response.status})`);
+                }
+                
+                console.log(`✅ DB에서 삭제 완료: ${email} (ID: ${id})`);
+                
+                if (showAlert) {
+                    alert(`✅ ${email} 회원이 DB에서 삭제되었습니다.`);
+                    checkDB();
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('삭제 오류:', error);
+                if (showAlert) {
+                    alert('삭제 중 오류: ' + error.message);
+                }
+                return false;
+            }
+        }
+
+        // 모든 데이터 초기화
+        async function resetAll() {
+            if (!confirm('⚠️⚠️⚠️ 경고!\n\nlocalStorage와 DB의 모든 회원 데이터가 삭제됩니다.\n정말로 진행하시겠습니까?')) {
+                return;
+            }
+            
+            if (!confirm('정말로 진행하시겠습니까? (최종 확인)')) {
+                return;
+            }
+            
+            try {
+                // 1. localStorage 삭제
+                localStorage.removeItem('members_v2');
+                console.log('✅ localStorage 삭제 완료');
+                
+                // 2. DB 전체 조회
+                const response = await fetch('tables/members_v2?limit=1000');
+                const result = await response.json();
+                
+                if (result.data && result.data.length > 0) {
+                    // 3. 모든 회원 삭제
+                    for (const member of result.data) {
+                        await deleteFromDBById(member.id, member.email, false);
+                    }
+                    console.log(`✅ DB에서 ${result.data.length}명 삭제 완료`);
+                }
+                
+                alert('✅ 모든 데이터가 삭제되었습니다.');
+                checkLocalStorage();
+                document.getElementById('dbResult').innerHTML = '';
+                
+            } catch (error) {
+                alert('초기화 중 오류: ' + error.message);
+            }
+        }
+
+        // 페이지 로드 시 자동 확인
+        window.addEventListener('DOMContentLoaded', () => {
+            checkLocalStorage();
+        });
+    </script>
+</body>
+</html>

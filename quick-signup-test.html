@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>간편 회원가입 테스트</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #12162e 100%);
+            color: #ffffff;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(18, 22, 46, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 15px 50px rgba(0, 242, 255, 0.15);
+        }
+        h1 {
+            color: #00f2ff;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        input:focus {
+            outline: none;
+            border-color: #00f2ff;
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+        }
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            display: block;
+        }
+        .error {
+            background: rgba(244, 63, 94, 0.2);
+            border: 1px solid #f43f5e;
+            display: block;
+        }
+        .info {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        pre {
+            background: #0a0e27;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 간편 회원가입 테스트</h1>
+        
+        <div class="info">
+            <strong>✅ 테스트 목적:</strong><br>
+            최소한의 정보로 DB 저장을 테스트합니다.<br>
+            성공하면 전체 회원가입 폼도 정상 작동합니다.
+        </div>
+        
+        <form id="quickSignupForm">
+            <div class="form-group">
+                <label>이메일 *</label>
+                <input type="email" id="email" placeholder="crenah@daum.net" required>
+            </div>
+            
+            <div class="form-group">
+                <label>성명 *</label>
+                <input type="text" id="name" placeholder="나성수" required>
+            </div>
+            
+            <div class="form-group">
+                <label>비밀번호 *</label>
+                <input type="password" id="password" placeholder="비밀번호 입력" required>
+            </div>
+            
+            <div class="form-group">
+                <label>전화번호 *</label>
+                <input type="tel" id="phone" placeholder="010-1234-5678" required>
+            </div>
+            
+            <button type="submit" class="btn" id="submitBtn">회원가입 테스트</button>
+        </form>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('quickSignupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const resultDiv = document.getElementById('result');
+            
+            // 버튼 비활성화
+            submitBtn.disabled = true;
+            submitBtn.textContent = '처리 중...';
+            
+            // 입력값 수집
+            const email = document.getElementById('email').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const password = document.getElementById('password').value;
+            const phone = document.getElementById('phone').value.trim();
+            
+            // 회원가입일자 생성 (한국 시간 기준)
+            const now = new Date();
+            const signupDate = now.toISOString(); // ISO 8601 형식
+            
+            // 회원 데이터 구성
+            const memberData = {
+                signupDate: signupDate,  // 필수: 회원가입일자
+                memberName: name,
+                idNumber: '000000-0',  // 테스트용 기본값
+                email: email,
+                phoneNumber: phone,
+                address: '테스트 주소',
+                referrer: '디퀀트나인',
+                password: password,
+                investmentDate: null,
+                investmentAmount: 0,
+                dividendRate: '2.0%',
+                investorLevel: 'Starter',
+                investmentMonths: 0,
+                accumulatedDividend: 0,
+                notes: `간편 테스트 가입 (${now.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })})`
+            };
+            
+            console.log('📅 회원가입일자:', signupDate);
+            console.log('📅 한국시간:', now.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }));
+            console.log('📤 전송할 데이터:', memberData);
+            
+            try {
+                // 1단계: 중복 확인
+                console.log('1️⃣ 이메일 중복 확인...');
+                const checkResponse = await fetch(`tables/members_v2?search=${encodeURIComponent(email)}&limit=1`);
+                
+                console.log('중복 확인 응답 상태:', checkResponse.status);
+                
+                if (checkResponse.ok) {
+                    const checkResult = await checkResponse.json();
+                    console.log('중복 확인 결과:', checkResult);
+                    
+                    if (checkResult.data && checkResult.data.length > 0) {
+                        throw new Error('이미 등록된 이메일입니다.');
+                    }
+                }
+                
+                // 2단계: DB에 저장
+                console.log('2️⃣ DB에 저장 중...');
+                const response = await fetch('tables/members_v2', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(memberData)
+                });
+                
+                console.log('저장 응답 상태:', response.status);
+                console.log('저장 응답 헤더:', [...response.headers.entries()]);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('저장 실패 응답:', errorText);
+                    throw new Error(`DB 저장 실패 (${response.status}): ${errorText}`);
+                }
+                
+                const savedMember = await response.json();
+                console.log('✅ 저장 성공:', savedMember);
+                
+                // 성공 메시지
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `
+                    <h3>✅ 회원가입 성공!</h3>
+                    <p><strong>ID:</strong> ${savedMember.id}</p>
+                    <p><strong>이메일:</strong> ${savedMember.email}</p>
+                    <p><strong>성명:</strong> ${savedMember.memberName}</p>
+                    <p><strong>가입일:</strong> ${new Date(savedMember.signupDate).toLocaleString('ko-KR')}</p>
+                    <p style="margin-top: 1rem; color: #00ff88;">
+                        🎉 이제 메인 페이지에서 로그인이 가능합니다!
+                    </p>
+                    <pre>${JSON.stringify(savedMember, null, 2)}</pre>
+                `;
+                
+                // 폼 초기화
+                document.getElementById('quickSignupForm').reset();
+                
+            } catch (error) {
+                console.error('❌ 오류 발생:', error);
+                
+                // 오류 메시지
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ 오류 발생</h3>
+                    <p><strong>메시지:</strong> ${error.message}</p>
+                    <p><strong>상세 정보:</strong></p>
+                    <pre>${error.stack || '스택 정보 없음'}</pre>
+                    <p style="margin-top: 1rem;">
+                        <strong>해결 방법:</strong><br>
+                        1. 브라우저 콘솔(F12)에서 상세 로그 확인<br>
+                        2. API 서버 실행 여부 확인<br>
+                        3. 네트워크 탭에서 요청/응답 확인
+                    </p>
+                `;
+            } finally {
+                // 버튼 활성화
+                submitBtn.disabled = false;
+                submitBtn.textContent = '회원가입 테스트';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 기능 테스트</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #12162e 100%);
+            color: #ffffff;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(18, 22, 46, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        h1 {
+            color: #00f2ff;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            color: #00ff88;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .test-section {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        .btn {
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem 0;
+            font-size: 1rem;
+            width: 100%;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+        .error {
+            background: rgba(244, 63, 94, 0.2);
+            border: 1px solid #f43f5e;
+            color: #f43f5e;
+        }
+        .info {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid #a855f7;
+            color: #a855f7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 회원가입 기능 테스트</h1>
+        
+        <!-- 비밀번호 확인 테스트 -->
+        <div class="test-section">
+            <h2>1️⃣ 비밀번호 확인 기능 테스트</h2>
+            <input type="password" id="password" placeholder="비밀번호 입력">
+            <input type="password" id="passwordConfirm" placeholder="비밀번호 확인">
+            <div id="passwordMessage" class="message" style="display:none;"></div>
+        </div>
+
+        <!-- 이메일 확인 테스트 -->
+        <div class="test-section">
+            <h2>2️⃣ 이메일 형식 및 중복 확인 테스트</h2>
+            <input type="email" id="email" placeholder="이메일 입력 (예: test@example.com)">
+            <button class="btn" onclick="checkEmail()">이메일 확인</button>
+            <div id="emailMessage" class="message" style="display:none;"></div>
+        </div>
+
+        <!-- 인증코드 테스트 -->
+        <div class="test-section">
+            <h2>3️⃣ 인증코드 전송 및 확인 테스트</h2>
+            <input type="email" id="emailForCode" placeholder="이메일 입력" value="test@example.com">
+            <button class="btn" onclick="sendCode()">인증코드 전송</button>
+            <input type="text" id="code" placeholder="인증코드 입력" maxlength="6">
+            <button class="btn" onclick="verifyCode()">인증코드 확인</button>
+            <div id="codeMessage" class="message" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // 전역 변수
+        let verificationCode = '';
+        
+        // DOM 로드 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ DOM 로드 완료');
+            
+            // 1. 비밀번호 확인 기능
+            const passwordInput = document.getElementById('password');
+            const passwordConfirmInput = document.getElementById('passwordConfirm');
+            const passwordMessage = document.getElementById('passwordMessage');
+            
+            function checkPasswordMatch() {
+                const password = passwordInput.value;
+                const confirmPassword = passwordConfirmInput.value;
+                
+                if (confirmPassword === '') {
+                    passwordMessage.style.display = 'none';
+                    return;
+                }
+                
+                passwordMessage.style.display = 'block';
+                if (password === confirmPassword) {
+                    passwordMessage.textContent = '✅ 비밀번호가 일치합니다.';
+                    passwordMessage.className = 'message success';
+                } else {
+                    passwordMessage.textContent = '❌ 비밀번호가 일치하지 않습니다.';
+                    passwordMessage.className = 'message error';
+                }
+            }
+            
+            passwordInput.addEventListener('input', checkPasswordMatch);
+            passwordConfirmInput.addEventListener('input', checkPasswordMatch);
+            
+            console.log('✅ 비밀번호 확인 이벤트 리스너 등록 완료');
+        });
+        
+        // 2. 이메일 확인 함수
+        function checkEmail() {
+            console.log('🔍 이메일 확인 함수 호출됨');
+            
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim();
+            const messageEl = document.getElementById('emailMessage');
+            
+            messageEl.style.display = 'block';
+            
+            if (!email) {
+                messageEl.textContent = '❌ 이메일을 입력해주세요.';
+                messageEl.className = 'message error';
+                return;
+            }
+            
+            // 이메일 형식 검증
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                messageEl.textContent = '❌ 올바른 이메일 형식이 아닙니다.';
+                messageEl.className = 'message error';
+                return;
+            }
+            
+            // localStorage 중복 확인
+            try {
+                const membersData = localStorage.getItem('members_v2');
+                let members = [];
+                
+                if (membersData) {
+                    members = JSON.parse(membersData);
+                }
+                
+                const isDuplicate = members.some(m => m.email === email);
+                
+                if (isDuplicate) {
+                    messageEl.textContent = '❌ 이미 등록된 이메일입니다.';
+                    messageEl.className = 'message error';
+                } else {
+                    messageEl.textContent = '✅ 사용 가능한 이메일입니다.';
+                    messageEl.className = 'message success';
+                }
+            } catch (error) {
+                console.error('이메일 확인 오류:', error);
+                messageEl.textContent = '⚠️ 확인 중 오류가 발생했습니다.';
+                messageEl.className = 'message error';
+            }
+        }
+        
+        // 3. 인증코드 전송 함수
+        function sendCode() {
+            console.log('📧 인증코드 전송 함수 호출됨');
+            
+            const emailInput = document.getElementById('emailForCode');
+            const email = emailInput.value.trim();
+            const messageEl = document.getElementById('codeMessage');
+            
+            if (!email) {
+                alert('이메일을 입력해주세요.');
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('올바른 이메일 형식을 입력해주세요.');
+                return;
+            }
+            
+            // 테스트용 인증코드 생성 (6자리)
+            verificationCode = String(Math.floor(100000 + Math.random() * 900000));
+            
+            messageEl.style.display = 'block';
+            messageEl.textContent = `✅ 인증코드가 발송되었습니다.\n테스트용 코드: ${verificationCode}`;
+            messageEl.className = 'message info';
+            
+            console.log('📧 생성된 인증코드:', verificationCode);
+            
+            // 테스트를 위해 자동으로 입력
+            document.getElementById('code').value = verificationCode;
+        }
+        
+        // 4. 인증코드 확인 함수
+        function verifyCode() {
+            console.log('🔐 인증코드 확인 함수 호출됨');
+            
+            const codeInput = document.getElementById('code');
+            const code = codeInput.value.trim();
+            const messageEl = document.getElementById('codeMessage');
+            
+            messageEl.style.display = 'block';
+            
+            if (!code) {
+                messageEl.textContent = '❌ 인증코드를 입력해주세요.';
+                messageEl.className = 'message error';
+                return;
+            }
+            
+            if (!verificationCode) {
+                messageEl.textContent = '❌ 먼저 인증코드를 전송해주세요.';
+                messageEl.className = 'message error';
+                return;
+            }
+            
+            if (code === verificationCode) {
+                messageEl.textContent = '✅ 인증코드가 일치합니다!';
+                messageEl.className = 'message success';
+            } else {
+                messageEl.textContent = `❌ 인증코드가 일치하지 않습니다.\n입력: ${code}, 정답: ${verificationCode}`;
+                messageEl.className = 'message error';
+            }
+        }
+    </script>
+</body>
+</html>

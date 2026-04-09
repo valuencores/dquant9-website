@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 문제 진단 도구</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #12162e 100%);
+            color: #ffffff;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(18, 22, 46, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        h1 {
+            color: #00f2ff;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            color: #00ff88;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .test-section {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+        }
+        .error {
+            background: rgba(244, 63, 94, 0.2);
+            border: 1px solid #f43f5e;
+        }
+        .info {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid #a855f7;
+        }
+        pre {
+            background: #0a0e27;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.85rem;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-ok {
+            background: #10b981;
+        }
+        .status-error {
+            background: #f43f5e;
+        }
+        .status-unknown {
+            background: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 회원가입 문제 진단 도구</h1>
+        
+        <!-- API 연결 테스트 -->
+        <div class="test-section">
+            <h2>1️⃣ API 연결 테스트</h2>
+            <p>API 서버에 접근 가능한지 확인합니다.</p>
+            <button class="btn" onclick="testAPIConnection()">API 연결 테스트</button>
+            <div id="apiResult"></div>
+        </div>
+
+        <!-- GET 요청 테스트 -->
+        <div class="test-section">
+            <h2>2️⃣ GET 요청 테스트</h2>
+            <p>회원 목록 조회가 가능한지 확인합니다.</p>
+            <button class="btn" onclick="testGET()">GET 요청 테스트</button>
+            <div id="getResult"></div>
+        </div>
+
+        <!-- POST 요청 테스트 -->
+        <div class="test-section">
+            <h2>3️⃣ POST 요청 테스트</h2>
+            <p>회원 등록이 가능한지 확인합니다.</p>
+            <button class="btn" onclick="testPOST()">POST 요청 테스트</button>
+            <div id="postResult"></div>
+        </div>
+
+        <!-- 진단 결과 -->
+        <div class="test-section">
+            <h2>📊 전체 진단 실행</h2>
+            <p>모든 테스트를 순차적으로 실행합니다.</p>
+            <button class="btn" onclick="runFullDiagnostics()">전체 진단 시작</button>
+            <div id="diagnosticsResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // API 연결 테스트
+        async function testAPIConnection() {
+            const resultDiv = document.getElementById('apiResult');
+            resultDiv.innerHTML = '<div class="info result">🔄 테스트 중...</div>';
+            
+            try {
+                // 단순 fetch 시도
+                const response = await fetch('tables/members_v2?limit=1');
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success result">
+                            <h3><span class="status-indicator status-ok"></span>✅ API 연결 성공</h3>
+                            <p><strong>상태 코드:</strong> ${response.status} ${response.statusText}</p>
+                            <p><strong>URL:</strong> ${response.url}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error result">
+                            <h3><span class="status-indicator status-error"></span>❌ API 연결 실패</h3>
+                            <p><strong>상태 코드:</strong> ${response.status} ${response.statusText}</p>
+                            <p><strong>URL:</strong> ${response.url}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error result">
+                        <h3><span class="status-indicator status-error"></span>❌ 네트워크 오류</h3>
+                        <p><strong>오류:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // GET 요청 테스트
+        async function testGET() {
+            const resultDiv = document.getElementById('getResult');
+            resultDiv.innerHTML = '<div class="info result">🔄 GET 요청 중...</div>';
+            
+            try {
+                const response = await fetch('tables/members_v2?limit=5');
+                
+                console.log('GET 응답 상태:', response.status);
+                console.log('GET 응답 헤더:', Object.fromEntries([...response.headers.entries()]));
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('GET 응답 데이터:', data);
+                
+                resultDiv.innerHTML = `
+                    <div class="success result">
+                        <h3><span class="status-indicator status-ok"></span>✅ GET 요청 성공</h3>
+                        <p><strong>총 회원 수:</strong> ${data.total || 0}명</p>
+                        <p><strong>조회된 회원:</strong> ${data.data ? data.data.length : 0}명</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('GET 오류:', error);
+                resultDiv.innerHTML = `
+                    <div class="error result">
+                        <h3><span class="status-indicator status-error"></span>❌ GET 요청 실패</h3>
+                        <p><strong>오류:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // POST 요청 테스트
+        async function testPOST() {
+            const resultDiv = document.getElementById('postResult');
+            resultDiv.innerHTML = '<div class="info result">🔄 POST 요청 중...</div>';
+            
+            // 테스트용 회원 데이터
+            const testMember = {
+                signupDate: new Date().toISOString(),
+                memberName: '테스트회원_' + Date.now(),
+                idNumber: '000000-0',
+                email: 'test_' + Date.now() + '@test.com',
+                phoneNumber: '010-0000-0000',
+                address: '테스트 주소',
+                referrer: '디퀀트나인',
+                password: 'test1234',
+                investmentDate: null,
+                investmentAmount: 0,
+                dividendRate: '2.0%',
+                investorLevel: 'Starter',
+                investmentMonths: 0,
+                accumulatedDividend: 0,
+                notes: 'POST 테스트'
+            };
+            
+            console.log('POST 요청 데이터:', testMember);
+            
+            try {
+                const response = await fetch('tables/members_v2', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testMember)
+                });
+                
+                console.log('POST 응답 상태:', response.status, response.statusText);
+                console.log('POST 응답 헤더:', Object.fromEntries([...response.headers.entries()]));
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('POST 오류 응답:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const savedMember = await response.json();
+                console.log('POST 성공 데이터:', savedMember);
+                
+                resultDiv.innerHTML = `
+                    <div class="success result">
+                        <h3><span class="status-indicator status-ok"></span>✅ POST 요청 성공</h3>
+                        <p><strong>회원 ID:</strong> ${savedMember.id}</p>
+                        <p><strong>이메일:</strong> ${savedMember.email}</p>
+                        <p><strong>가입일:</strong> ${new Date(savedMember.signupDate).toLocaleString('ko-KR')}</p>
+                        <pre>${JSON.stringify(savedMember, null, 2)}</pre>
+                        <p style="color: #00ff88; margin-top: 1rem;">
+                            ✅ POST 요청이 정상 작동합니다! 회원가입 기능을 사용할 수 있습니다.
+                        </p>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('POST 오류:', error);
+                resultDiv.innerHTML = `
+                    <div class="error result">
+                        <h3><span class="status-indicator status-error"></span>❌ POST 요청 실패</h3>
+                        <p><strong>오류:</strong> ${error.message}</p>
+                        <p><strong>가능한 원인:</strong></p>
+                        <ul>
+                            <li>API 엔드포인트가 POST 메서드를 지원하지 않음</li>
+                            <li>CORS 정책 문제</li>
+                            <li>서버 측 오류</li>
+                            <li>네트워크 연결 문제</li>
+                        </ul>
+                        <p><strong>해결 방법:</strong></p>
+                        <ul>
+                            <li>브라우저 콘솔(F12)에서 상세 오류 확인</li>
+                            <li>네트워크 탭에서 요청/응답 확인</li>
+                            <li>API 서버 로그 확인</li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        // 전체 진단
+        async function runFullDiagnostics() {
+            const resultDiv = document.getElementById('diagnosticsResult');
+            resultDiv.innerHTML = '<div class="info result">🔄 전체 진단 실행 중...</div>';
+            
+            const results = [];
+            
+            // 1. API 연결 테스트
+            try {
+                const response = await fetch('tables/members_v2?limit=1');
+                results.push({
+                    test: 'API 연결',
+                    status: response.ok ? 'success' : 'error',
+                    message: `${response.status} ${response.statusText}`
+                });
+            } catch (error) {
+                results.push({
+                    test: 'API 연결',
+                    status: 'error',
+                    message: error.message
+                });
+            }
+            
+            // 2. GET 요청 테스트
+            try {
+                const response = await fetch('tables/members_v2?limit=5');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                results.push({
+                    test: 'GET 요청',
+                    status: 'success',
+                    message: `총 ${data.total || 0}명의 회원`
+                });
+            } catch (error) {
+                results.push({
+                    test: 'GET 요청',
+                    status: 'error',
+                    message: error.message
+                });
+            }
+            
+            // 3. POST 요청 테스트
+            try {
+                const testMember = {
+                    signupDate: new Date().toISOString(),
+                    memberName: '진단테스트_' + Date.now(),
+                    idNumber: '000000-0',
+                    email: 'diag_' + Date.now() + '@test.com',
+                    phoneNumber: '010-0000-0000',
+                    address: '테스트',
+                    referrer: '디퀀트나인',
+                    password: 'test1234',
+                    investmentDate: null,
+                    investmentAmount: 0,
+                    dividendRate: '2.0%',
+                    investorLevel: 'Starter',
+                    investmentMonths: 0,
+                    accumulatedDividend: 0,
+                    notes: '전체 진단 테스트'
+                };
+                
+                const response = await fetch('tables/members_v2', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(testMember)
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const savedMember = await response.json();
+                results.push({
+                    test: 'POST 요청',
+                    status: 'success',
+                    message: `회원 ID: ${savedMember.id}`
+                });
+            } catch (error) {
+                results.push({
+                    test: 'POST 요청',
+                    status: 'error',
+                    message: error.message
+                });
+            }
+            
+            // 결과 표시
+            let html = '<div class="result">';
+            html += '<h3>📊 진단 결과</h3>';
+            html += '<table style="width: 100%; margin-top: 1rem;">';
+            
+            results.forEach(result => {
+                const statusClass = result.status === 'success' ? 'status-ok' : 'status-error';
+                const statusIcon = result.status === 'success' ? '✅' : '❌';
+                html += `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 0.75rem;">
+                            <span class="status-indicator ${statusClass}"></span>
+                            ${statusIcon} ${result.test}
+                        </td>
+                        <td style="padding: 0.75rem;">${result.message}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</table>';
+            
+            const allSuccess = results.every(r => r.status === 'success');
+            if (allSuccess) {
+                html += `
+                    <p style="color: #00ff88; margin-top: 1.5rem; font-weight: 600;">
+                        🎉 모든 테스트 통과! 회원가입 기능이 정상 작동합니다.
+                    </p>
+                `;
+                resultDiv.className = 'success';
+            } else {
+                html += `
+                    <p style="color: #f43f5e; margin-top: 1.5rem; font-weight: 600;">
+                        ⚠️ 일부 테스트 실패. API 설정을 확인해주세요.
+                    </p>
+                `;
+                resultDiv.className = 'error';
+            }
+            
+            html += '</div>';
+            resultDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주소 검색 단순 테스트</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        
+        .test-section {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #00d9ff;
+            margin-top: 0;
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .status.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #00d9ff 0%, #00ff88 100%);
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            margin: 5px;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+        }
+        
+        .log {
+            background: #000;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .log-entry {
+            margin: 3px 0;
+            padding: 3px;
+        }
+        
+        .log-entry.success { color: #10b981; }
+        .log-entry.error { color: #ef4444; }
+        .log-entry.info { color: #00d9ff; }
+    </style>
+</head>
+<body>
+    <div class="test-section">
+        <h2>🏠 주소 검색 단순 테스트</h2>
+        
+        <div id="apiStatus" class="status">
+            <strong>Daum Postcode API 상태:</strong> <span id="apiStatusText">확인 중...</span>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <input type="text" id="postcode" placeholder="우편번호" readonly>
+            <input type="text" id="address" placeholder="기본주소" readonly>
+            <input type="text" id="addressDetail" placeholder="상세주소">
+        </div>
+        
+        <button id="searchBtn">주소 검색</button>
+        <button onclick="clearAddress()">초기화</button>
+        
+        <div class="log" id="logContainer"></div>
+    </div>
+    
+    <!-- Daum 우편번호 API -->
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    
+    <script>
+        // 로그 기능
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('logContainer');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            console.log(message);
+        }
+        
+        // API 상태 확인
+        function checkDaumAPI() {
+            const statusEl = document.getElementById('apiStatus');
+            const statusTextEl = document.getElementById('apiStatusText');
+            
+            if (typeof daum !== 'undefined' && daum.Postcode) {
+                statusEl.className = 'status success';
+                statusTextEl.textContent = '✅ 정상 로드됨';
+                addLog('✅ Daum Postcode API 정상 로드', 'success');
+                return true;
+            } else {
+                statusEl.className = 'status error';
+                statusTextEl.textContent = '❌ 로드 실패';
+                addLog('❌ Daum Postcode API 로드 실패', 'error');
+                return false;
+            }
+        }
+        
+        // 주소 초기화
+        function clearAddress() {
+            document.getElementById('postcode').value = '';
+            document.getElementById('address').value = '';
+            document.getElementById('addressDetail').value = '';
+            addLog('🔄 주소 필드 초기화', 'info');
+        }
+        
+        // DOM 로드 완료
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('📄 페이지 로드 완료', 'info');
+            
+            // API 상태 확인
+            setTimeout(checkDaumAPI, 500);
+            
+            // 버튼 이벤트
+            const searchBtn = document.getElementById('searchBtn');
+            
+            searchBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                addLog('🔘 주소 검색 버튼 클릭', 'info');
+                
+                // API 확인
+                if (!checkDaumAPI()) {
+                    alert('Daum 우편번호 API를 사용할 수 없습니다.');
+                    return;
+                }
+                
+                // Postcode 팝업 열기
+                addLog('📬 Daum Postcode 팝업 열기 시도...', 'info');
+                
+                try {
+                    new daum.Postcode({
+                        oncomplete: function(data) {
+                            addLog('✅ 주소 선택 완료', 'success');
+                            addLog(`  - 우편번호: ${data.zonecode}`, 'info');
+                            addLog(`  - 주소: ${data.address}`, 'info');
+                            
+                            // 필드 입력
+                            document.getElementById('postcode').value = data.zonecode;
+                            document.getElementById('address').value = data.address;
+                            document.getElementById('addressDetail').focus();
+                        },
+                        onclose: function(state) {
+                            if (state === 'COMPLETE_CLOSE') {
+                                addLog('✅ 주소 선택 후 창 닫힘', 'success');
+                            } else {
+                                addLog('❌ 주소 선택 없이 창 닫힘', 'info');
+                            }
+                        }
+                    }).open();
+                    
+                    addLog('✅ Daum Postcode 팝업 열기 성공', 'success');
+                } catch (error) {
+                    addLog(`❌ 오류 발생: ${error.message}`, 'error');
+                    alert('주소 검색 중 오류가 발생했습니다.');
+                }
+            });
+            
+            addLog('✅ 이벤트 리스너 등록 완료', 'success');
+        });
+    </script>
+</body>
+</html>

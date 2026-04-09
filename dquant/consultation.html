@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상담 문의 - D-QUANT 9.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <style>
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #0f1824;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255,255,255,0.7);
+            --text-tertiary: rgba(255,255,255,0.4);
+            --cyan-glow: #00f2ff;
+            --emerald-safe: #10b981;
+            --warning-orange: rgba(255,165,0,0.9);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-top: 80px;
+            display: flex;
+            flex-direction: column;
+        }
+        .glass-nav{background:rgba(15,23,42,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.1);position:fixed;top:0;width:100%;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,0.4)}.nav-container{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:80px}.nav-brand{display:flex;align-items:center;gap:0.75rem;text-decoration:none;color:var(--cyan-glow);font-size:1.5rem;font-weight:700;transition:all 0.3s;flex-shrink:0}.nav-brand:hover{opacity:0.8}.nav-links{display:flex;list-style:none;gap:2rem;align-items:center;flex:1;margin-left:3rem}.nav-links li{position:relative}.nav-links a{color:var(--text-secondary);text-decoration:none;font-weight:500;font-size:0.95rem;transition:all 0.3s;position:relative;white-space:nowrap}.nav-links a:hover{color:var(--cyan-glow)}.nav-links li:nth-of-type(1) a::after,.nav-links li:nth-of-type(2) a::after,.nav-links li:nth-of-type(3) a::after{content:'';position:absolute;bottom:-8px;left:0;width:0;height:2px;background:var(--cyan-glow);transition:width 0.3s ease}.nav-links li:nth-of-type(1) a:hover::after,.nav-links li:nth-of-type(2) a:hover::after,.nav-links li:nth-of-type(3) a:hover::after,.nav-links li:nth-of-type(1) a.active::after,.nav-links li:nth-of-type(2) a.active::after,.nav-links li:nth-of-type(3) a.active::after{width:100%}.nav-actions{display:flex;align-items:center;gap:1rem;position:relative;z-index:100}.nav-link-text{color:var(--text-secondary);text-decoration:none;font-weight:500;font-size:0.95rem;transition:all 0.3s}.nav-link-text:hover{color:var(--cyan-glow)}.btn-my-info-icon{width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(147,51,234,0.1));border:2px solid transparent;border-radius:50%;color:var(--text-secondary);text-decoration:none;font-size:1.25rem;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden}.btn-my-info-icon::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(135deg,#A855F7,#9333EA,#A855F7);background-size:300% 300%;border-radius:50%;z-index:-1;animation:shimmer-border 3s ease-in-out infinite;opacity:0;transition:opacity 0.3s}.btn-my-info-icon:hover::before{opacity:1}.btn-my-info-icon:hover{color:#A855F7;transform:translateY(-2px);box-shadow:0 5px 20px rgba(168,85,247,0.4)}.mobile-menu-toggle{display:none;background:none;border:none;color:var(--text-secondary);font-size:1.5rem;cursor:pointer;padding:0.5rem;z-index:1001;position:relative;transition:color 0.3s}.mobile-menu-toggle:hover{color:var(--cyan-glow)}.mobile-menu-close{display:none;position:absolute;top:20px;right:20px;background:none;border:none;color:var(--text-secondary);font-size:1.5rem;cursor:pointer;padding:0.5rem;z-index:1002;transition:color 0.3s}.mobile-menu-close:hover{color:var(--cyan-glow)}.mobile-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;opacity:0;transition:opacity 0.3s}.mobile-overlay.active{display:block;opacity:1}.nav-links li:nth-of-type(4) a{padding:0.5rem 1rem;background:linear-gradient(135deg,rgba(0,242,255,0.1),rgba(16,185,129,0.1));border:2px solid transparent;border-radius:8px;position:relative;overflow:hidden}.nav-links li:nth-of-type(4) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(135deg,#00F2FF,#10B981,#00F2FF);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmer-border 3s ease-in-out infinite}.nav-links li:nth-of-type(4) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(4) a:hover{color:#94A3B8;transform:translateY(-2px);box-shadow:0 5px 20px rgba(0,242,255,0.4)}.nav-links li:nth-of-type(5) a{padding:0.5rem 1rem;background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(147,51,234,0.1));border:2px solid transparent;border-radius:8px;position:relative;overflow:hidden}.nav-links li:nth-of-type(5) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(135deg,#A855F7,#9333EA,#A855F7);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmer-border 3s ease-in-out infinite}.nav-links li:nth-of-type(5) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(5) a:hover{color:#94A3B8;transform:translateY(-2px);box-shadow:0 5px 20px rgba(168,85,247,0.4)}.nav-links li:nth-of-type(6) a{padding:0.5rem 1rem;background:linear-gradient(135deg,rgba(255,182,193,0.1),rgba(255,105,180,0.1));border:2px solid transparent;border-radius:8px;position:relative;overflow:hidden}.nav-links li:nth-of-type(6) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(135deg,#FFB6C1,#FF69B4,#FFB6C1);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmer-border 3s ease-in-out infinite}.nav-links li:nth-of-type(6) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(6) a:hover{color:#94A3B8;transform:translateY(-2px);box-shadow:0 5px 20px rgba(255,105,180,0.4)}.nav-links li:nth-of-type(7) a,.nav-links li:nth-of-type(8) a{padding:0.5rem 1rem;background:linear-gradient(135deg,rgba(30,41,59,0.6),rgba(15,23,42,0.8));border:2px solid transparent;border-radius:8px;position:relative;overflow:hidden}.nav-links li:nth-of-type(7) a::before,.nav-links li:nth-of-type(8) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(135deg,#1E293B,#0F172A,#1E293B);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmer-border 3s ease-in-out infinite}.nav-links li:nth-of-type(7) a::after,.nav-links li:nth-of-type(8) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(7) a:hover,.nav-links li:nth-of-type(8) a:hover{color:#94A3B8;transform:translateY(-2px);box-shadow:0 5px 20px rgba(30,41,59,0.4)}.nav-links li:nth-of-type(7) a .fa-user-plus,.nav-links li:nth-of-type(8) a .login-icon{margin-right:0.5rem}@keyframes shimmer-border{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}@keyframes shine{0%{left:-100%}50%,100%{left:100%}}@media(min-width:993px){.nav-actions{display:flex !important}.mobile-menu-toggle{display:none}}@media(min-width:1201px){.nav-links li:nth-of-type(5),.nav-links li:nth-of-type(6),.nav-links li:nth-of-type(7),.nav-links li:nth-of-type(8){display:none}}@media(max-width:1200px){.nav-actions .btn-my-info-icon,.nav-actions .nav-link-text{display:none}.mobile-menu-toggle{display:block}.nav-links{position:fixed;top:0;right:-100%;width:320px;height:100vh;background:var(--bg-secondary);padding:80px 30px 30px;flex-direction:column;gap:1rem;transition:right 0.3s ease;z-index:1000;overflow-y:auto;border-left:1px solid rgba(255,255,255,0.1);box-shadow:-5px 0 15px rgba(0,0,0,0.3);margin-left:0}.nav-links.mobile-active{right:0}.mobile-menu-close{display:block}.mobile-menu-actions{display:flex}.nav-links li{width:100%}}@media(max-width:768px){.nav-links li:nth-of-type(4) a,.nav-links li:nth-of-type(5) a,.nav-links li:nth-of-type(6) a,.nav-links li:nth-of-type(7) a,.nav-links li:nth-of-type(8) a{padding:14px 20px;text-align:left}}
+        
+        /* 메인 콘텐츠 */
+        .consultation-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .consultation-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .consultation-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--cyan-glow);
+            margin-bottom: 0.75rem;
+        }
+        
+        .consultation-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .consultation-form {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+        
+        .form-group label .required {
+            color: #ef4444;
+            margin-left: 0.25rem;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--cyan-glow);
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 20px rgba(0,242,255,0.2);
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .char-counter {
+            text-align: right;
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+            margin-top: 0.5rem;
+        }
+        
+        .char-counter.warning {
+            color: var(--warning-orange);
+        }
+        
+        .char-counter.error {
+            color: #ef4444;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        /* 아코디언 스타일 */
+        .radio-option {
+            display: flex;
+            flex-direction: column;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .radio-option:hover {
+            border-color: rgba(0,242,255,0.3);
+        }
+        
+        .radio-option-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .radio-option-header:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .radio-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 1rem;
+            cursor: pointer;
+            accent-color: var(--cyan-glow);
+            flex-shrink: 0;
+        }
+        
+        .radio-option-header label {
+            flex: 1;
+            cursor: pointer;
+            margin: 0;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .accordion-icon {
+            color: var(--cyan-glow);
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            margin-left: auto;
+        }
+        
+        .radio-option.expanded .accordion-icon {
+            transform: rotate(180deg);
+        }
+        
+        .radio-option-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 1.25rem;
+            background: rgba(0,242,255,0.02);
+        }
+        
+        .radio-option.expanded .radio-option-content {
+            max-height: 500px;
+            padding: 1rem 1.25rem 1.5rem;
+        }
+        
+        .radio-option-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .radio-option.selected {
+            background: rgba(0,242,255,0.08);
+            border-color: var(--cyan-glow);
+        }
+        
+        .radio-option.selected .radio-option-header {
+            background: rgba(0,242,255,0.05);
+        }
+        
+        .radio-option.selected .radio-option-header label {
+            color: var(--cyan-glow);
+            font-weight: 600;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cancel {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .btn-cancel:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .btn-temp-save {
+            background: linear-gradient(135deg, rgba(255,165,0,0.3), rgba(255,165,0,0.2));
+            color: var(--warning-orange);
+            border: 1px solid rgba(255,165,0,0.5);
+        }
+        
+        .btn-temp-save:hover {
+            background: linear-gradient(135deg, rgba(255,165,0,0.4), rgba(255,165,0,0.3));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,165,0,0.3);
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, var(--cyan-glow), #0099cc);
+            color: #0a0e27;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,242,255,0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            background: rgba(16,185,129,0.1);
+            border: 2px solid var(--emerald-safe);
+            border-radius: 16px;
+            margin-top: 2rem;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: var(--emerald-safe);
+            margin-bottom: 1rem;
+        }
+        
+        .success-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--emerald-safe);
+            margin-bottom: 1rem;
+        }
+        
+        .success-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .temp-save-notice {
+            display: none;
+            background: rgba(255,165,0,0.1);
+            border-left: 4px solid var(--warning-orange);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            color: var(--warning-orange);
+        }
+        
+        .temp-save-notice.show {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .nav-link-text {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .consultation-title {
+                font-size: 2rem;
+            }
+            
+            .consultation-subtitle {
+                font-size: 1rem;
+            }
+            
+            .consultation-form {
+                padding: 2rem 1.5rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+        /* 푸터 스타일 */
+        .footer {
+            background: #000000;
+            border-top: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 3rem 2rem 2rem;
+            margin-top: auto;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .footer-company {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .company-name {
+            color: #00F2FF;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-address {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-contact {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+        
+        .company-contact a {
+            color: #00F2FF;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .company-contact a:hover {
+            opacity: 0.8;
+        }
+        
+        .footer-disclaimer {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .disclaimer-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .disclaimer-content {
+            flex: 1;
+        }
+        
+        .disclaimer-content strong {
+            color: #00F2FF;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .disclaimer-content p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .footer-copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-copyright p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand"><i class="fas fa-chart-line"></i><span>D-QUANT 9.0</span></a>
+            <ul class="nav-links" id="navLinks">
+                <button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button>
+                <li><a href="index.html">디퀀트나인</a></li>
+                <li><a href="team.html">D.Insight</a></li>
+                <li><a href="simulation.html">투자운용 시뮬레이션</a></li>
+                <li><a href="my-assets.html"><i class="fas fa-wallet"></i> 나의 자산</a></li>
+                <li><a href="my-info.html" class="my-info-link"><i class="fas fa-user-circle"></i> 나의 정보</a></li>
+                <li><a href="support.html" class="customer-center-link"><i class="fas fa-headset"></i> 고객센터</a></li>
+                <li><a href="#" id="mobileSignupBtn2"><i class="fas fa-user-plus"></i> 회원가입</a></li>
+                <li><a href="#" id="mobileLoginBtn2"><i class="fas fa-sign-in-alt login-icon"></i> <span class="login-text">로그인</span></a></li>
+            </ul>
+            <div class="mobile-overlay" id="mobileOverlay"></div>
+            <div class="nav-actions">
+                <a href="my-info.html" class="btn-my-info-icon"><i class="fas fa-user-circle"></i></a>
+                <a href="#" class="nav-link-text" id="signupBtn">회원가입</a>
+                <a href="#" class="nav-link-text" id="loginBtn">로그인</a>
+                <a href="support.html" class="nav-link-text">고객센터</a>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+    <div class="app-container">
+        <!-- 투자 상담 폼 -->
+        <div class="consultation-container">
+            <div class="consultation-header">
+                <h1 class="consultation-title">상담 문의</h1>
+                <p class="consultation-subtitle">투자 전략과 수익 구조에 대한 궁금하신 사항을 문의해 주세요.</p>
+            </div>
+            
+            <div class="temp-save-notice" id="tempSaveNotice">
+                <i class="fas fa-info-circle"></i>
+                임시 저장된 내용을 불러왔습니다.
+            </div>
+
+            <form id="consultationForm" class="consultation-form">
+                <div class="form-group">
+                    <label for="userName">성명 <span class="required">*</span></label>
+                    <input type="text" id="userName" placeholder="성명을 입력하세요" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="userEmail">이메일 주소 <span class="required">*</span></label>
+                    <input type="email" id="userEmail" placeholder="이메일 주소를 입력하세요" required>
+                </div>
+
+                <div class="form-group">
+                    <label>투자상담 목적 <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <div class="radio-option-header">
+                                <input type="radio" id="purpose1" name="purpose" value="디퀀트나인 회원가입" required>
+                                <label for="purpose1">디퀀트나인 회원가입</label>
+                                <i class="fas fa-chevron-down accordion-icon"></i>
+                            </div>
+                            <div class="radio-option-content">
+                                <p class="radio-option-description">
+                                    D-QUANT 9.0 플랫폼의 정회원으로 가입하여 AI 기반 투자 전략을 활용하고 싶으신 분들을 위한 상담입니다. 
+                                    회원 가입 절차, 필요 서류, 초기 투자금 등에 대해 자세히 안내해 드립니다.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="radio-option">
+                            <div class="radio-option-header">
+                                <input type="radio" id="purpose2" name="purpose" value="디퀀트나인의 투자 방법론">
+                                <label for="purpose2">디퀀트나인의 투자 방법론</label>
+                                <i class="fas fa-chevron-down accordion-icon"></i>
+                            </div>
+                            <div class="radio-option-content">
+                                <p class="radio-option-description">
+                                    AI 알고리즘 기반 변동성 역이용 전략, 시장 무관 수익 구조, 롱/숏 포지션 운영 방식 등 
+                                    디퀀트나인만의 독자적인 투자 방법론과 철학에 대해 상세히 설명해 드립니다.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="radio-option">
+                            <div class="radio-option-header">
+                                <input type="radio" id="purpose3" name="purpose" value="사업의 법률적 근거와 이해 학습">
+                                <label for="purpose3">사업의 법률적 근거와 이해 학습</label>
+                                <i class="fas fa-chevron-down accordion-icon"></i>
+                            </div>
+                            <div class="radio-option-content">
+                                <p class="radio-option-description">
+                                    디퀀트나인 사업의 법적 기반, 금융 규제 준수 사항, 투자자 보호 장치, 
+                                    운영 구조의 투명성 등 법률적 측면과 사업 구조에 대한 이해를 돕는 상담입니다.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="radio-option">
+                            <div class="radio-option-header">
+                                <input type="radio" id="purpose4" name="purpose" value="투자회원의 조건">
+                                <label for="purpose4">투자회원의 조건</label>
+                                <i class="fas fa-chevron-down accordion-icon"></i>
+                            </div>
+                            <div class="radio-option-content">
+                                <p class="radio-option-description">
+                                    투자 회원으로 참여하기 위한 자격 요건, 최소 투자금액, 필요한 금융 지식 수준, 
+                                    투자 기간 및 출금 정책 등 회원 조건과 관련된 모든 사항을 안내해 드립니다.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="radio-option">
+                            <div class="radio-option-header">
+                                <input type="radio" id="purpose5" name="purpose" value="기타">
+                                <label for="purpose5">기타</label>
+                                <i class="fas fa-chevron-down accordion-icon"></i>
+                            </div>
+                            <div class="radio-option-content">
+                                <p class="radio-option-description">
+                                    위 항목에 해당하지 않는 문의사항이나 특별한 상담 요청이 있으신 경우 선택해 주세요. 
+                                    아래 상담문의 내용란에 구체적인 문의 내용을 작성해 주시면 맞춤 상담을 제공해 드립니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="consultContent">상담문의 내용 <span class="required">*</span></label>
+                    <textarea id="consultContent" placeholder="상담 내용을 300자 이내로 입력해주세요" maxlength="300" required></textarea>
+                    <div class="char-counter" id="charCounter">0 / 300자</div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel" id="btnCancel">취소</button>
+                    <button type="button" class="btn btn-temp-save" id="btnTempSave">임시저장</button>
+                    <button type="submit" class="btn btn-submit">완료</button>
+                </div>
+            </form>
+
+            <div class="success-message" id="successMessage">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 class="success-title">상담 문의가 완료되었습니다!</h2>
+                <p class="success-text">
+                    입력하신 이메일로 상담 접수 확인 메일이 발송되었습니다.<br>
+                    빠른 시일 내에 담당자가 연락드리겠습니다.
+                </p>
+                <button class="btn btn-submit" style="margin-top: 2rem;" onclick="location.href='index.html'">
+                    홈으로 돌아가기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        // EmailJS 초기화
+        (function(){
+            emailjs.init("YOUR_PUBLIC_KEY"); // 실제 Public Key로 교체 필요
+        })();
+        
+        // 이메일 전송 함수
+        async function sendEmails(consultationData) {
+            try {
+                // 1. 관리자에게 이메일 전송
+                const adminEmailParams = {
+                    to_email: 'valuencores@gmail.com',
+                    subject: '[D-QUANT 9.0] 새로운 상담 문의',
+                    user_name: consultationData.userName,
+                    user_email: consultationData.userEmail,
+                    purpose: consultationData.purpose,
+                    content: consultationData.consultContent,
+                    submitted_date: new Date().toLocaleString('ko-KR')
+                };
+                
+                await emailjs.send('YOUR_SERVICE_ID', 'admin_template', adminEmailParams);
+                console.log('관리자 이메일 전송 성공');
+                
+                // 2. 신청자에게 확인 이메일 전송
+                const userEmailParams = {
+                    to_email: consultationData.userEmail,
+                    user_name: consultationData.userName,
+                    purpose: consultationData.purpose,
+                    content: consultationData.consultContent,
+                    submitted_date: new Date().toLocaleString('ko-KR')
+                };
+                
+                await emailjs.send('YOUR_SERVICE_ID', 'user_template', userEmailParams);
+                console.log('신청자 이메일 전송 성공');
+                
+                return true;
+            } catch (error) {
+                console.error('이메일 전송 실패:', error);
+                return false;
+            }
+        }
+        
+        // 글자 수 카운터
+        const consultContent = document.getElementById('consultContent');
+        const charCounter = document.getElementById('charCounter');
+        
+        consultContent.addEventListener('input', function() {
+            const length = this.value.length;
+            charCounter.textContent = `${length} / 300자`;
+            
+            if (length >= 300) {
+                charCounter.classList.add('error');
+                charCounter.classList.remove('warning');
+            } else if (length >= 270) {
+                charCounter.classList.add('warning');
+                charCounter.classList.remove('error');
+            } else {
+                charCounter.classList.remove('warning', 'error');
+            }
+        });
+        
+        // 라디오 버튼 선택 시 스타일 변경 및 아코디언 기능
+        const radioOptions = document.querySelectorAll('.radio-option');
+        radioOptions.forEach(option => {
+            const radio = option.querySelector('input[type="radio"]');
+            const header = option.querySelector('.radio-option-header');
+            
+            // 헤더 클릭 시 아코디언 토글
+            header.addEventListener('click', function(e) {
+                // 라디오 버튼이나 라벨 직접 클릭이 아닌 경우에만 토글
+                if (e.target === header || e.target.classList.contains('accordion-icon')) {
+                    e.preventDefault();
+                    
+                    // 현재 열려있는지 확인
+                    const isExpanded = option.classList.contains('expanded');
+                    
+                    // 모든 아코디언 닫기
+                    radioOptions.forEach(opt => opt.classList.remove('expanded'));
+                    
+                    // 클릭한 아코디언만 열기 (이미 열려있었으면 닫힌 상태 유지)
+                    if (!isExpanded) {
+                        option.classList.add('expanded');
+                    }
+                }
+            });
+            
+            // 라디오 버튼 클릭 시
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    // 모든 선택 해제
+                    radioOptions.forEach(opt => {
+                        opt.classList.remove('selected');
+                        opt.classList.remove('expanded');
+                    });
+                    // 현재 옵션 선택 및 펼치기
+                    option.classList.add('selected');
+                    option.classList.add('expanded');
+                }
+            });
+            
+            // 라벨 클릭 시 라디오 버튼 선택 및 펼치기
+            const label = option.querySelector('label');
+            label.addEventListener('click', function() {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change'));
+            });
+        });
+        
+        // 페이지 로드 시 저장된 이메일 불러오기
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedEmail = localStorage.getItem('savedEmail');
+            if (savedEmail) {
+                document.getElementById('userEmail').value = savedEmail;
+            }
+            
+            // 임시저장 데이터 확인
+            loadTempSave();
+        });
+        
+        // 임시저장 기능
+        function loadTempSave() {
+            const tempData = localStorage.getItem('consultationTempSave');
+            if (tempData) {
+                try {
+                    const data = JSON.parse(tempData);
+                    document.getElementById('userName').value = data.userName || '';
+                    document.getElementById('userEmail').value = data.userEmail || '';
+                    document.getElementById('consultContent').value = data.consultContent || '';
+                    
+                    // 라디오 버튼 복원
+                    if (data.purpose) {
+                        const radio = document.querySelector(`input[name="purpose"][value="${data.purpose}"]`);
+                        if (radio) {
+                            radio.checked = true;
+                            const option = radio.closest('.radio-option');
+                            option.classList.add('selected');
+                            option.classList.add('expanded');
+                        }
+                    }
+                    
+                    // 글자 수 업데이트
+                    const length = data.consultContent?.length || 0;
+                    document.getElementById('charCounter').textContent = `${length} / 300자`;
+                    
+                    // 알림 표시
+                    document.getElementById('tempSaveNotice').classList.add('show');
+                    
+                    setTimeout(() => {
+                        document.getElementById('tempSaveNotice').classList.remove('show');
+                    }, 5000);
+                } catch (e) {
+                    console.error('임시저장 데이터 로드 실패:', e);
+                }
+            }
+        }
+        
+        // 임시저장 버튼
+        document.getElementById('btnTempSave').addEventListener('click', function() {
+            const formData = {
+                userName: document.getElementById('userName').value,
+                userEmail: document.getElementById('userEmail').value,
+                purpose: document.querySelector('input[name="purpose"]:checked')?.value || '',
+                consultContent: document.getElementById('consultContent').value,
+                savedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('consultationTempSave', JSON.stringify(formData));
+            
+            alert('임시저장되었습니다.\n다음 방문 시 저장된 내용을 불러올 수 있습니다.');
+        });
+        
+        // 취소 버튼
+        document.getElementById('btnCancel').addEventListener('click', function() {
+            if (confirm('작성 중인 내용을 취소하시겠습니까?\n임시저장된 내용은 유지됩니다.')) {
+                history.back();
+            }
+        });
+        
+        // 폼 제출
+        document.getElementById('consultationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const userName = document.getElementById('userName').value.trim();
+            const userEmail = document.getElementById('userEmail').value.trim();
+            const purpose = document.querySelector('input[name="purpose"]:checked')?.value;
+            const consultContent = document.getElementById('consultContent').value.trim();
+            
+            // 유효성 검사
+            if (!userName) {
+                alert('성명을 입력해주세요.');
+                document.getElementById('userName').focus();
+                return;
+            }
+            
+            if (!userEmail) {
+                alert('이메일 주소를 입력해주세요.');
+                document.getElementById('userEmail').focus();
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(userEmail)) {
+                alert('올바른 이메일 형식을 입력해주세요.');
+                document.getElementById('userEmail').focus();
+                return;
+            }
+            
+            if (!purpose) {
+                alert('투자상담 목적을 선택해주세요.');
+                return;
+            }
+            
+            if (!consultContent) {
+                alert('상담문의 내용을 입력해주세요.');
+                document.getElementById('consultContent').focus();
+                return;
+            }
+            
+            // 상담 데이터 준비
+            const consultationData = {
+                userName,
+                userEmail,
+                purpose,
+                consultContent,
+                submittedAt: new Date().toISOString()
+            };
+            
+            // 제출 버튼 비활성화
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '전송 중...';
+            
+            try {
+                // 이메일 전송
+                const emailSent = await sendEmails(consultationData);
+                
+                if (emailSent) {
+                    console.log('상담 문의 완료:', consultationData);
+                    
+                    // 임시저장 데이터 삭제
+                    localStorage.removeItem('consultationTempSave');
+                    
+                    // 성공 메시지 표시
+                    document.querySelector('.consultation-form').style.display = 'none';
+                    document.getElementById('successMessage').classList.add('show');
+                    
+                    // 페이지 상단으로 스크롤
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    // 이메일 전송 실패 시에도 성공 메시지 표시 (사용자 경험)
+                    alert('상담 신청이 접수되었습니다.\n이메일 전송에 문제가 있을 수 있으니 확인이 필요하면 고객센터로 문의해주세요.');
+                    
+                    // 임시저장 데이터 삭제
+                    localStorage.removeItem('consultationTempSave');
+                    
+                    // 성공 메시지 표시
+                    document.querySelector('.consultation-form').style.display = 'none';
+                    document.getElementById('successMessage').classList.add('show');
+                    
+                    // 페이지 상단으로 스크롤
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } catch (error) {
+                console.error('제출 오류:', error);
+                alert('일시적인 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.');
+                
+                // 버튼 복원
+                submitBtn.disabled = false;
+                submitBtn.textContent = '완료';
+            }
+        });
+        
+        // 모바일 메뉴 토글
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const navLinks = document.getElementById('navLinks');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const body = document.body;
+        
+        function openMenu() {
+            navLinks.classList.add('mobile-active');
+            mobileOverlay.classList.add('active');
+            body.style.overflow = 'hidden';
+        }
+        
+        function closeMenu() {
+            navLinks.classList.remove('mobile-active');
+            mobileOverlay.classList.remove('active');
+            body.style.overflow = '';
+        }
+        
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', openMenu);
+        }
+        
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeMenu);
+        }
+        
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', closeMenu);
+        }
+        
+        // 메뉴 링크 클릭 시 닫기
+        const menuLinks = navLinks.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 992) {
+                    setTimeout(closeMenu, 200);
+                }
+            });
+        });
+    </script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const t=document.getElementById('mobileMenuToggle'),e=document.getElementById('mobileMenuClose'),n=document.getElementById('navLinks'),o=document.getElementById('mobileOverlay');t&&t.addEventListener('click',()=>{n.classList.add('mobile-active');o.classList.add('active')});e&&e.addEventListener('click',()=>{n.classList.remove('mobile-active');o.classList.remove('active')});o&&o.addEventListener('click',()=>{n.classList.remove('mobile-active');o.classList.remove('active')});const c=document.getElementById('signupBtn'),i=document.getElementById('mobileSignupBtn2');c&&c.addEventListener('click',e=>{e.preventDefault();window.location.href='signup.html'});i&&i.addEventListener('click',e=>{e.preventDefault();window.location.href='signup.html'})});</script>
+    <script src="js/check-login.js"></script>
+    
+    <!-- 로그인 모달 -->
+    <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:10000;align-items:center;justify-content:center;">
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:40px;border-radius:20px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,242,255,0.3);border:1px solid rgba(0,242,255,0.2);">
+            <span class="close-modal" style="float:right;font-size:28px;font-weight:bold;color:#00F2FF;cursor:pointer;line-height:20px;">&times;</span>
+            <h2 style="color:#00F2FF;margin-bottom:30px;font-size:24px;text-align:center;">로그인</h2>
+            <form id="loginForm">
+                <div style="margin-bottom:20px;">
+                    <label style="display:block;color:#fff;margin-bottom:8px;font-size:14px;">이메일</label>
+                    <input type="email" id="loginEmail" placeholder="이메일을 입력하세요" required style="width:100%;padding:12px;background:rgba(255,255,255,0.1);border:1px solid rgba(0,242,255,0.3);border-radius:8px;color:#fff;font-size:14px;box-sizing:border-box;">
+                </div>
+                <button type="submit" style="width:100%;padding:14px;background:linear-gradient(135deg,#00F2FF,#00a8cc);border:none;border-radius:8px;color:#000;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;margin-top:10px;">로그인</button>
+                <p style="text-align:center;margin-top:20px;color:#aaa;font-size:14px;">계정이 없으신가요? <a href="signup.html" style="color:#00F2FF;text-decoration:none;">회원가입</a></p>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-company">
+                <p class="company-name">밸류앤코어스(주)</p>
+                <p class="company-address">서울특별시 종로구 효자로 1길 5(통의동) 다모여빌딩 2층</p>
+                <p class="company-contact">
+                    전화: 07-356-6771 | 웹사이트: <a href="https://www.valuencores.com" target="_blank" rel="noopener noreferrer">www.valuencores.com</a>
+                </p>
+            </div>
+            
+            <div class="footer-disclaimer">
+                <div class="disclaimer-content">
+                    <strong>법적 면책조항(免責) 안내</strong>
+                    <p>본 플랫폼은 자본시장법, 가상자산이용자보호법 및 협동조합법을 준수하며 투자자 보호를 최우선으로 합니다. 특히 증권성 가상자산과 협동조합의 투자·자금 운용은 관련 법령에 따라 엄격히 규율됩니다. 이용자는 안전한 거래 환경 조성을 위해 법적 컴플라이언스 준수 여부를 상시 확인해야 하며, 당사는 규제 준수를 통한 투명한 서비스 제공에 최선을 다하고 있습니다.</p>
+                </div>
+            </div>
+            
+            <div class="footer-copyright">
+                <p>© 2026 D-Quant 9.0. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 로그인/로그아웃 기능 -->
+    <script src="js/auth.js"></script>
+    
+    <!-- 로그인 가드 (나의 자산, 나의 정보 접근 제어) -->
+    <script src="js/login-guard.js"></script>
+    
+    <!-- ADMIN 접근 버튼 -->
+    <script src="js/admin-access.js"></script>
+</body>
+</html>

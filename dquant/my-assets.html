@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 자산 - D-QUANT 9.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <style>
+        :root {
+            --bg-dark: #0a0e27;
+            --bg-darker: #050816;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --cyan-glow: #00F2FF;
+            --purple-accent: #9945FF;
+            --emerald-safe: #10b981;
+            --ruby-risk: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ============ NAVIGATION ============ */
+        .glass-nav { background: rgba(15,23,42,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        .nav-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 80px; }
+        .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--cyan-glow); font-size: 1.5rem; font-weight: 700; transition: all 0.3s; flex-shrink: 0; }
+        .nav-brand:hover { opacity: 0.8; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; align-items: center; flex: 1; margin-left: 3rem; }
+        .nav-links li { position: relative; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: all 0.3s; position: relative; white-space: nowrap; }
+        .nav-links a:hover { color: var(--cyan-glow); }
+        .nav-links li:nth-of-type(1) a::after, .nav-links li:nth-of-type(2) a::after, .nav-links li:nth-of-type(3) a::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 0; height: 2px; background: var(--cyan-glow); transition: width 0.3s ease; }
+        .nav-links li:nth-of-type(1) a:hover::after, .nav-links li:nth-of-type(2) a:hover::after, .nav-links li:nth-of-type(3) a:hover::after, .nav-links li:nth-of-type(1) a.active::after, .nav-links li:nth-of-type(2) a.active::after, .nav-links li:nth-of-type(3) a.active::after { width: 100%; }
+        .nav-actions { display: flex; align-items: center; gap: 1rem; position: relative; z-index: 100; }
+        .nav-link-text { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: all 0.3s; }
+        .nav-link-text:hover { color: var(--cyan-glow); }
+        .btn-my-info-icon { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg,rgba(168,85,247,0.1),rgba(147,51,234,0.1)); border: 2px solid transparent; border-radius: 50%; color: var(--text-secondary); text-decoration: none; font-size: 1.25rem; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+        .btn-my-info-icon::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg,#A855F7,#9333EA,#A855F7,#9333EA); background-size: 300% 300%; border-radius: 50%; z-index: -1; animation: shimmerBorder 3s ease-in-out infinite; opacity: 0.8; }
+        .btn-my-info-icon:hover { color: #A855F7; transform: translateY(-2px) scale(1.1); box-shadow: 0 5px 20px rgba(147,51,234,0.4); }
+        .mobile-menu-toggle { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; padding: 0.5rem; z-index: 1100; position: relative; }
+        .mobile-menu-toggle:hover { color: var(--cyan-glow); }
+        .mobile-menu-close { display: none; position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-primary); font-size: 1.75rem; cursor: pointer; padding: 0.5rem; z-index: 1001; }
+        .mobile-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; opacity: 0; transition: opacity 0.3s ease; }
+        .mobile-overlay.active { display: block; opacity: 1; }
+        .nav-links li:nth-of-type(4) a { padding: 0.5rem 1rem; border: 2px solid transparent; border-radius: 8px; background: linear-gradient(135deg,rgba(0,242,255,0.1),rgba(16,185,129,0.1)); position: relative; overflow: hidden; }
+        .nav-links li:nth-of-type(4) a::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg,var(--cyan-glow),var(--emerald-safe),var(--cyan-glow),var(--emerald-safe)); background-size: 300% 300%; border-radius: 8px; z-index: -1; animation: shimmerBorder 3s ease-in-out infinite; opacity: 0.8; }
+        .nav-links li:nth-of-type(4) a::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent); animation: shine 2s ease-in-out infinite; }
+        .nav-links li:nth-of-type(4) a:hover { color: var(--cyan-glow); transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,242,255,0.4); }
+        .nav-links li:nth-of-type(4) a i { margin-right: 0.5rem; }
+        .nav-links li:nth-of-type(5) a { padding: 0.5rem 1rem; border: 2px solid transparent; border-radius: 8px; background: linear-gradient(135deg,rgba(147,51,234,0.1),rgba(168,85,247,0.1)); position: relative; overflow: hidden; }
+        .nav-links li:nth-of-type(5) a::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg,#9333EA,#A855F7,#9333EA,#A855F7); background-size: 300% 300%; border-radius: 8px; z-index: -1; animation: shimmerBorder 3s ease-in-out infinite; opacity: 0.8; }
+        .nav-links li:nth-of-type(5) a::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent); animation: shine 2s ease-in-out infinite; }
+        .nav-links li:nth-of-type(5) a:hover { color: #A855F7; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(147,51,234,0.4); }
+        .nav-links li:nth-of-type(5) a i { margin-right: 0.5rem; }
+        .nav-links li:nth-of-type(6) a { padding: 0.5rem 1rem; border: 2px solid transparent; border-radius: 8px; background: linear-gradient(135deg,rgba(236,72,153,0.1),rgba(244,114,182,0.1)); position: relative; overflow: hidden; }
+        .nav-links li:nth-of-type(6) a::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg,#EC4899,#F472B6,#EC4899,#F472B6); background-size: 300% 300%; border-radius: 8px; z-index: -1; animation: shimmerBorder 3s ease-in-out infinite; opacity: 0.8; }
+        .nav-links li:nth-of-type(6) a::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent); animation: shine 2s ease-in-out infinite; }
+        .nav-links li:nth-of-type(6) a:hover { color: #EC4899; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(236,72,153,0.4); }
+        .nav-links li:nth-of-type(6) a i { margin-right: 0.5rem; }
+        .nav-links li:nth-of-type(7) a, .nav-links li:nth-of-type(8) a { padding: 0.5rem 1rem; border: 2px solid transparent; border-radius: 8px; background: linear-gradient(135deg,rgba(30,41,59,0.5),rgba(51,65,85,0.5)); position: relative; overflow: hidden; }
+        .nav-links li:nth-of-type(7) a::before, .nav-links li:nth-of-type(8) a::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg,#1E293B,#334155,#1E293B,#334155); background-size: 300% 300%; border-radius: 8px; z-index: -1; animation: shimmerBorder 3s ease-in-out infinite; opacity: 0.8; }
+        .nav-links li:nth-of-type(7) a::after, .nav-links li:nth-of-type(8) a::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent); animation: shine 2s ease-in-out infinite; }
+        .nav-links li:nth-of-type(7) a:hover, .nav-links li:nth-of-type(8) a:hover { color: #94A3B8; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(30,41,59,0.4); }
+        .nav-links li:nth-of-type(7) a i, .nav-links li:nth-of-type(8) a i { margin-right: 0.5rem; }
+        @keyframes shimmerBorder { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes shine { 0% { left: -100%; } 50%, 100% { left: 100%; } }
+        @media (min-width: 993px) { .nav-actions { display: flex !important; } .mobile-menu-toggle { display: none !important; } }
+        @media (min-width: 1201px) { .nav-links li:nth-of-type(5), .nav-links li:nth-of-type(6), .nav-links li:nth-of-type(7), .nav-links li:nth-of-type(8) { display: none; } }
+        @media (max-width: 1200px) { .nav-actions .btn-my-info-icon, .nav-actions .nav-link-text { display: none !important; } .mobile-menu-toggle { display: block !important; } .nav-links { position: fixed; top: 0; right: -100%; width: 320px; height: 100vh; background: rgba(15,23,42,0.98); padding: 80px 30px 30px; flex-direction: column; gap: 16px; transition: right 0.3s ease; z-index: 1000; overflow-y: auto; border-left: 1px solid rgba(255,255,255,0.1); box-shadow: -4px 0 20px rgba(0,0,0,0.3); margin-left: 0; } .nav-links.mobile-active { right: 0; } .mobile-menu-close { display: block; } .nav-links li { width: 100%; } .nav-links a { display: block; width: 100%; padding: 14px 20px; text-align: left; } .nav-links li:nth-of-type(1) a::after, .nav-links li:nth-of-type(2) a::after, .nav-links li:nth-of-type(3) a::after { display: none; } .nav-links li:nth-of-type(4) a, .nav-links li:nth-of-type(5) a, .nav-links li:nth-of-type(6) a, .nav-links li:nth-of-type(7) a, .nav-links li:nth-of-type(8) a { padding: 14px 20px; text-align: left; } }
+        /* ============ END NAVIGATION ============ */
+
+        /* Background Effects */
+        .bg-gradient {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(ellipse at top, rgba(153,69,255,0.15), transparent),
+                        radial-gradient(ellipse at bottom, rgba(0,242,255,0.1), transparent);
+            pointer-events: none;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--cyan-glow), var(--purple-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(0, 242, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--cyan-glow);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title i {
+            font-size: 1.3rem;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            background: rgba(0, 242, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .info-value.highlight {
+            color: var(--cyan-glow);
+            font-size: 1.5rem;
+        }
+
+        .info-value.amount {
+            color: #fbbf24;
+        }
+
+        /* Investment Level Badge */
+        .level-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .level-Cosmos {
+            background: linear-gradient(135deg, #8B5CF6, #EC4899);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+
+        .level-Quantium {
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .level-Platinum {
+            background: linear-gradient(135deg, #94A3B8, #CBD5E1);
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(148, 163, 184, 0.4);
+        }
+
+        .level-Diamond {
+            background: linear-gradient(135deg, #06B6D4, #67E8F9);
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+
+        .level-Gold {
+            background: linear-gradient(135deg, #F59E0B, #FCD34D);
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .level-Silver {
+            background: linear-gradient(135deg, #64748B, #94A3B8);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(100, 116, 139, 0.3);
+        }
+
+        .level-Bronze {
+            background: linear-gradient(135deg, #92400E, #D97706);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(146, 64, 14, 0.3);
+        }
+
+        .level-Starter {
+            background: linear-gradient(135deg, #10B981, #34D399);
+            color: #0a0a0a;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .level-Tester {
+            background: linear-gradient(135deg, #6B7280, #9CA3AF);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(107, 114, 128, 0.3);
+        }
+
+        /* Dividend Table */
+        .dividend-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .dividend-table thead {
+            background: rgba(0, 242, 255, 0.1);
+        }
+
+        .dividend-table th,
+        .dividend-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .dividend-table th:first-child,
+        .dividend-table td:first-child {
+            text-align: left;
+        }
+        
+        .dividend-table th:last-child,
+        .dividend-table td:last-child {
+            text-align: right;
+        }
+
+        .dividend-table th {
+            color: var(--cyan-glow);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .dividend-table td {
+            color: var(--text-primary);
+        }
+
+        .dividend-table tbody tr:hover {
+            background: rgba(0, 242, 255, 0.05);
+        }
+
+        .month-cell {
+            font-weight: 600;
+            color: var(--cyan-glow);
+        }
+
+        .amount-cell {
+            font-weight: 700;
+            color: #fbbf24;
+        }
+        
+        .amount-cell.cumulative {
+            font-weight: 800;
+            color: #10b981;
+            font-size: 1.05rem;
+        }
+        
+        .date-cell {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Summary Box */
+        .summary-box {
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.1), rgba(153, 69, 255, 0.1));
+            border: 2px solid var(--cyan-glow);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .summary-label {
+            color: var(--cyan-glow);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .summary-breakdown {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .breakdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breakdown-item.total {
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.2), rgba(153, 69, 255, 0.2));
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--cyan-glow);
+        }
+
+        .breakdown-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .breakdown-value {
+            color: var(--cyan-glow);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .breakdown-item.total .breakdown-value {
+            font-size: 2rem;
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+        }
+
+        .breakdown-plus,
+        .breakdown-equals {
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .summary-value {
+            color: var(--cyan-glow);
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .loading i {
+            font-size: 3rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error State */
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--ruby-risk);
+            color: var(--ruby-risk);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .error-message i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dividend-table {
+                font-size: 0.9rem;
+            }
+
+            .dividend-table th,
+            .dividend-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .summary-breakdown {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .breakdown-value {
+                font-size: 1.3rem;
+            }
+
+            .breakdown-item.total .breakdown-value {
+                font-size: 1.6rem;
+            }
+
+            .breakdown-plus,
+            .breakdown-equals {
+                font-size: 1.2rem;
+            }
+
+            .summary-value {
+                font-size: 2rem;
+            }
+        }
+        
+        /* 푸터 스타일 */
+        .footer {
+            background: #000000;
+            border-top: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 3rem 2rem 2rem;
+            margin-top: auto;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .footer-company {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .company-name {
+            color: #00F2FF;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-address {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-contact {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+        
+        .company-contact a {
+            color: #00F2FF;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .company-contact a:hover {
+            opacity: 0.8;
+        }
+        
+        .footer-disclaimer {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .disclaimer-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .disclaimer-content {
+            flex: 1;
+        }
+        
+        .disclaimer-content strong {
+            color: #00F2FF;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .disclaimer-content p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .footer-copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-copyright p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-chart-line"></i>
+                <span>D-QUANT 9.0</span>
+            </a>
+            
+            <ul class="nav-links" id="navLinks">
+                <button class="mobile-menu-close" id="mobileMenuClose">
+                    <i class="fas fa-times"></i>
+                </button>
+                <li><a href="index.html">디퀀트나인</a></li>
+                <li><a href="team.html">D.Insight</a></li>
+                <li><a href="simulation.html">투자운용 시뮬레이션</a></li>
+                <li><a href="my-assets.html" class="active"><i class="fas fa-wallet"></i> 나의 자산</a></li>
+                <li><a href="my-info.html" class="my-info-link"><i class="fas fa-user-circle"></i> 나의 정보</a></li>
+                <li><a href="support.html" class="customer-center-link"><i class="fas fa-headset"></i> 고객센터</a></li>
+                <li><a href="#" id="mobileSignupBtn2"><i class="fas fa-user-plus"></i> 회원가입</a></li>
+                <li><a href="#" id="mobileLoginBtn2"><i class="fas fa-sign-in-alt login-icon"></i> <span class="login-text">로그인</span></a></li>
+            </ul>
+            
+            <div class="mobile-overlay" id="mobileOverlay"></div>
+            
+            <div class="nav-actions">
+                <a href="my-info.html" class="btn-my-info-icon">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+                <a href="#" class="nav-link-text" id="signupBtn">회원가입</a>
+                <a href="#" class="nav-link-text" id="loginBtn">로그인</a>
+                <a href="support.html" class="nav-link-text">고객센터</a>
+                
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="bg-gradient"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">나의 자산</h1>
+            <p class="page-subtitle">투자 현황 및 배당금 내역을 확인하세요</p>
+        </div>
+
+        <div id="contentArea">
+            <div class="loading">
+                <i class="fas fa-spinner"></i>
+                <p>데이터를 불러오는 중...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 로그인 상태 확인
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        if (!loggedInUser) {
+            alert('로그인이 필요한 서비스입니다.\n로그인 페이지로 이동합니다.');
+            window.location.href = 'index.html';
+        }
+
+        let currentUser = null;
+        let memberData = null;
+
+        // 사용자 정보 로드
+        async function loadUserData() {
+            try {
+                // localStorage에서 사용자 정보 파싱
+                let userEmail = '';
+                try {
+                    const parsedUser = JSON.parse(loggedInUser);
+                    userEmail = parsedUser.email;
+                } catch (e) {
+                    // JSON 파싱 실패 시 직접 이메일로 간주
+                    userEmail = loggedInUser;
+                }
+
+                console.log('로그인 사용자 이메일:', userEmail);
+
+                // 회원 데이터 조회
+                const response = await fetch(`tables/members_v2?search=${encodeURIComponent(userEmail)}&limit=1000`);
+                const result = await response.json();
+
+                console.log('API 응답:', result);
+                console.log('검색된 회원 수:', result.data?.length || 0);
+
+                if (result.data && result.data.length > 0) {
+                    // 이메일이 정확히 일치하는 회원 찾기 (대소문자 구분 없이)
+                    memberData = result.data.find(m => {
+                        const memberEmail = (m.email || m.memberEmail || '').toLowerCase();
+                        const searchEmail = userEmail.toLowerCase();
+                        console.log('비교:', memberEmail, '===', searchEmail);
+                        return memberEmail === searchEmail;
+                    });
+                    
+                    if (memberData) {
+                        console.log('회원 데이터 발견:', memberData);
+                        renderContent();
+                    } else {
+                        console.error('이메일 일치하는 회원 없음');
+                        console.log('전체 데이터:', result.data);
+                        showError('회원 정보를 찾을 수 없습니다.<br>이메일: ' + userEmail);
+                    }
+                } else {
+                    console.error('검색 결과 없음');
+                    showError('회원 정보를 찾을 수 없습니다.');
+                }
+            } catch (error) {
+                console.error('데이터 로드 오류:', error);
+                showError('데이터를 불러오는 중 오류가 발생했습니다.<br>' + error.message);
+            }
+        }
+
+        // 콘텐츠 렌더링
+        function renderContent() {
+            const contentArea = document.getElementById('contentArea');
+            
+            // 필드명 호환성 처리
+            const memberName = memberData.memberName || memberData.name || '-';
+            const email = memberData.email || '-';
+            const signupDate = memberData.signupDate || memberData.signup_date || memberData.created_at;
+            const phoneNumber = memberData.phoneNumber || memberData.phone || '미등록';
+            const address = memberData.address || '미등록';
+            const referrer = memberData.referrer || memberData.partner || '디퀀트';
+            const idNumber = memberData.idNumber || memberData.id_number || '미등록';
+            const investmentDate = memberData.investmentDate || memberData.investment_date || signupDate;
+            const investmentAmount = memberData.investmentAmount || memberData.investment_amount || 0;
+            const dividendRate = memberData.dividendRate || memberData.dividend_rate || '-';
+            const dividendPaymentDate = memberData.dividendPaymentDate || memberData.dividend_payment_date;
+            const investorLevel = memberData.investorLevel || memberData.investor_level || 'Starter';
+            
+            // 가입일 기준으로 누적차월수 계산
+            const today = new Date();
+            const signupDateObj = new Date(signupDate);
+            let investmentMonths = (today.getFullYear() - signupDateObj.getFullYear()) * 12 
+                                  + (today.getMonth() - signupDateObj.getMonth());
+            
+            if (today.getDate() < signupDateObj.getDate()) {
+                investmentMonths--;
+            }
+            investmentMonths = Math.max(0, investmentMonths);
+            
+            // 다음 배당일 계산 (매월 5일, 25일)
+            const currentDay = today.getDate();
+            let nextPaymentDate;
+            
+            if (currentDay < 5) {
+                nextPaymentDate = new Date(today.getFullYear(), today.getMonth(), 5);
+            } else if (currentDay < 25) {
+                nextPaymentDate = new Date(today.getFullYear(), today.getMonth(), 25);
+            } else {
+                nextPaymentDate = new Date(today.getFullYear(), today.getMonth() + 1, 5);
+            }
+            
+            // 다음 배당일의 차월 계산
+            let nextMonthsDiff = (nextPaymentDate.getFullYear() - signupDateObj.getFullYear()) * 12 
+                               + (nextPaymentDate.getMonth() - signupDateObj.getMonth());
+            
+            if (nextPaymentDate.getDate() < signupDateObj.getDate()) {
+                nextMonthsDiff--;
+            }
+            nextMonthsDiff = Math.max(1, nextMonthsDiff + 1);
+            
+            // 누적 배당금 계산
+            let calculatedDividend = 0;
+            if (investmentAmount > 0 && dividendRate && investmentMonths > 0) {
+                const rate = parseFloat(dividendRate.toString().replace('%', '').trim());
+                const monthlyDividend = Math.round(investmentAmount * rate / 100);
+                calculatedDividend = monthlyDividend * investmentMonths;
+            }
+            
+            // 총 자산 계산
+            const totalAssets = investmentAmount + calculatedDividend;
+            
+            // 개인정보 카드
+            const personalInfoHTML = `
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-user-circle"></i>
+                        개인 정보
+                    </h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">성명 (실명)</div>
+                            <div class="info-value">${memberName}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">이메일</div>
+                            <div class="info-value">${email}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">가입일</div>
+                            <div class="info-value">${formatDate(signupDate)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">전화번호</div>
+                            <div class="info-value">${phoneNumber}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">실명확인번호</div>
+                            <div class="info-value">${idNumber}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">추천인</div>
+                            <div class="info-value">${referrer}</div>
+                        </div>
+                        <div class="info-item" style="grid-column: 1 / -1;">
+                            <div class="info-label">우편물 수령 주소</div>
+                            <div class="info-value">${address}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 투자 정보 카드
+            const hasInvestment = investmentAmount && investmentAmount > 0;
+            const investmentInfoHTML = `
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        투자 정보
+                    </h2>
+                    ${hasInvestment ? `
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">투자 일시</div>
+                                <div class="info-value">${formatDate(investmentDate)}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">투자자 레벨</div>
+                                <div class="info-value">
+                                    <span class="level-badge level-${investorLevel}">
+                                        ${investorLevel}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">투자 금액</div>
+                                <div class="info-value highlight amount">${formatAmount(investmentAmount)}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">월 배당률</div>
+                                <div class="info-value highlight" style="color: var(--emerald-safe);">${dividendRate}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">배당지급일</div>
+                                <div class="info-value">${dividendPaymentDate ? formatDate(dividendPaymentDate) : '매월 5일, 25일'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">누적 차월</div>
+                                <div class="info-value highlight">${investmentMonths}M</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">누적 배당금</div>
+                                <div class="info-value highlight amount">${formatAmount(calculatedDividend)}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">다음 배당일</div>
+                                <div class="info-value" style="color: #fbbf24;">
+                                    ${formatDate(nextPaymentDate)}<br>
+                                    <small style="color: #94a3b8;">${nextMonthsDiff}M 지급예정</small>
+                                </div>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="error-message">
+                            <i class="fas fa-info-circle"></i>
+                            <p>아직 투자 정보가 등록되지 않았습니다.<br>관리자에게 문의해주세요.</p>
+                        </div>
+                    `}
+                </div>
+            `;
+
+            // 투자유치배당 현황
+            let referralDividendHTML = '';
+            // TODO: 실제 데이터는 서버에서 가져와야 함
+            const hasReferralInvestment = memberData.referralInvestmentAmount && memberData.referralInvestmentAmount > 0;
+            
+            if (hasReferralInvestment) {
+                const referralInvestment = memberData.referralInvestmentAmount || 0;
+                const referralRate = memberData.referralDividendRate || 0;
+                const referralMonthlyDividend = Math.round(referralInvestment * referralRate / 100);
+                const referralCumulativeDividend = referralMonthlyDividend * investmentMonths;
+                
+                referralDividendHTML = `
+                    <div class="card" style="border: 1px solid rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.05);">
+                        <h2 class="card-title" style="color: #a855f7;">
+                            <i class="fas fa-users"></i>
+                            투자유치배당 현황
+                        </h2>
+                        <div class="info-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                            <div class="info-item">
+                                <div class="info-label">유치 투자금액</div>
+                                <div class="info-value highlight amount">${formatAmount(referralInvestment)}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">유치 배당률</div>
+                                <div class="info-value">${referralRate.toFixed(1)}%</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">유치 월 배당금</div>
+                                <div class="info-value highlight amount" style="color: #a855f7;">${formatAmount(referralMonthlyDividend)}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">유치 누적 배당금</div>
+                                <div class="info-value highlight amount" style="color: #a855f7;">${formatAmount(referralCumulativeDividend)}</div>
+                            </div>
+                        </div>
+                        <div class="summary-box" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3); margin-top: 1.5rem;">
+                            <div class="summary-label" style="color: #a855f7;">총 배당금 합계</div>
+                            <div class="summary-breakdown">
+                                <div class="breakdown-item">
+                                    <span class="breakdown-label">기본 누적배당</span>
+                                    <span class="breakdown-value">${formatAmount(calculatedDividend)}</span>
+                                </div>
+                                <div class="breakdown-plus">+</div>
+                                <div class="breakdown-item">
+                                    <span class="breakdown-label">유치 누적배당</span>
+                                    <span class="breakdown-value" style="color: #a855f7;">${formatAmount(referralCumulativeDividend)}</span>
+                                </div>
+                                <div class="breakdown-equals">=</div>
+                                <div class="breakdown-item total">
+                                    <span class="breakdown-label">총 누적배당</span>
+                                    <span class="breakdown-value" style="color: #a855f7;">${formatAmount(calculatedDividend + referralCumulativeDividend)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 월별 배당금 내역
+            let dividendTableHTML = '';
+            if (hasInvestment && investmentMonths > 0) {
+                dividendTableHTML = `
+                    <div class="card">
+                        <h2 class="card-title">
+                            <i class="fas fa-calendar-alt"></i>
+                            월별 배당금 내역
+                        </h2>
+                        <table class="dividend-table">
+                            <thead>
+                                <tr>
+                                    <th>차월</th>
+                                    <th>배당률</th>
+                                    <th>월 배당금</th>
+                                    <th>누적 배당금</th>
+                                    <th>배당금 지급일시</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${generateDividendRows()}
+                            </tbody>
+                        </table>
+                        
+                        <div class="summary-box">
+                            <div class="summary-label">총 투자운용금</div>
+                            <div class="summary-breakdown">
+                                <div class="breakdown-item">
+                                    <span class="breakdown-label">투자원금</span>
+                                    <span class="breakdown-value">${formatAmount(investmentAmount)}</span>
+                                </div>
+                                <div class="breakdown-plus">+</div>
+                                <div class="breakdown-item">
+                                    <span class="breakdown-label">누적배당</span>
+                                    <span class="breakdown-value">${formatAmount(calculatedDividend)}</span>
+                                </div>
+                                <div class="breakdown-equals">=</div>
+                                <div class="breakdown-item total">
+                                    <span class="breakdown-label">총자산</span>
+                                    <span class="breakdown-value">${formatAmount(totalAssets)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            contentArea.innerHTML = personalInfoHTML + investmentInfoHTML + referralDividendHTML + dividendTableHTML;
+        }
+
+        // 월별 배당금 행 생성
+        function generateDividendRows() {
+            const amount = memberData.investmentAmount || memberData.investment_amount || 0;
+            const rateStr = memberData.dividendRate || memberData.dividend_rate || '0%';
+            const paymentDateStr = memberData.dividendPaymentDate || memberData.dividend_payment_date;
+            
+            if (!amount || amount === 0 || !rateStr) return '';
+            
+            // 배당률에서 숫자만 추출 (예: "3.0%" -> 3.0)
+            const rate = parseFloat(rateStr.toString().replace('%', '').trim());
+            
+            // 월 배당금 = 투자금액 × (배당률 ÷ 100)
+            // 예: 30,000,000 × (3.0 ÷ 100) = 30,000,000 × 0.03 = 900,000원
+            const monthlyDividend = Math.round(amount * rate / 100);
+            const months = memberData.investmentMonths || memberData.investment_months || 0;
+
+            // 배당금 지급일 계산
+            let paymentDate = null;
+            if (paymentDateStr) {
+                paymentDate = new Date(paymentDateStr);
+            }
+
+            let rows = '';
+            let cumulativeDividend = 0;
+            
+            for (let i = 1; i <= months; i++) {
+                cumulativeDividend += monthlyDividend;
+                
+                // i번째 달의 배당금 지급일 계산
+                let monthPaymentDate = '-';
+                if (paymentDate) {
+                    const currentPaymentDate = new Date(paymentDate);
+                    currentPaymentDate.setMonth(currentPaymentDate.getMonth() + (i - 1));
+                    monthPaymentDate = formatDate(currentPaymentDate.toISOString());
+                }
+                
+                rows += `
+                    <tr>
+                        <td class="month-cell">${i}M</td>
+                        <td>${rate.toFixed(1)}%</td>
+                        <td class="amount-cell">${formatAmount(monthlyDividend)}</td>
+                        <td class="amount-cell cumulative">${formatAmount(cumulativeDividend)}</td>
+                        <td class="date-cell">${monthPaymentDate}</td>
+                    </tr>
+                `;
+            }
+            return rows;
+        }
+
+        // 날짜 포맷팅
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // 금액 포맷팅 (원 단위)
+        function formatAmount(amount) {
+            if (!amount) return '0원';
+            return Number(amount).toLocaleString('ko-KR') + '원';
+        }
+
+        // 에러 메시지 표시
+        function showError(message) {
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>${message}</div>
+                </div>
+            `;
+        }
+
+        // 페이지 로드 시 데이터 로드
+        loadUserData();
+    </script>
+    <script>
+        // Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            const navLinks = document.getElementById('navLinks');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            if (mobileMenuToggle) mobileMenuToggle.addEventListener('click', () => { navLinks.classList.add('mobile-active'); mobileOverlay.classList.add('active'); });
+            if (mobileMenuClose) mobileMenuClose.addEventListener('click', () => { navLinks.classList.remove('mobile-active'); mobileOverlay.classList.remove('active'); });
+            if (mobileOverlay) mobileOverlay.addEventListener('click', () => { navLinks.classList.remove('mobile-active'); mobileOverlay.classList.remove('active'); });
+            const signupBtn = document.getElementById('signupBtn');
+            const mobileSignupBtn2 = document.getElementById('mobileSignupBtn2');
+            if (signupBtn) signupBtn.addEventListener('click', (e) => { e.preventDefault(); window.location.href = 'signup.html'; });
+            if (mobileSignupBtn2) mobileSignupBtn2.addEventListener('click', (e) => { e.preventDefault(); window.location.href = 'signup.html'; });
+        });
+    </script>
+    
+    <!-- 로그인 모달 -->
+    <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:10000;align-items:center;justify-content:center;">
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:40px;border-radius:20px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,242,255,0.3);border:1px solid rgba(0,242,255,0.2);">
+            <span class="close-modal" style="float:right;font-size:28px;font-weight:bold;color:#00F2FF;cursor:pointer;line-height:20px;">&times;</span>
+            <h2 style="color:#00F2FF;margin-bottom:30px;font-size:24px;text-align:center;">로그인</h2>
+            <form id="loginForm">
+                <div style="margin-bottom:20px;">
+                    <label style="display:block;color:#fff;margin-bottom:8px;font-size:14px;">이메일</label>
+                    <input type="email" id="loginEmail" placeholder="이메일을 입력하세요" required style="width:100%;padding:12px;background:rgba(255,255,255,0.1);border:1px solid rgba(0,242,255,0.3);border-radius:8px;color:#fff;font-size:14px;box-sizing:border-box;">
+                </div>
+                <button type="submit" style="width:100%;padding:14px;background:linear-gradient(135deg,#00F2FF,#00a8cc);border:none;border-radius:8px;color:#000;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;margin-top:10px;">로그인</button>
+                <p style="text-align:center;margin-top:20px;color:#aaa;font-size:14px;">계정이 없으신가요? <a href="signup.html" style="color:#00F2FF;text-decoration:none;">회원가입</a></p>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-company">
+                <p class="company-name">밸류앤코어스(주)</p>
+                <p class="company-address">서울특별시 종로구 효자로 1길 5(통의동) 다모여빌딩 2층</p>
+                <p class="company-contact">
+                    전화: 07-356-6771 | 웹사이트: <a href="https://www.valuencores.com" target="_blank" rel="noopener noreferrer">www.valuencores.com</a>
+                </p>
+            </div>
+            
+            <div class="footer-disclaimer">
+                <div class="disclaimer-content">
+                    <strong>법적 면책조항(免責) 안내</strong>
+                    <p>본 플랫폼은 자본시장법, 가상자산이용자보호법 및 협동조합법을 준수하며 투자자 보호를 최우선으로 합니다. 특히 증권성 가상자산과 협동조합의 투자·자금 운용은 관련 법령에 따라 엄격히 규율됩니다. 이용자는 안전한 거래 환경 조성을 위해 법적 컴플라이언스 준수 여부를 상시 확인해야 하며, 당사는 규제 준수를 통한 투명한 서비스 제공에 최선을 다하고 있습니다.</p>
+                </div>
+            </div>
+            
+            <div class="footer-copyright">
+                <p>© 2026 D-Quant 9.0. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 로그인/로그아웃 기능 -->
+    <script src="js/auth.js"></script>
+    
+    <!-- ADMIN 접근 버튼 -->
+    <script src="js/admin-access.js"></script>
+</body>
+</html>

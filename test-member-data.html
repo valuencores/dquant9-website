@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 데이터 테스트</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #00F2FF;
+        }
+        .test-section {
+            background: #1a1a2e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid #00F2FF;
+        }
+        button {
+            background: #00F2FF;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        pre {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            color: #10b981;
+        }
+        .error {
+            color: #ef4444;
+        }
+        .success {
+            color: #10b981;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 회원 데이터 테스트</h1>
+        
+        <div class="test-section">
+            <h2>1. 전체 회원 조회</h2>
+            <button onclick="loadAllMembers()">전체 회원 조회</button>
+            <div id="allMembersResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. 특정 회원 검색 (나성수)</h2>
+            <button onclick="searchMember('crenah@daum.net')">이메일로 검색</button>
+            <button onclick="searchMember('나성수')">이름으로 검색</button>
+            <div id="searchResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. localStorage 확인</h2>
+            <button onclick="checkLocalStorage()">로그인 정보 확인</button>
+            <button onclick="setTestLogin()">테스트 로그인 설정</button>
+            <div id="localStorageResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // 전체 회원 조회
+        async function loadAllMembers() {
+            const resultDiv = document.getElementById('allMembersResult');
+            resultDiv.innerHTML = '<p>로딩 중...</p>';
+            
+            try {
+                const response = await fetch('tables/members_v2?limit=1000');
+                const result = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ 성공! 총 ${result.data?.length || 0}명의 회원</p>
+                    <pre>${JSON.stringify(result.data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">❌ 오류: ${error.message}</p>`;
+            }
+        }
+        
+        // 특정 회원 검색
+        async function searchMember(query) {
+            const resultDiv = document.getElementById('searchResult');
+            resultDiv.innerHTML = '<p>검색 중...</p>';
+            
+            try {
+                const response = await fetch(`tables/members_v2?search=${encodeURIComponent(query)}&limit=100`);
+                const result = await response.json();
+                
+                if (result.data && result.data.length > 0) {
+                    // 이메일이 정확히 일치하는 회원 찾기
+                    const member = result.data.find(m => 
+                        (m.email || '').toLowerCase() === query.toLowerCase() ||
+                        (m.name || m.memberName || '').includes(query)
+                    );
+                    
+                    if (member) {
+                        resultDiv.innerHTML = `
+                            <p class="success">✅ 회원 발견!</p>
+                            <pre>${JSON.stringify(member, null, 2)}</pre>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <p class="error">❌ 정확히 일치하는 회원 없음</p>
+                            <p>검색 결과: ${result.data.length}명</p>
+                            <pre>${JSON.stringify(result.data, null, 2)}</pre>
+                        `;
+                    }
+                } else {
+                    resultDiv.innerHTML = `<p class="error">❌ 검색 결과 없음</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">❌ 오류: ${error.message}</p>`;
+            }
+        }
+        
+        // localStorage 확인
+        function checkLocalStorage() {
+            const resultDiv = document.getElementById('localStorageResult');
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            
+            if (loggedInUser) {
+                try {
+                    const parsed = JSON.parse(loggedInUser);
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ 로그인 정보 있음</p>
+                        <pre>${JSON.stringify(parsed, null, 2)}</pre>
+                    `;
+                } catch (e) {
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ 로그인 정보 있음 (문자열)</p>
+                        <pre>${loggedInUser}</pre>
+                    `;
+                }
+            } else {
+                resultDiv.innerHTML = `<p class="error">❌ 로그인 정보 없음</p>`;
+            }
+        }
+        
+        // 테스트 로그인 설정
+        function setTestLogin() {
+            const testUser = {
+                email: 'crenah@daum.net',
+                name: '나성수',
+                loginTime: new Date().toISOString()
+            };
+            localStorage.setItem('loggedInUser', JSON.stringify(testUser));
+            alert('테스트 로그인 설정 완료!\n이메일: crenah@daum.net');
+            checkLocalStorage();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - D-QUANT 9.0</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #00f2ff;
+            --secondary-color: #7c3aed;
+            --background-dark: #0a0e27;
+            --background-card: #1a1e3a;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --border-color: rgba(0, 242, 255, 0.2);
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1e3a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* 배경 애니메이션 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+        
+        .login-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            background: linear-gradient(135deg, rgba(26, 30, 58, 0.95) 0%, rgba(15, 18, 35, 0.95) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            box-shadow: 
+                0 20px 60px rgba(0, 242, 255, 0.1),
+                0 0 80px rgba(124, 58, 237, 0.1);
+            backdrop-filter: blur(20px);
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+        }
+        
+        .login-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-wrapper input {
+            width: 100%;
+            padding: 1rem;
+            padding-right: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 242, 255, 0.1);
+        }
+        
+        .password-toggle-btn {
+            position: absolute;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+            padding: 0.5rem;
+        }
+        
+        .password-toggle-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .forgot-password {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .forgot-password:hover {
+            opacity: 0.8;
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 1.1rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            border-radius: 10px;
+            color: #0a0e27;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.3);
+        }
+        
+        .btn-login:active {
+            transform: translateY(0);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .divider span {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .signup-link {
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        
+        .signup-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+        
+        .signup-link a:hover {
+            opacity: 0.8;
+        }
+        
+        .back-home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .back-home a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .back-home a:hover {
+            color: var(--primary-color);
+        }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .login-title {
+                font-size: 1.5rem;
+            }
+            
+            .logo {
+                font-size: 1.75rem;
+            }
+            
+            .logo i {
+                font-size: 2rem;
+            }
+        }
+        
+        /* 푸터 스타일 */
+        .footer {
+            background: #000000;
+            border-top: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 3rem 2rem 2rem;
+            margin-top: auto;
+            width: 100%;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .footer-company {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .company-name {
+            color: #00F2FF;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-address {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-contact {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+        
+        .company-contact a {
+            color: #00F2FF;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .company-contact a:hover {
+            opacity: 0.8;
+        }
+        
+        .footer-disclaimer {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .disclaimer-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .disclaimer-content {
+            flex: 1;
+        }
+        
+        .disclaimer-content strong {
+            color: #00F2FF;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .disclaimer-content p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .footer-copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-copyright p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- 헤더 -->
+        <div class="login-header">
+            <a href="index.html" class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>D-QUANT 9.0</span>
+            </a>
+            <h1 class="login-title">로그인</h1>
+            <p class="login-subtitle">디퀀트나인에 오신 것을 환영합니다</p>
+        </div>
+        
+        <!-- 로그인 폼 -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="loginEmail">이메일</label>
+                <div class="input-wrapper">
+                    <input type="email" id="loginEmail" placeholder="이메일을 입력하세요" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="loginPassword">비밀번호</label>
+                <div class="input-wrapper">
+                    <input type="password" id="loginPassword" placeholder="비밀번호를 입력하세요" required>
+                    <button type="button" class="password-toggle-btn" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" id="rememberEmail">
+                    <span>이메일 기억하기</span>
+                </label>
+                <a href="#" class="forgot-password" id="forgotPasswordLink">비밀번호 찾기</a>
+            </div>
+            
+            <button type="submit" class="btn-login">로그인</button>
+        </form>
+        
+        <div class="divider">
+            <span>또는</span>
+        </div>
+        
+        <div class="signup-link">
+            <p>계정이 없으신가요? <a href="signup.html">회원가입</a></p>
+        </div>
+        
+        <div class="back-home">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i>
+                <span>홈으로 돌아가기</span>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // 비밀번호 표시/숨김 토글
+        document.getElementById('togglePassword').addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const passwordInput = document.getElementById('loginPassword');
+            const icon = this.querySelector('i');
+            
+            console.log('Password toggle clicked - current type:', passwordInput.type);
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+                console.log('Password now visible');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+                console.log('Password now hidden');
+            }
+        });
+        
+        // 저장된 이메일 불러오기
+        window.addEventListener('DOMContentLoaded', function() {
+            const rememberedEmail = localStorage.getItem('rememberedEmail');
+            if (rememberedEmail) {
+                document.getElementById('loginEmail').value = rememberedEmail;
+                document.getElementById('rememberEmail').checked = true;
+            }
+        });
+        
+        // 로그인 폼 제출
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const rememberEmail = document.getElementById('rememberEmail').checked;
+            
+            console.log('로그인 시도:', email);
+            
+            try {
+                // 회원 데이터 조회
+                const response = await fetch(`tables/members_v2?search=${encodeURIComponent(email)}&limit=1000`);
+                const result = await response.json();
+                
+                console.log('API 응답:', result);
+                console.log('검색된 회원 수:', result.data ? result.data.length : 0);
+                
+                if (!result.data || result.data.length === 0) {
+                    alert('등록되지 않은 이메일입니다.');
+                    return;
+                }
+                
+                // 이메일로 회원 찾기
+                const member = result.data.find(m => 
+                    (m.email && m.email.toLowerCase() === email.toLowerCase())
+                );
+                
+                console.log('찾은 회원:', member);
+                
+                if (!member) {
+                    alert('등록되지 않은 이메일입니다.');
+                    return;
+                }
+                
+                // 비밀번호 확인 (실제로는 암호화된 비밀번호와 비교해야 함)
+                // 현재는 간단한 검증
+                if (password.length < 4) {
+                    alert('비밀번호가 올바르지 않습니다.');
+                    return;
+                }
+                
+                // 로그인 성공
+                const loginData = {
+                    email: member.email,
+                    name: member.name || member.memberName,
+                    loginTime: new Date().toISOString()
+                };
+                
+                localStorage.setItem('loggedInUser', JSON.stringify(loginData));
+                
+                // 이메일 기억하기
+                if (rememberEmail) {
+                    localStorage.setItem('rememberedEmail', email);
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                }
+                
+                alert(`환영합니다, ${loginData.name}님!`);
+                
+                // 이전 페이지로 돌아가기 또는 메인 페이지로
+                const returnUrl = sessionStorage.getItem('returnUrl') || 'index.html';
+                sessionStorage.removeItem('returnUrl');
+                window.location.href = returnUrl;
+                
+            } catch (error) {
+                console.error('로그인 오류:', error);
+                alert('로그인 중 오류가 발생했습니다.');
+            }
+        });
+        
+        // 비밀번호 찾기 (추후 구현)
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('비밀번호 찾기 기능은 준비 중입니다.');
+        });
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-company">
+                <p class="company-name">밸류앤코어스(주)</p>
+                <p class="company-address">서울특별시 종로구 효자로 1길 5(통의동) 다모여빌딩 2층</p>
+                <p class="company-contact">
+                    전화: 07-356-6771 | 웹사이트: <a href="https://www.valuencores.com" target="_blank" rel="noopener noreferrer">www.valuencores.com</a>
+                </p>
+            </div>
+            
+            <div class="footer-disclaimer">
+                <div class="disclaimer-content">
+                    <strong>법적 면책조항(免責) 안내</strong>
+                    <p>본 플랫폼은 자본시장법, 가상자산이용자보호법 및 협동조합법을 준수하며 투자자 보호를 최우선으로 합니다. 특히 증권성 가상자산과 협동조합의 투자·자금 운용은 관련 법령에 따라 엄격히 규율됩니다. 이용자는 안전한 거래 환경 조성을 위해 법적 컴플라이언스 준수 여부를 상시 확인해야 하며, 당사는 규제 준수를 통한 투명한 서비스 제공에 최선을 다하고 있습니다.</p>
+                </div>
+            </div>
+            
+            <div class="footer-copyright">
+                <p>© 2026 D-Quant 9.0. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    </script>
+    
+    <!-- ADMIN 접근 버튼 -->
+    <script src="js/admin-access.js"></script>
+</body>
+</html>

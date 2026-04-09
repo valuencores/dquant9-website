@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.Insight - 연구진 소개 | D-QUANT 9.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #0f1824;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255,255,255,0.7);
+            --text-tertiary: rgba(255,255,255,0.4);
+            --cyan-glow: #00f2ff;
+            --emerald-safe: #10b981;
+            --glass-white: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+            
+            /* R&D Division 컴러 (Blue/Cyan - 기술, 혁신) */
+            --rd-primary: #00a8ff;
+            --rd-glow: #00d4ff;
+            --rd-bg: rgba(0, 168, 255, 0.08);
+            --rd-border: rgba(0, 168, 255, 0.3);
+            --rd-hover: rgba(0, 212, 255, 0.2);
+            
+            /* Planning & Mgmt. Division 컴러 (Green/Emerald - 성장, 안정) */
+            --pm-primary: #10b981;
+            --pm-glow: #34d399;
+            --pm-bg: rgba(16, 185, 129, 0.08);
+            --pm-border: rgba(16, 185, 129, 0.3);
+            --pm-hover: rgba(52, 211, 153, 0.2);
+            
+            /* Strategic Counsel Committee 컴러 (Purple/Violet - 전문성, 권위) */
+            --sc-primary: #8b5cf6;
+            --sc-glow: #a78bfa;
+            --sc-bg: rgba(139, 92, 246, 0.08);
+            --sc-border: rgba(139, 92, 246, 0.3);
+            --sc-hover: rgba(167, 139, 250, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-top: 80px;
+            display: flex;
+            flex-direction: column;
+        }
+        .glass-nav{background:rgba(15,23,42,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.1);position:fixed;top:0;width:100%;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,0.4)}.nav-container{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:80px}.nav-brand{display:flex;align-items:center;gap:0.75rem;text-decoration:none;color:var(--cyan-glow);font-size:1.5rem;font-weight:700;transition:all 0.3s;flex-shrink:0}.nav-brand:hover{opacity:0.8}.nav-links{display:flex;list-style:none;gap:2rem;align-items:center;flex:1;margin-left:3rem}.nav-links li{position:relative}.nav-links a{color:var(--text-secondary);text-decoration:none;font-weight:500;font-size:0.95rem;transition:all 0.3s;position:relative;white-space:nowrap}.nav-links a:hover{color:var(--cyan-glow)}.nav-links li:nth-of-type(1) a::after,.nav-links li:nth-of-type(2) a::after,.nav-links li:nth-of-type(3) a::after{content:'';position:absolute;bottom:-8px;left:0;width:0;height:2px;background:var(--cyan-glow);transition:width 0.3s ease}.nav-links li:nth-of-type(1) a:hover::after,.nav-links li:nth-of-type(2) a:hover::after,.nav-links li:nth-of-type(3) a:hover::after,.nav-links li:nth-of-type(1) a.active::after,.nav-links li:nth-of-type(2) a.active::after,.nav-links li:nth-of-type(3) a.active::after{width:100%}.nav-actions{display:flex;align-items:center;gap:1rem;position:relative;z-index:100}.nav-link-text{color:var(--text-secondary);text-decoration:none;font-weight:500;font-size:0.95rem;transition:all 0.3s}.nav-link-text:hover{color:var(--cyan-glow)}.btn-my-info-icon{width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(147,51,234,0.1));border:2px solid transparent;border-radius:50%;color:var(--text-secondary);text-decoration:none;font-size:1.25rem;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden}.btn-my-info-icon::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(135deg,#A855F7,#9333EA,#A855F7);background-size:300% 300%;border-radius:50%;z-index:-1;animation:shimmer-border 3s ease-in-out infinite;opacity:0;transition:opacity 0.3s}.btn-my-info-icon:hover::before{opacity:1}.btn-my-info-icon:hover{color:#A855F7;transform:translateY(-2px);box-shadow:0 5px 20px rgba(168,85,247,0.4)}.mobile-menu-toggle{display:none;background:none;border:none;color:var(--text-secondary);font-size:1.5rem;cursor:pointer;padding:0.5rem;z-index:1001;position:relative;transition:color 0.3s}.mobile-menu-toggle:hover{color:var(--cyan-glow)}.mobile-menu-close{display:none;position:absolute;top:20px;right:20px;background:none;border:none;color:var(--text-secondary);font-size:1.5rem;cursor:pointer;padding:0.5rem;z-index:1002;transition:color 0.3s}.mobile-menu-close:hover{color:var(--cyan-glow)}.mobile-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;opacity:0;transition:opacity 0.3s}.mobile-overlay.active{display:block;opacity:1}.nav-links li:nth-of-type(4) a{padding:0.5rem 1rem;background:linear-gradient(135deg,rgba(0,242,255,0.1),rgba(16,185,129,0.1));border:2px solid transparent;border-radius:8px;position:relative;overflow:hidden}.nav-links li:nth-of-type(4) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(135deg,#00F2FF,#10B981,#00F2FF);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmer-border 3s ease-in-out infinite}.nav-links li:nth-of-type(4) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(4) a:hover{color:#94A3B8;transform:translateY(-2px);box-shadow:0 5px 20px rgba(0,242,255,0.4)}.nav-links li:nth-of-type(5) a{padding:0.5rem 1rem;background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(147,51,234,0.1));border:2px solid transparent;border-radius:8px;position:relative;overflow:hidden}.nav-links li:nth-of-type(5) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(135deg,#A855F7,#9333EA,#A855F7);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmer-border 3s ease-in-out infinite}.nav-links li:nth-of-type(5) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(5) a:hover{color:#94A3B8;transform:translateY(-2px);box-shadow:0 5px 20px rgba(168,85,247,0.4)}.nav-links li:nth-of-type(6) a{padding:0.5rem 1rem;background:linear-gradient(135deg,rgba(255,182,193,0.1),rgba(255,105,180,0.1));border:2px solid transparent;border-radius:8px;position:relative;overflow:hidden}.nav-links li:nth-of-type(6) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(135deg,#FFB6C1,#FF69B4,#FFB6C1);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmer-border 3s ease-in-out infinite}.nav-links li:nth-of-type(6) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(6) a:hover{color:#94A3B8;transform:translateY(-2px);box-shadow:0 5px 20px rgba(255,105,180,0.4)}.nav-links li:nth-of-type(7) a,.nav-links li:nth-of-type(8) a{padding:0.5rem 1rem;background:linear-gradient(135deg,rgba(30,41,59,0.6),rgba(15,23,42,0.8));border:2px solid transparent;border-radius:8px;position:relative;overflow:hidden}.nav-links li:nth-of-type(7) a::before,.nav-links li:nth-of-type(8) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(135deg,#1E293B,#0F172A,#1E293B);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmer-border 3s ease-in-out infinite}.nav-links li:nth-of-type(7) a::after,.nav-links li:nth-of-type(8) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(7) a:hover,.nav-links li:nth-of-type(8) a:hover{color:#94A3B8;transform:translateY(-2px);box-shadow:0 5px 20px rgba(30,41,59,0.4)}.nav-links li:nth-of-type(7) a .fa-user-plus,.nav-links li:nth-of-type(8) a .login-icon{margin-right:0.5rem}@keyframes shimmer-border{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}@keyframes shine{0%{left:-100%}50%,100%{left:100%}}@media(min-width:993px){.nav-actions{display:flex !important}.mobile-menu-toggle{display:none}}@media(min-width:1201px){.nav-links li:nth-of-type(5),.nav-links li:nth-of-type(6),.nav-links li:nth-of-type(7),.nav-links li:nth-of-type(8){display:none}}@media(max-width:1200px){.nav-actions .btn-my-info-icon,.nav-actions .nav-link-text{display:none}.mobile-menu-toggle{display:block}.nav-links{position:fixed;top:0;right:-100%;width:320px;height:100vh;background:var(--bg-secondary);padding:80px 30px 30px;flex-direction:column;gap:1rem;transition:right 0.3s ease;z-index:1000;overflow-y:auto;border-left:1px solid rgba(255,255,255,0.1);box-shadow:-5px 0 15px rgba(0,0,0,0.3);margin-left:0}.nav-links.mobile-active{right:0}.mobile-menu-close{display:block}.mobile-menu-actions{display:flex}.nav-links li{width:100%}}@media(max-width:768px){.nav-links li:nth-of-type(4) a,.nav-links li:nth-of-type(5) a,.nav-links li:nth-of-type(6) a,.nav-links li:nth-of-type(7) a,.nav-links li:nth-of-type(8) a{padding:14px 20px;text-align:left}}
+        
+        /* 페이지 헤더 */
+        .page-header {
+            padding: 3rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(0,242,255,0.05), rgba(16,185,129,0.05));
+            border-bottom: 1px solid rgba(0,242,255,0.1);
+        }
+        
+        .page-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(0,242,255,0.1);
+            border: 1px solid rgba(0,242,255,0.3);
+            border-radius: 50px;
+            color: var(--cyan-glow);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .page-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cyan-glow), var(--emerald-safe));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .page-subtitle {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* 팀 그리드 */
+        .team-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        /* Division 헤더 */
+        .division-header {
+            margin: 4rem 0 2rem;
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 2px solid rgba(0,242,255,0.3);
+            position: relative;
+        }
+        
+        .division-header:first-of-type {
+            margin-top: 0;
+        }
+        
+        .division-header::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan-glow), transparent);
+        }
+        
+        .division-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cyan-glow), var(--emerald-safe));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .division-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        /* 팀 멤버 카드 */
+        .team-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--cyan-glow), var(--emerald-safe));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .team-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(0,242,255,0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,242,255,0.2);
+        }
+        
+        .team-card:hover::before {
+            opacity: 1;
+        }
+        
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .member-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cyan-glow), var(--emerald-safe));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--bg-primary);
+            flex-shrink: 0;
+        }
+        
+        .member-info {
+            flex: 1;
+        }
+        
+        .member-name-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .member-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .member-name-en {
+            font-size: 0.95rem;
+            color: var(--cyan-glow);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .member-title {
+            font-size: 1rem;
+            color: var(--emerald-safe);
+            font-weight: 600;
+        }
+        
+        .member-education {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .education-item {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            padding-left: 1.2rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+        
+        .education-item::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--cyan-glow);
+            font-size: 0.7rem;
+        }
+        
+        .member-experience {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .experience-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+        
+        .experience-icon {
+            color: var(--emerald-safe);
+            font-size: 0.9rem;
+            margin-top: 0.15rem;
+            flex-shrink: 0;
+        }
+        
+        /* Planning & Mgmt. Division 전용 스타일 - 폰트 크기 조정 (원본의 93.75%) */
+        .team-grid-executives {
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .team-grid-executives .member-name {
+            font-size: 1.40625rem; /* 1.5rem × 0.9375 = 1.40625rem */
+        }
+        
+        .team-grid-executives .member-name-en {
+            font-size: 0.890625rem; /* 0.95rem × 0.9375 = 0.890625rem */
+        }
+        
+        .team-grid-executives .member-title {
+            font-size: 0.9375rem; /* 1rem × 0.9375 = 0.9375rem */
+        }
+        
+        .team-grid-executives .education-item {
+            font-size: 0.84375rem; /* 0.9rem × 0.9375 = 0.84375rem */
+        }
+        
+        .team-grid-executives .experience-item {
+            font-size: 0.796875rem; /* 0.85rem × 0.9375 = 0.796875rem */
+        }
+        
+        .team-grid-executives .experience-icon {
+            font-size: 0.84375rem; /* 0.9rem × 0.9375 = 0.84375rem */
+        }
+        
+        /* Strategic Counsel Committee 전용 스타일 - 폰트 20% 감소 (원본의 80%) */
+        .team-grid-counsel {
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .team-grid-counsel .member-name {
+            font-size: 1.2rem; /* 1.5rem × 0.8 = 1.2rem */
+        }
+        
+        .team-grid-counsel .member-name-en {
+            font-size: 0.76rem; /* 0.95rem × 0.8 = 0.76rem */
+        }
+        
+        .team-grid-counsel .member-title {
+            font-size: 0.8rem; /* 1rem × 0.8 = 0.8rem */
+        }
+        
+        .team-grid-counsel .education-item {
+            font-size: 0.72rem; /* 0.9rem × 0.8 = 0.72rem */
+        }
+        
+        .team-grid-counsel .experience-item {
+            font-size: 0.68rem; /* 0.85rem × 0.8 = 0.68rem */
+        }
+        
+        .team-grid-counsel .experience-icon {
+            font-size: 0.72rem; /* 0.9rem × 0.8 = 0.72rem */
+        }
+        
+        /* ═══════════════════════════════════════════════════
+           SECTION COLOR THEMES - 섹션별 컬러 테마
+        ═══════════════════════════════════════════════════ */
+        
+        /* R&D Division - Blue/Cyan Theme */
+        .section-rd .team-card {
+            background: var(--rd-bg);
+            border-color: var(--rd-border);
+        }
+        
+        .section-rd .team-card::before {
+            background: linear-gradient(90deg, var(--rd-primary), var(--rd-glow));
+        }
+        
+        .section-rd .team-card:hover {
+            border-color: var(--rd-glow);
+            box-shadow: 0 10px 40px var(--rd-hover);
+        }
+        
+        .section-rd .member-avatar {
+            background: linear-gradient(135deg, var(--rd-primary), var(--rd-glow));
+        }
+        
+        .section-rd .member-name-en {
+            color: var(--rd-glow);
+        }
+        
+        .section-rd .member-title {
+            color: var(--rd-primary);
+        }
+        
+        .section-rd .education-item::before {
+            color: var(--rd-glow);
+        }
+        
+        .section-rd .experience-icon {
+            color: var(--rd-primary);
+        }
+        
+        /* Planning & Mgmt. Division - Green/Emerald Theme */
+        .section-pm .team-card {
+            background: var(--pm-bg);
+            border-color: var(--pm-border);
+        }
+        
+        .section-pm .team-card::before {
+            background: linear-gradient(90deg, var(--pm-primary), var(--pm-glow));
+        }
+        
+        .section-pm .team-card:hover {
+            border-color: var(--pm-glow);
+            box-shadow: 0 10px 40px var(--pm-hover);
+        }
+        
+        .section-pm .member-avatar {
+            background: linear-gradient(135deg, var(--pm-primary), var(--pm-glow));
+        }
+        
+        .section-pm .member-name-en {
+            color: var(--pm-glow);
+        }
+        
+        .section-pm .member-title {
+            color: var(--pm-primary);
+        }
+        
+        .section-pm .education-item::before {
+            color: var(--pm-glow);
+        }
+        
+        .section-pm .experience-icon {
+            color: var(--pm-primary);
+        }
+        
+        /* Strategic Counsel Committee - Purple/Violet Theme */
+        .section-sc .team-card {
+            background: var(--sc-bg);
+            border-color: var(--sc-border);
+        }
+        
+        .section-sc .team-card::before {
+            background: linear-gradient(90deg, var(--sc-primary), var(--sc-glow));
+        }
+        
+        .section-sc .team-card:hover {
+            border-color: var(--sc-glow);
+            box-shadow: 0 10px 40px var(--sc-hover);
+        }
+        
+        .section-sc .member-avatar {
+            background: linear-gradient(135deg, var(--sc-primary), var(--sc-glow));
+        }
+        
+        .section-sc .member-name-en {
+            color: var(--sc-glow);
+        }
+        
+        .section-sc .member-title {
+            color: var(--sc-primary);
+        }
+        
+        .section-sc .education-item::before {
+            color: var(--sc-glow);
+        }
+        
+        .section-sc .experience-icon {
+            color: var(--sc-primary);
+        }
+        
+        /* 푸터 */
+        .footer {
+            background: #000000;
+            border-top: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 3rem 2rem 2rem;
+            margin-top: auto;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .footer-company {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .company-name {
+            color: #00F2FF;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-address {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-contact {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+        
+        .company-contact a {
+            color: #00F2FF;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .company-contact a:hover {
+            opacity: 0.8;
+        }
+        
+        .footer-disclaimer {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .disclaimer-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .disclaimer-content {
+            flex: 1;
+        }
+        
+        .disclaimer-content strong {
+            color: #00F2FF;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .disclaimer-content p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .footer-copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-copyright p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            /* 타이틀 크기 30% 감소 */
+            .page-title {
+                font-size: clamp(1.75rem, 3.5vw, 2.8rem); /* 30% 감소: 2.5rem → 1.75rem, 4rem → 2.8rem */
+            }
+            
+            .page-subtitle {
+                font-size: clamp(0.7rem, 1.4vw, 0.84rem); /* 30% 감소 */
+            }
+            
+            .division-header h2 {
+                font-size: 1.4rem; /* 30% 감소: 2rem → 1.4rem */
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .team-card {
+                padding: 1.5rem;
+            }
+            
+            .member-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .member-name {
+                font-size: 1.3rem;
+            }
+            
+            .page-header {
+                padding: 4rem 1rem 3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .member-avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .member-name {
+                font-size: 1.2rem;
+            }
+            
+            .member-name-en {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+    <style>.glass-nav{background:rgba(15,23,42,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.1);position:fixed;top:0;width:100%;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,0.4)}.nav-container{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:80px}.nav-brand{display:flex;align-items:center;gap:0.75rem;text-decoration:none;color:#00F2FF;font-size:1.5rem;font-weight:700;transition:all 0.3s;flex-shrink:0}.nav-brand:hover{opacity:0.8}.nav-links{display:flex;list-style:none;gap:2rem;align-items:center;flex:1;margin-left:3rem}.nav-links li{position:relative}.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-weight:500;font-size:0.95rem;transition:all 0.3s;position:relative;white-space:nowrap}.nav-links a:hover{color:#00F2FF}.nav-links li:nth-of-type(1) a::after,.nav-links li:nth-of-type(2) a::after,.nav-links li:nth-of-type(3) a::after{content:'';position:absolute;bottom:-8px;left:0;width:0;height:2px;background:#00F2FF;transition:width 0.3s ease}.nav-links li:nth-of-type(1) a:hover::after,.nav-links li:nth-of-type(2) a:hover::after,.nav-links li:nth-of-type(3) a:hover::after,.nav-links li:nth-of-type(1) a.active::after,.nav-links li:nth-of-type(2) a.active::after,.nav-links li:nth-of-type(3) a.active::after{width:100%}.nav-actions{display:flex;align-items:center;gap:1rem;position:relative;z-index:100}.nav-link-text{color:rgba(255,255,255,0.7);text-decoration:none;font-weight:500;font-size:0.95rem;transition:all 0.3s}.nav-link-text:hover{color:#00F2FF}.btn-my-info-icon{width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(147,51,234,0.1));border:2px solid transparent;border-radius:50%;color:rgba(255,255,255,0.7);text-decoration:none;font-size:1.25rem;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden}.btn-my-info-icon::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(45deg,#A855F7,#9333EA,#A855F7,#9333EA);background-size:300% 300%;border-radius:50%;z-index:-1;animation:shimmerBorder 3s ease-in-out infinite;opacity:0.8}.btn-my-info-icon:hover{color:#A855F7;transform:translateY(-2px) scale(1.1);box-shadow:0 5px 20px rgba(147,51,234,0.4)}.mobile-menu-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;padding:0.5rem;z-index:1100;position:relative}.mobile-menu-toggle:hover{color:#00F2FF}.mobile-menu-close{display:none;position:absolute;top:20px;right:20px;background:none;border:none;color:#fff;font-size:1.75rem;cursor:pointer;padding:0.5rem;z-index:1001}.mobile-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;opacity:0;transition:opacity 0.3s ease}.mobile-overlay.active{display:block;opacity:1}.nav-links li:nth-of-type(4) a{padding:0.5rem 1rem;border:2px solid transparent;border-radius:8px;background:linear-gradient(135deg,rgba(0,242,255,0.1),rgba(16,185,129,0.1));position:relative;overflow:hidden}.nav-links li:nth-of-type(4) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(45deg,#00F2FF,#10B981,#00F2FF,#10B981);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmerBorder 3s ease-in-out infinite;opacity:0.8}.nav-links li:nth-of-type(4) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(4) a:hover{color:#00F2FF;transform:translateY(-2px);box-shadow:0 5px 20px rgba(0,242,255,0.4)}.nav-links li:nth-of-type(4) a i{margin-right:0.5rem}.nav-links li:nth-of-type(5) a{padding:0.5rem 1rem;border:2px solid transparent;border-radius:8px;background:linear-gradient(135deg,rgba(147,51,234,0.1),rgba(168,85,247,0.1));position:relative;overflow:hidden}.nav-links li:nth-of-type(5) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(45deg,#9333EA,#A855F7,#9333EA,#A855F7);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmerBorder 3s ease-in-out infinite;opacity:0.8}.nav-links li:nth-of-type(5) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(5) a:hover{color:#A855F7;transform:translateY(-2px);box-shadow:0 5px 20px rgba(147,51,234,0.4)}.nav-links li:nth-of-type(5) a i{margin-right:0.5rem}.nav-links li:nth-of-type(6) a{padding:0.5rem 1rem;border:2px solid transparent;border-radius:8px;background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(244,114,182,0.1));position:relative;overflow:hidden}.nav-links li:nth-of-type(6) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(45deg,#EC4899,#F472B6,#EC4899,#F472B6);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmerBorder 3s ease-in-out infinite;opacity:0.8}.nav-links li:nth-of-type(6) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(6) a:hover{color:#EC4899;transform:translateY(-2px);box-shadow:0 5px 20px rgba(236,72,153,0.4)}.nav-links li:nth-of-type(6) a i{margin-right:0.5rem}.nav-links li:nth-of-type(7) a,.nav-links li:nth-of-type(8) a{padding:0.5rem 1rem;border:2px solid transparent;border-radius:8px;background:linear-gradient(135deg,rgba(30,41,59,0.5),rgba(51,65,85,0.5));position:relative;overflow:hidden}.nav-links li:nth-of-type(7) a::before,.nav-links li:nth-of-type(8) a::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;background:linear-gradient(45deg,#1E293B,#334155,#1E293B,#334155);background-size:300% 300%;border-radius:8px;z-index:-1;animation:shimmerBorder 3s ease-in-out infinite;opacity:0.8}.nav-links li:nth-of-type(7) a::after,.nav-links li:nth-of-type(8) a::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shine 2s ease-in-out infinite}.nav-links li:nth-of-type(7) a:hover,.nav-links li:nth-of-type(8) a:hover{color:#94A3B8;transform:translateY(-2px);box-shadow:0 5px 20px rgba(30,41,59,0.4)}.nav-links li:nth-of-type(7) a i,.nav-links li:nth-of-type(8) a i{margin-right:0.5rem}@keyframes shimmerBorder{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}@keyframes shine{0%{left:-100%}50%,100%{left:100%}}@media (min-width:993px){.nav-actions{display:flex!important}.mobile-menu-toggle{display:none!important}}@media (min-width:1201px){.nav-links li:nth-of-type(5),.nav-links li:nth-of-type(6),.nav-links li:nth-of-type(7),.nav-links li:nth-of-type(8){display:none}}@media (max-width:1200px){.nav-actions .btn-my-info-icon,.nav-actions .nav-link-text{display:none!important}.mobile-menu-toggle{display:block!important}.nav-links{position:fixed;top:0;right:-100%;width:320px;height:100vh;background:rgba(15,23,42,0.98);padding:80px 30px 30px;flex-direction:column;gap:16px;transition:right 0.3s ease;z-index:1000;overflow-y:auto;border-left:1px solid rgba(255,255,255,0.1);box-shadow:-4px 0 20px rgba(0,0,0,0.3);margin-left:0}.nav-links.mobile-active{right:0}.mobile-menu-close{display:block}.nav-links li{width:100%}.nav-links a{display:block;width:100%;padding:14px 20px;text-align:left}.nav-links li:nth-of-type(1) a::after,.nav-links li:nth-of-type(2) a::after,.nav-links li:nth-of-type(3) a::after{display:none}.nav-links li:nth-of-type(4) a,.nav-links li:nth-of-type(5) a,.nav-links li:nth-of-type(6) a,.nav-links li:nth-of-type(7) a,.nav-links li:nth-of-type(8) a{padding:14px 20px;text-align:left}}body{padding-top:80px}</style>
+</head>
+<body>
+    <nav class="glass-nav"><div class="nav-container"><a href="index.html" class="nav-brand"><i class="fas fa-chart-line"></i><span>D-QUANT 9.0</span></a><ul class="nav-links" id="navLinks"><button class="mobile-menu-close" id="mobileMenuClose"><i class="fas fa-times"></i></button><li><a href="index.html">디퀀트나인</a></li><li><a href="team.html" class="active">D.Insight</a></li><li><a href="simulation.html">투자운용 시뮬레이션</a></li><li><a href="my-assets.html"><i class="fas fa-wallet"></i> 나의 자산</a></li><li><a href="my-info.html" class="my-info-link"><i class="fas fa-user-circle"></i> 나의 정보</a></li><li><a href="support.html" class="customer-center-link"><i class="fas fa-headset"></i> 고객센터</a></li><li><a href="#" id="mobileSignupBtn2"><i class="fas fa-user-plus"></i> 회원가입</a></li><li><a href="#" id="mobileLoginBtn2"><i class="fas fa-sign-in-alt login-icon"></i><span class="login-text">로그인</span></a></li></ul><div class="mobile-overlay" id="mobileOverlay"></div><div class="nav-actions"><a href="my-info.html" class="btn-my-info-icon"><i class="fas fa-user-circle"></i></a><a href="#" class="nav-link-text" id="signupBtn">회원가입</a><a href="#" class="nav-link-text" id="loginBtn">로그인</a><a href="support.html" class="nav-link-text">고객센터</a><button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button></div></div></nav>
+    <!-- 페이지 헤더 -->
+    <header class="page-header">
+        <div class="page-badge">
+            <i class="fas fa-users"></i> RESEARCH TEAM
+        </div>
+        <h1 class="page-title">D.Insight</h1>
+        <p class="page-subtitle">
+            D-QUANT 9.0 개발 프로젝트를 이끌고 있는<br>
+            전문연구진과 사업기획/운영진을 소개합니다
+        </p>
+    </header>
+
+    <!-- 팀 그리드 -->
+    <div class="team-container">
+        <!-- R&D Division -->
+        <div class="section-rd">
+        <div class="division-header">
+            <h2 class="division-title">R&D Division</h2>
+            <p class="division-subtitle">연구개발 본부</p>
+        </div>
+        
+        <div class="team-grid">
+            <!-- LIHAM 임현 박사 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-user-tie"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">임현 박사</h3>
+                            <span class="member-name-en">LIHAM</span>
+                        </div>
+                        <p class="member-title">연구개발총괄</p>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">고려대학교 학사</div>
+                    <div class="education-item">서강대학교 미디어커뮤니케이션 석사</div>
+                    <div class="education-item">한국외국어대학교 언어학 박사(수료)</div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>디지털언어학, 인공지능 LLM-Corpus 연구</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>가상자산 AI 자동투자 서비스 MC9 개발 프레임워크 연구</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>DILLIAN META INC. 가상자산투자운용 총괄이사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>AI시대의 문명/문화 비평서 '듣보말읽쓰' 집필/출간</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHRIS. PARK 박승진 박사 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-user-graduate"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">박승진 박사</h3>
+                            <span class="member-name-en">CHRIS. PARK</span>
+                        </div>
+                        <p class="member-title">AI 금융공학 분석/학습총괄</p>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">한양대학교 인공지능융합학과 학사/석사/박사</div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>딥러닝기반 금융정보 비식별화 통합프레임워크 개발</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>데이터 전처리, NLP 기반 모델 학습 및 튜닝</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>NER 고도화를 활용한 투자학습모형 개발</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BRIAN KIM 김성원 박사 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-user-cog"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">김성원 박사</h3>
+                            <span class="member-name-en">BRIAN KIM</span>
+                        </div>
+                        <p class="member-title">시스템 아키텍처</p>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">서울대학교 컴퓨터공학과 학사</div>
+                    <div class="education-item">한국과학기술원(KAIST) 컴퓨터공학과 석사</div>
+                    <div class="education-item">KAIST 산업및시스템공학과 박사</div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>탈중앙화자산관리시스템 개발</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>스테이블코인 평가시스템 개발</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>금융투자플랫폼 FINT 인공지능 파인튜닝 개발</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JAY KIM 김현수 이사 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-laptop-code"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">김현수 이사</h3>
+                            <span class="member-name-en">JAY KIM</span>
+                        </div>
+                        <p class="member-title">기술기획 PM</p>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">한국외국어대학교 컴퓨터공학과 학사</div>
+                    <div class="education-item">감리교신학대학원 M.Div 석사</div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>ING생명보험/미래애셋생명보험 금융분석/자산설계</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>중국 알리바바 디스트리뷰션즈 대표이사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>중국-베트남 무역 플랫폼 GOLP 서비스 사업 기획 총괄</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>디퀀트나인 플랫폼 기술 기획 및 개발 PM</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 밸류앤코어스(주) 인공지능금융연구소 소장</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+        <!-- Planning & Mgmt. Division -->
+        <div class="section-pm">
+        <div class="division-header">
+            <h2 class="division-title">Planning & Mgmt. Division</h2>
+            <p class="division-subtitle">전략기획 및 운용관리 본부</p>
+        </div>
+        
+        <div class="team-grid team-grid-executives">
+            <!-- NAHDAN 나성수 대표 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-user-shield"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">나성수 대표</h3>
+                            <span class="member-name-en">NAHDAN</span>
+                        </div>
+                        <p class="member-title">전략기획/정책PM</p>
+                        <p class="member-title">ValuenCores 대표이사</p>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">연세대학교 영문학 학사</div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>중앙일보 조인스닷컴 편집국, TBWA KOREA 광고기획</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>전, WINNESTIDE KOREA 대표이사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 밸류앤코어스(주) 대표이사 / 디코퍼레이트 이사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>'26 서울시 AI 정책플랫폼 자문/기획위원</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>'26 인천시의회 스마트의정 정책자문위원</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>시니어 AI Agent 서비스 '에버영' 서비스 기획 총괄</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>AI 활용 P-Matrix 기업 성과 모형 기획, 개발 총괄</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>AI시대의 문명/문화 비평서 '듣보말읽쓰', '엑시니어' 출간</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DANIEL CHAE 채우성 대표 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-briefcase"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">채우성 대표</h3>
+                            <span class="member-name-en">DANIEL CHAE</span>
+                        </div>
+                        <p class="member-title">ValuenCores 전략사업부문 대표</p>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">수원대학교 경영학과 학사</div>
+                    <div class="education-item">경희대학교 글로벌경영학과 학사</div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>롯데제과 기획실/유통사업본부 소장</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>미당프랜차이즈 대표이사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>INNO KOREA 대표이사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>DO COMPANY 대표이사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>국내외 F&B 서비스 프로모션 전문 컨설팅 다수 진행</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>스페인-한국 중개무역 SPO, ValuenSpain 사업 총괄</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 밸류앤코어스(주) 무역사업본부 GM/PM</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ANDREW KIM 김한님 이사장 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-user-tie"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">김한님 이사장</h3>
+                            <span class="member-name-en">ANDREW KIM</span>
+                        </div>
+                        <p class="member-title">D.Cooperative Chairman</p>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">한양대학교 영문학/독문학 학사</div>
+                    <div class="education-item">감리교신학대학원 M.Div 석사</div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>GS홀딩스 글로벌사업부 미주/유럽 책임</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>미국뉴저지 사랑의교회 담임목사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>Dolby Laboratories 한국지사장</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>크립토비즈니스 컨설팅펌, DeCentre 총괄이사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 미국 SingleStone 글로벌 세일즈 코어 파트너</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, APlatform Inc. 플랫폼영업본부장/이사</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Strategic Counsel Committee -->
+    <div class="section-sc">
+    <div class="team-section">
+        <div class="division-header">
+            <h2 class="division-title">Strategic Counsel Committee</h2>
+            <p class="division-subtitle">전략자문위원회</p>
+        </div>
+        
+        <div class="team-grid team-grid-counsel">
+            <!-- 최철민 변호사 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-gavel"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">최철민 변호사</h3>
+                        </div>
+                        <p class="member-title">Legal Counsel</p>
+                    </div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 최앤리법률사무소 대표변호사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>공무원연금공단 감사관</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>중소벤처기업부 법률자문</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>창업진흥원 법률자문 위원</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>서울경제진흥원(SBA) 법률자문 위원</span>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">전주 상산고등학교 졸업</div>
+                    <div class="education-item">연세대학교(법학) 학사</div>
+                    <div class="education-item">서울시립대학교 법학전문대학원</div>
+                </div>
+            </div>
+
+            <!-- 정재권 변호사 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-balance-scale"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">정재권 변호사</h3>
+                        </div>
+                        <p class="member-title">Legal Counsel</p>
+                    </div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 법률사무소 화음 대표변호사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 과학기술정보통신부 고문변호사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 법정위원회 연구자권익보호위원회 위원</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 한국연구재단 제재처분평가단 위원</span>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">한성과학고등학교 졸업</div>
+                    <div class="education-item">서울대학교 공과대학 조선해양공학과 학사 졸업</div>
+                    <div class="education-item">충남대학교 법학전문대학원 전문석사 졸업</div>
+                    <div class="education-item">서울대학교 기술과법센터 박사후 연구원</div>
+                    <div class="education-item">서울대학교 법과대학 법학과 박사 졸업</div>
+                </div>
+            </div>
+
+            <!-- 김진 변리사 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-lightbulb"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">김진 변리사</h3>
+                        </div>
+                        <p class="member-title">Patent Counsel</p>
+                    </div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 모아특허법인 대표 변리사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>유미특허법인 변리사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>팬코리아특허법인 변리사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>김&장 법률사무소 변리사</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>대한변리사회 정회원</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>한국신용평가원 기술전문가</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>신용보증기금 컨설턴트</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>발명진흥회 지식재산 경영인증 심사위원</span>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">서울대학교 기계항공공학부 학사</div>
+                </div>
+            </div>
+
+            <!-- 서병윤 고문 -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="member-avatar"><i class="fas fa-chart-line"></i></div>
+                    <div class="member-info">
+                        <div class="member-name-wrapper">
+                            <h3 class="member-name">서병윤 고문</h3>
+                        </div>
+                        <p class="member-title">Business Counsel</p>
+                    </div>
+                </div>
+                
+                <div class="member-experience">
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>현, 가상자산전략투자사 DSRV 최고사업책임자</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>전, 금융위원회 사무관(가상자산 금융정책 담당)</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>전, 빗썸경제연구소장</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>금융위원회 사무관</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>핀테크산업협회 자문위원</span>
+                    </div>
+                    <div class="experience-item">
+                        <i class="fas fa-check-circle experience-icon"></i>
+                        <span>은행법학회 이사</span>
+                    </div>
+                </div>
+                
+                <div class="member-education">
+                    <div class="education-item">연세대학교 경제학과 학사</div>
+                    <div class="education-item">UC San Diego 석사</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-company">
+                <p class="company-name">밸류앤코어스(주)</p>
+                <p class="company-address">서울특별시 종로구 효자로 1길 5(통의동) 다모여빌딩 2층</p>
+                <p class="company-contact">
+                    전화: 07-356-6771 | 웹사이트: <a href="https://www.valuencores.com" target="_blank" rel="noopener noreferrer">www.valuencores.com</a>
+                </p>
+            </div>
+            
+            <div class="footer-disclaimer">
+                <div class="disclaimer-content">
+                    <strong>법적 면책조항(免責) 안내</strong>
+                    <p>본 플랫폼은 자문사업법, 거짓허위정보금지법 및 법령준수제도를 준수하여 투자자 참조용 정보로서 운영됩니다. 투자 중실명 거짓산출 법령준수 위반자는 관련 법령에 따라 엄중히 규제됩니다. 이용자는 언제나 거짓산적 참조용로 하며 법적 면책라이언스 준수 어떤한 실시 법칙에피 어떤 공식 준수를 통한 무협한 시 어떠한 다운로드 밝혀집니다.</p>
+                </div>
+            </div>
+            
+            <div class="footer-copyright">
+                <p>© 2026 D-Quant 9.0. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 모바일 메뉴 스크립트 -->
+    <script>
+        // 모바일 메뉴 토글
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const navLinks = document.getElementById('navLinks');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const body = document.body;
+        
+        function openMenu() {
+            navLinks.classList.add('mobile-active');
+            mobileOverlay.classList.add('active');
+            body.style.overflow = 'hidden';
+        }
+        
+        function closeMenu() {
+            navLinks.classList.remove('mobile-active');
+            mobileOverlay.classList.remove('active');
+            body.style.overflow = '';
+        }
+        
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', openMenu);
+        }
+        
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeMenu);
+        }
+        
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', closeMenu);
+        }
+        
+        // 메뉴 링크 클릭 시 닫기
+        const menuLinks = navLinks.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 992) {
+                    setTimeout(closeMenu, 200);
+                }
+            });
+        });
+    </script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const t=document.getElementById('mobileMenuToggle'),e=document.getElementById('mobileMenuClose'),n=document.getElementById('navLinks'),o=document.getElementById('mobileOverlay');t&&t.addEventListener('click',()=>{n.classList.add('mobile-active');o.classList.add('active')});e&&e.addEventListener('click',()=>{n.classList.remove('mobile-active');o.classList.remove('active')});o&&o.addEventListener('click',()=>{n.classList.remove('mobile-active');o.classList.remove('active')});const c=document.getElementById('signupBtn'),i=document.getElementById('mobileSignupBtn2');c&&c.addEventListener('click',e=>{e.preventDefault();window.location.href='signup.html'});i&&i.addEventListener('click',e=>{e.preventDefault();window.location.href='signup.html'})});</script>
+    <script src="js/check-login.js"></script>
+    
+    <!-- 로그인 모달 -->
+    <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:10000;align-items:center;justify-content:center;">
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:40px;border-radius:20px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,242,255,0.3);border:1px solid rgba(0,242,255,0.2);">
+            <span class="close-modal" style="float:right;font-size:28px;font-weight:bold;color:#00F2FF;cursor:pointer;line-height:20px;">&times;</span>
+            <h2 style="color:#00F2FF;margin-bottom:30px;font-size:24px;text-align:center;">로그인</h2>
+            <form id="loginForm">
+                <div style="margin-bottom:20px;">
+                    <label style="display:block;color:#fff;margin-bottom:8px;font-size:14px;">이메일</label>
+                    <input type="email" id="loginEmail" placeholder="이메일을 입력하세요" required style="width:100%;padding:12px;background:rgba(255,255,255,0.1);border:1px solid rgba(0,242,255,0.3);border-radius:8px;color:#fff;font-size:14px;box-sizing:border-box;">
+                </div>
+                <button type="submit" style="width:100%;padding:14px;background:linear-gradient(135deg,#00F2FF,#00a8cc);border:none;border-radius:8px;color:#000;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;margin-top:10px;">로그인</button>
+                <p style="text-align:center;margin-top:20px;color:#aaa;font-size:14px;">계정이 없으신가요? <a href="signup.html" style="color:#00F2FF;text-decoration:none;">회원가입</a></p>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 로그인/로그아웃 기능 -->
+    <script src="js/auth.js"></script>
+    
+    <!-- 로그인 가드 (나의 자산, 나의 정보 접근 제어) -->
+    <script src="js/login-guard.js"></script>
+    
+    <!-- ADMIN 접근 버튼 -->
+    <script src="js/admin-access.js"></script>
+</body>
+</html>

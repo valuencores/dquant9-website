@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 로그인 - D-QUANT 9.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-dark: #0a0a0a;
+            --secondary-dark: #1a1a1a;
+            --accent-cyan: #00F2FF;
+            --cyan-glow: #00F2FF;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --emerald-safe: #10b981;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+        }
+        
+        .admin-login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+        }
+        
+        .admin-login-card {
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 242, 255, 0.1);
+        }
+        
+        .admin-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-logo i {
+            font-size: 4rem;
+            color: var(--cyan-glow);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .admin-logo h1 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-logo p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 0 3px rgba(0, 242, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .password-toggle-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.3rem;
+            transition: color 0.3s ease;
+        }
+        
+        .password-toggle-btn:hover {
+            color: var(--cyan-glow);
+        }
+        
+        .admin-submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--cyan-glow) 0%, #0099cc 100%);
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .admin-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 242, 255, 0.3);
+        }
+        
+        .admin-submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .security-notice {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .security-notice i {
+            color: #ef4444;
+            margin-right: 0.5rem;
+        }
+        
+        .security-notice p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .back-link a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link a:hover {
+            color: var(--cyan-glow);
+        }
+        
+        /* 토스트 메시지 */
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 242, 255, 0.15);
+            border: 1px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            z-index: 10001;
+            animation: toastSlideUp 0.3s ease-out;
+            box-shadow: 0 4px 12px rgba(0, 242, 255, 0.2);
+        }
+        
+        @keyframes toastSlideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        .toast-message.error {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #ef4444;
+            color: #ef4444;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+        
+        .toast-message.success {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--emerald-safe);
+            color: var(--emerald-safe);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        
+        /* 반응형 미디어 쿼리 */
+        @media (max-width: 768px) {
+            .admin-login-container {
+                padding: 1rem;
+            }
+            
+            .admin-login-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .admin-logo i {
+                font-size: 3rem;
+            }
+            
+            .admin-logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .admin-logo p {
+                font-size: 0.85rem;
+            }
+            
+            .form-group input {
+                padding: 0.875rem 0.875rem 0.875rem 2.75rem;
+                font-size: 0.95rem;
+            }
+            
+            .input-icon {
+                font-size: 1rem;
+                left: 0.875rem;
+            }
+            
+            .admin-submit-btn {
+                padding: 0.875rem;
+                font-size: 1rem;
+            }
+            
+            .security-notice {
+                padding: 0.875rem;
+            }
+            
+            .security-notice p {
+                font-size: 0.8rem;
+            }
+            
+            .toast-message {
+                bottom: 20px;
+                left: 1rem;
+                right: 1rem;
+                transform: none;
+                padding: 0.875rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            @keyframes toastSlideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .admin-login-card {
+                padding: 1.5rem 1rem;
+            }
+            
+            .admin-logo i {
+                font-size: 2.5rem;
+            }
+            
+            .admin-logo h1 {
+                font-size: 1.3rem;
+            }
+        }
+        
+        /* 푸터 스타일 */
+        .footer {
+            background: #000000;
+            border-top: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 3rem 2rem 2rem;
+            margin-top: auto;
+            width: 100%;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .footer-company {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .company-name {
+            color: #00F2FF;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-address {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-contact {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+        
+        .company-contact a {
+            color: #00F2FF;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .company-contact a:hover {
+            opacity: 0.8;
+        }
+        
+        .footer-disclaimer {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .disclaimer-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .disclaimer-content {
+            flex: 1;
+        }
+        
+        .disclaimer-content strong {
+            color: #00F2FF;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .disclaimer-content p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .footer-copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-copyright p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-login-container">
+        <div class="admin-login-card">
+            <div class="admin-logo">
+                <i class="fas fa-user-shield"></i>
+                <h1>관리자 로그인</h1>
+                <p>D-QUANT 9.0 Admin Panel</p>
+            </div>
+            
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminEmail">관리자 이메일</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="adminEmail" placeholder="valuencores@gmail.com" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="adminPassword">비밀번호</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="adminPassword" placeholder="비밀번호를 입력하세요" required>
+                        <button type="button" class="password-toggle-btn" data-target="adminPassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="admin-submit-btn">
+                    <i class="fas fa-sign-in-alt"></i> 관리자 로그인
+                </button>
+            </form>
+            
+            <div class="security-notice">
+                <p>
+                    <i class="fas fa-shield-alt"></i>
+                    <strong>보안 알림:</strong> 관리자 계정은 승인된 인원만 접근 가능합니다.
+                    무단 접근 시도는 기록되며 법적 조치가 취해질 수 있습니다.
+                </p>
+            </div>
+            
+            <div class="back-link">
+                <a href="index.html">
+                    <i class="fas fa-arrow-left"></i> 메인 페이지로 돌아가기
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 비밀번호 토글 기능
+        document.querySelectorAll('.password-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'fas fa-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'fas fa-eye';
+                }
+            });
+        });
+        
+        // 토스트 메시지 표시 함수
+        function showToast(message, type = 'info') {
+            const existingToast = document.querySelector('.toast-message');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = `toast-message ${type}`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // 관리자 로그인 폼 제출
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            // 개발 모드: 임시 관리자 계정
+            // 실제 운영 시에는 서버 인증으로 교체 필요
+            const ADMIN_EMAIL = 'valuencores@gmail.com';
+            const ADMIN_PASSWORD = '@vnc1201';
+            
+            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                // 관리자 세션 저장
+                localStorage.setItem('adminLoggedIn', 'true');
+                localStorage.setItem('adminEmail', email);
+                localStorage.setItem('adminLoginTime', new Date().toISOString());
+                
+                showToast('관리자 로그인 성공!', 'success');
+                
+                // 1초 후 대시보드로 이동
+                setTimeout(() => {
+                    window.location.href = 'admin-dashboard.html';
+                }, 1000);
+            } else {
+                showToast('이메일 또는 비밀번호가 올바르지 않습니다.', 'error');
+            }
+        });
+        
+        // 페이지 로드 시 이미 로그인되어 있으면 대시보드로 이동
+        window.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('adminLoggedIn') === 'true') {
+                window.location.href = 'admin-dashboard.html';
+            }
+        });
+    </script>
+    
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-company">
+                <p class="company-name">밸류앤코어스(주)</p>
+                <p class="company-address">서울특별시 종로구 효자로 1길 5(통의동) 다모여빌딩 2층</p>
+                <p class="company-contact">
+                    전화: 07-356-6771 | 웹사이트: <a href="https://www.valuencores.com" target="_blank" rel="noopener noreferrer">www.valuencores.com</a>
+                </p>
+            </div>
+            
+            <div class="footer-disclaimer">
+                <div class="disclaimer-content">
+                    <strong>법적 면책조항(免責) 안내</strong>
+                    <p>본 플랫폼은 자본시장법, 가상자산이용자보호법 및 협동조합법을 준수하며 투자자 보호를 최우선으로 합니다. 특히 증권성 가상자산과 협동조합의 투자·자금 운용은 관련 법령에 따라 엄격히 규율됩니다. 이용자는 안전한 거래 환경 조성을 위해 법적 컴플라이언스 준수 여부를 상시 확인해야 하며, 당사는 규제 준수를 통한 투명한 서비스 제공에 최선을 다하고 있습니다.</p>
+                </div>
+            </div>
+            
+            <div class="footer-copyright">
+                <p>© 2026 D-Quant 9.0. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    </script>
+    
+    <!-- ADMIN 접근 버튼 -->
+    <script src="js/admin-access.js"></script>
+</body>
+</html>

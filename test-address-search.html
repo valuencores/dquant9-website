@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주소 검색 API 테스트</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #12162e 100%);
+            color: #ffffff;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(18, 22, 46, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        h1 {
+            color: #00f2ff;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .status {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        .status-item {
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-ok {
+            color: #10b981;
+        }
+        .status-error {
+            color: #f43f5e;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        input:read-only {
+            background: rgba(255, 255, 255, 0.05);
+            cursor: not-allowed;
+        }
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 0.5rem 0;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+        .info {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        pre {
+            background: #0a0e27;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 주소 검색 API 테스트</h1>
+        
+        <div class="info">
+            <strong>💡 테스트 목적:</strong><br>
+            Daum Postcode API가 정상적으로 로드되고 작동하는지 확인합니다.
+        </div>
+        
+        <div class="status">
+            <h3 style="color: #00ff88; margin-bottom: 1rem;">API 로드 상태</h3>
+            <div class="status-item">
+                <span>Daum 스크립트:</span>
+                <span id="scriptStatus">확인 중...</span>
+            </div>
+            <div class="status-item">
+                <span>daum 객체:</span>
+                <span id="daumStatus">확인 중...</span>
+            </div>
+            <div class="status-item">
+                <span>daum.Postcode:</span>
+                <span id="postcodeStatus">확인 중...</span>
+            </div>
+        </div>
+        
+        <button class="btn" id="testBtn" onclick="testPostcode()">주소 검색 테스트</button>
+        
+        <div style="margin-top: 2rem;">
+            <input type="text" id="postcode" placeholder="우편번호" readonly>
+            <input type="text" id="address" placeholder="기본주소" readonly>
+            <input type="text" id="addressDetail" placeholder="상세주소">
+        </div>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <!-- Daum 우편번호 서비스 -->
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <script>
+        // 페이지 로드 시 API 상태 확인
+        window.addEventListener('load', function() {
+            console.log('✅ 페이지 로드 완료');
+            checkAPIStatus();
+        });
+        
+        function checkAPIStatus() {
+            const scriptStatus = document.getElementById('scriptStatus');
+            const daumStatus = document.getElementById('daumStatus');
+            const postcodeStatus = document.getElementById('postcodeStatus');
+            const testBtn = document.getElementById('testBtn');
+            
+            // 1. 스크립트 태그 확인
+            const scripts = document.querySelectorAll('script[src*="postcode"]');
+            if (scripts.length > 0) {
+                scriptStatus.textContent = '✅ 로드됨';
+                scriptStatus.className = 'status-ok';
+                console.log('✅ Postcode 스크립트 태그 발견:', scripts.length, '개');
+            } else {
+                scriptStatus.textContent = '❌ 없음';
+                scriptStatus.className = 'status-error';
+                console.error('❌ Postcode 스크립트 태그 없음');
+            }
+            
+            // 2. daum 객체 확인
+            if (typeof daum !== 'undefined') {
+                daumStatus.textContent = '✅ 존재함';
+                daumStatus.className = 'status-ok';
+                console.log('✅ daum 객체 존재');
+                console.log('daum 객체 내용:', daum);
+            } else {
+                daumStatus.textContent = '❌ 없음';
+                daumStatus.className = 'status-error';
+                console.error('❌ daum 객체 없음');
+            }
+            
+            // 3. daum.Postcode 확인
+            if (typeof daum !== 'undefined' && typeof daum.Postcode !== 'undefined') {
+                postcodeStatus.textContent = '✅ 사용 가능';
+                postcodeStatus.className = 'status-ok';
+                console.log('✅ daum.Postcode 사용 가능');
+                console.log('daum.Postcode:', daum.Postcode);
+            } else {
+                postcodeStatus.textContent = '❌ 없음';
+                postcodeStatus.className = 'status-error';
+                console.error('❌ daum.Postcode 없음');
+                testBtn.disabled = true;
+                testBtn.textContent = '❌ API를 사용할 수 없습니다';
+            }
+        }
+        
+        function testPostcode() {
+            console.log('🏠 주소 검색 버튼 클릭');
+            
+            if (typeof daum === 'undefined' || typeof daum.Postcode === 'undefined') {
+                alert('❌ Daum Postcode API를 사용할 수 없습니다.\n\n페이지를 새로고침(Ctrl+Shift+R)해주세요.');
+                return;
+            }
+            
+            try {
+                console.log('🚀 new daum.Postcode() 실행...');
+                
+                new daum.Postcode({
+                    oncomplete: function(data) {
+                        console.log('✅ 주소 선택 완료:', data);
+                        
+                        document.getElementById('postcode').value = data.zonecode;
+                        document.getElementById('address').value = data.address;
+                        document.getElementById('addressDetail').focus();
+                        
+                        const resultDiv = document.getElementById('result');
+                        resultDiv.style.display = 'block';
+                        resultDiv.innerHTML = `
+                            <h3 style="color: #00ff88; margin-bottom: 1rem;">✅ 주소 검색 성공!</h3>
+                            <p><strong>우편번호:</strong> ${data.zonecode}</p>
+                            <p><strong>주소:</strong> ${data.address}</p>
+                            <p><strong>지번주소:</strong> ${data.jibunAddress || 'N/A'}</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        `;
+                    },
+                    onclose: function() {
+                        console.log('📭 주소 검색 창 닫힘');
+                    },
+                    onresize: function(size) {
+                        console.log('📏 크기 변경:', size);
+                    }
+                }).open();
+                
+                console.log('✅ open() 호출 완료');
+                
+            } catch (error) {
+                console.error('❌ 오류 발생:', error);
+                alert('오류 발생: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

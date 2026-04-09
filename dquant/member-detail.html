@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 상세 현황 - D-QUANT 9.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #0a0e1a;
+            --dark-surface: #1a1f2e;
+            --dark-hover: #252b3c;
+            --cyan: #00d9ff;
+            --green: #00ff88;
+            --purple: #9d4edd;
+            --text-primary: #ffffff;
+            --text-secondary: #b4b4b4;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #0d1526 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 헤더 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-back {
+            padding: 0.6rem 1.2rem;
+            background: var(--dark-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-back:hover {
+            background: var(--dark-hover);
+            border-color: var(--cyan);
+            transform: translateY(-2px);
+        }
+
+        /* 회원 정보 카드 */
+        .member-card {
+            background: var(--dark-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .member-title {
+            flex: 1;
+        }
+
+        .member-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-level {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* 레벨별 배지 색상 */
+        .level-cosmos { background: linear-gradient(135deg, #ff00ff, #00ffff); }
+        .level-quantium { background: linear-gradient(135deg, #00d9ff, #0099ff); }
+        .level-platinum { background: linear-gradient(135deg, #e0e0e0, #b0b0b0); }
+        .level-diamond { background: linear-gradient(135deg, #b9f2ff, #00d9ff); }
+        .level-gold { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; }
+        .level-silver { background: linear-gradient(135deg, #c0c0c0, #e8e8e8); color: #000; }
+        .level-bronze { background: linear-gradient(135deg, #cd7f32, #b8860b); }
+        .level-starter { background: linear-gradient(135deg, #00ff88, #00d9ff); }
+        .level-tester { background: linear-gradient(135deg, #9d4edd, #7b2cbf); }
+
+        /* 정보 그리드 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.2rem;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .info-value.highlight {
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 통계 섹션 */
+        .stats-section {
+            background: var(--dark-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--cyan);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        /* 배당 내역 테이블 */
+        .history-section {
+            background: var(--dark-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .history-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--green);
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table thead {
+            background: rgba(0, 217, 255, 0.05);
+        }
+
+        .history-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--cyan);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .history-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .history-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-paid {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--green);
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        /* 로딩 */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--cyan);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .member-name {
+                font-size: 1.4rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .history-table {
+                font-size: 0.85rem;
+            }
+
+            .history-table th,
+            .history-table td {
+                padding: 0.7rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1><i class="fas fa-user-circle"></i> 회원 상세 현황</h1>
+            <button class="btn-back" onclick="window.close()">
+                <i class="fas fa-times"></i> 닫기
+            </button>
+        </div>
+
+        <!-- 로딩 -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>회원 정보를 불러오는 중...</p>
+        </div>
+
+        <!-- 회원 정보 -->
+        <div id="memberContent" style="display: none;">
+            <!-- 회원 카드 -->
+            <div class="member-card">
+                <div class="member-header">
+                    <div class="member-avatar" id="memberAvatar">회</div>
+                    <div class="member-title">
+                        <div class="member-name" id="memberName">-</div>
+                        <span class="member-level" id="memberLevel">-</span>
+                    </div>
+                </div>
+
+                <!-- 기본 정보 -->
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-envelope"></i> 이메일
+                        </div>
+                        <div class="info-value" id="memberEmail">-</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-phone"></i> 휴대전화
+                        </div>
+                        <div class="info-value" id="memberPhone">-</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-id-card"></i> 실명확인번호
+                        </div>
+                        <div class="info-value" id="memberIdNumber">-</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-calendar-alt"></i> 가입일
+                        </div>
+                        <div class="info-value" id="memberSignupDate">-</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-map-marker-alt"></i> 주소
+                        </div>
+                        <div class="info-value" id="memberAddress">-</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-user-plus"></i> 추천인
+                        </div>
+                        <div class="info-value" id="memberReferrer">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 투자 통계 -->
+            <div class="stats-section">
+                <h2><i class="fas fa-chart-line"></i> 투자 통계</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                        <div class="stat-label">투자금액</div>
+                        <div class="stat-value" id="investmentAmount">-</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                        <div class="stat-label">월 배당율</div>
+                        <div class="stat-value" id="dividendRate">-</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div class="stat-label">누적 차월수</div>
+                        <div class="stat-value" id="investmentMonths">-</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+                        <div class="stat-label">누적 배당금</div>
+                        <div class="stat-value" id="accumulatedDividend">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 배당 내역 -->
+            <div class="history-section">
+                <h2><i class="fas fa-history"></i> 배당 지급 내역</h2>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>지급일</th>
+                            <th>배당금</th>
+                            <th>차월</th>
+                            <th>상태</th>
+                            <th>비고</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dividendHistory">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--text-secondary);">
+                                배당 내역이 없습니다.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL에서 회원 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const memberId = urlParams.get('id');
+
+        // 날짜 포맷 함수
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}.${month}.${day}`;
+        }
+
+        // 금액 포맷 함수
+        function formatAmount(amount) {
+            if (!amount) return '-';
+            return `${Number(amount).toLocaleString()}원`;
+        }
+
+        // 레벨 클래스 매핑
+        function getLevelClass(level) {
+            const levelMap = {
+                'Cosmos': 'level-cosmos',
+                'Quantium': 'level-quantium',
+                'Platinum': 'level-platinum',
+                'Diamond': 'level-diamond',
+                'Gold': 'level-gold',
+                'Silver': 'level-silver',
+                'Bronze': 'level-bronze',
+                'Starter': 'level-starter',
+                'Tester': 'level-tester'
+            };
+            return levelMap[level] || 'level-starter';
+        }
+
+        // 회원 데이터 로드
+        async function loadMemberDetail() {
+            if (!memberId) {
+                document.getElementById('loading').innerHTML = 
+                    '<p style="color: #ff4444;"><i class="fas fa-exclamation-triangle"></i> 회원 ID가 없습니다.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`../tables/members_v2/${memberId}`);
+                
+                if (!response.ok) {
+                    throw new Error('회원 정보를 불러올 수 없습니다.');
+                }
+
+                const member = await response.json();
+                displayMemberInfo(member);
+
+            } catch (error) {
+                console.error('회원 데이터 로드 실패:', error);
+                document.getElementById('loading').innerHTML = 
+                    `<p style="color: #ff4444;"><i class="fas fa-exclamation-triangle"></i> ${error.message}</p>`;
+            }
+        }
+
+        // 회원 정보 표시
+        function displayMemberInfo(member) {
+            // 아바타 (이름 첫 글자)
+            const firstChar = member.memberName ? member.memberName.charAt(0) : '회';
+            document.getElementById('memberAvatar').textContent = firstChar;
+
+            // 기본 정보
+            document.getElementById('memberName').textContent = member.memberName || '-';
+            
+            const levelBadge = document.getElementById('memberLevel');
+            levelBadge.textContent = member.investorLevel || '-';
+            levelBadge.className = `member-level ${getLevelClass(member.investorLevel)}`;
+
+            document.getElementById('memberEmail').textContent = member.email || '-';
+            document.getElementById('memberPhone').textContent = member.phoneNumber || '-';
+            document.getElementById('memberIdNumber').textContent = member.idNumber || '-';
+            document.getElementById('memberSignupDate').textContent = formatDate(member.signupDate);
+            document.getElementById('memberAddress').textContent = member.address || '-';
+            document.getElementById('memberReferrer').textContent = member.referrer || '-';
+
+            // 가입일 기준으로 누적차월수 계산
+            const today = new Date();
+            const signupDate = new Date(member.signupDate);
+            let investmentMonths = (today.getFullYear() - signupDate.getFullYear()) * 12 
+                                  + (today.getMonth() - signupDate.getMonth());
+            
+            if (today.getDate() < signupDate.getDate()) {
+                investmentMonths--;
+            }
+            investmentMonths = Math.max(0, investmentMonths);
+            
+            // 누적 배당금 계산
+            let accumulatedDividend = 0;
+            if (member.investmentAmount > 0 && member.dividendRate && investmentMonths > 0) {
+                const rate = parseFloat(member.dividendRate.toString().replace('%', ''));
+                const monthlyDividend = Math.round(member.investmentAmount * rate / 100);
+                accumulatedDividend = monthlyDividend * investmentMonths;
+            }
+
+            // 투자 통계
+            document.getElementById('investmentAmount').textContent = formatAmount(member.investmentAmount);
+            document.getElementById('dividendRate').textContent = member.dividendRate || '-';
+            document.getElementById('investmentMonths').textContent = investmentMonths > 0 ? `${investmentMonths}M` : '-';
+            document.getElementById('accumulatedDividend').textContent = formatAmount(accumulatedDividend);
+
+            // 배당 내역 (실제 데이터가 있다면 여기서 로드)
+            // 현재는 샘플 데이터 표시
+            if (investmentMonths > 0) {
+                generateDividendHistory(member, investmentMonths);
+            }
+
+            // 로딩 숨기고 콘텐츠 표시
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('memberContent').style.display = 'block';
+        }
+
+        // 배당 내역 생성 (매월 5일, 25일 기준)
+        function generateDividendHistory(member, calculatedMonths) {
+            const tbody = document.getElementById('dividendHistory');
+            const monthlyDividend = member.investmentAmount * (parseFloat(member.dividendRate) / 100);
+            
+            let html = '';
+            const signupDate = new Date(member.investmentDate || member.signupDate);
+            const today = new Date();
+            
+            // 가입일부터 오늘까지 지난 배당일 계산 (5일, 25일 기준)
+            const paymentDates = [];
+            let currentDate = new Date(signupDate);
+            
+            // 가입일 다음 첫 배당일 찾기
+            if (signupDate.getDate() < 5) {
+                currentDate = new Date(signupDate.getFullYear(), signupDate.getMonth(), 5);
+            } else if (signupDate.getDate() < 25) {
+                currentDate = new Date(signupDate.getFullYear(), signupDate.getMonth(), 25);
+            } else {
+                currentDate = new Date(signupDate.getFullYear(), signupDate.getMonth() + 1, 5);
+            }
+            
+            // 지난 배당일들 수집
+            let monthCount = 1;
+            while (currentDate <= today) {
+                paymentDates.push({
+                    date: new Date(currentDate),
+                    month: monthCount,
+                    isPaid: true
+                });
+                
+                // 다음 배당일 계산 (5일 → 25일 → 다음달 5일)
+                if (currentDate.getDate() === 5) {
+                    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 25);
+                } else {
+                    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 5);
+                }
+                monthCount++;
+            }
+            
+            // 지급된 배당 내역 표시
+            paymentDates.forEach(payment => {
+                html += `
+                    <tr>
+                        <td>${formatDate(payment.date)}</td>
+                        <td>${formatAmount(monthlyDividend)}</td>
+                        <td>${payment.month}M</td>
+                        <td><span class="status-badge status-paid"><i class="fas fa-check"></i> 지급완료</span></td>
+                        <td>정상 지급</td>
+                    </tr>
+                `;
+            });
+            
+            // 다음 배당 예정일 계산 (2번)
+            for (let i = 0; i < 2; i++) {
+                const nextDate = new Date(currentDate);
+                
+                html += `
+                    <tr style="background: rgba(255, 193, 7, 0.05);">
+                        <td><strong>${formatDate(nextDate)}</strong></td>
+                        <td><strong>${formatAmount(monthlyDividend)}</strong></td>
+                        <td><strong>${monthCount}M</strong></td>
+                        <td><span class="status-badge status-pending"><i class="fas fa-clock"></i> 지급예정</span></td>
+                        <td>예정</td>
+                    </tr>
+                `;
+                
+                // 다음 배당일 계산
+                if (currentDate.getDate() === 5) {
+                    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 25);
+                } else {
+                    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 5);
+                }
+                monthCount++;
+            }
+
+            tbody.innerHTML = html;
+        }
+
+        // 페이지 로드 시 실행
+        window.addEventListener('DOMContentLoaded', loadMemberDetail);
+    </script>
+</body>
+</html>

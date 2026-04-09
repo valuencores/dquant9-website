@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주소 검색 문제 해결 가이드</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #12162e 100%);
+            color: #ffffff;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(18, 22, 46, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        h1 {
+            color: #00f2ff;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            color: #00ff88;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .step {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 0.5rem;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid #f59e0b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        code {
+            background: #0a0e27;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #00f2ff;
+        }
+        ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        li {
+            margin: 0.5rem 0;
+        }
+        .console-example {
+            background: #0a0e27;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 주소 검색 문제 해결 가이드</h1>
+        
+        <div class="warning">
+            <strong>⚠️ 현재 상황:</strong><br>
+            주소 검색 버튼을 눌렀지만 팝업이 나타나지 않습니다.
+        </div>
+
+        <h2>📋 즉시 확인할 사항</h2>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>F12를 눌러 개발자 도구를 엽니다</strong>
+            <ul>
+                <li>Windows: <code>F12</code> 또는 <code>Ctrl + Shift + I</code></li>
+                <li>Mac: <code>Cmd + Option + I</code></li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Console 탭으로 이동합니다</strong>
+            <p>다음 메시지 중 하나가 표시되는지 확인하세요:</p>
+        </div>
+
+        <h2>🔍 예상 콘솔 메시지</h2>
+
+        <div class="step">
+            <h3 style="color: #10b981;">✅ 정상 작동 시</h3>
+            <div class="console-example">
+✅ DOM 로드 완료 - 이벤트 리스너 등록 시작<br>
+✅ 주소 검색 버튼 발견 - 이벤트 리스너 등록<br>
+🔍 Daum Postcode API 상태: ✅ 로드됨<br>
+✅ 모든 이벤트 리스너 등록 완료<br>
+<br>
+[버튼 클릭 시]<br>
+🏠 주소 검색 버튼 클릭됨<br>
+🔍 daum 객체 존재 여부: true<br>
+🚀 Daum Postcode 실행 시도...<br>
+✅ Daum Postcode open() 호출 완료
+            </div>
+        </div>
+
+        <div class="step">
+            <h3 style="color: #f43f5e;">❌ 오류 발생 시</h3>
+            
+            <h4>케이스 1: API 로드 실패</h4>
+            <div class="console-example">
+❌ Daum Postcode API가 로드되지 않았습니다.<br>
+또는<br>
+🔍 daum 객체 존재 여부: false
+            </div>
+            <p><strong>해결:</strong> 인터넷 연결 확인, 페이지 새로고침 (Ctrl + Shift + R)</p>
+
+            <h4>케이스 2: 버튼 없음</h4>
+            <div class="console-example">
+❌ 주소 검색 버튼을 찾을 수 없습니다! ID: btnSearchAddress
+            </div>
+            <p><strong>해결:</strong> 페이지 완전 새로고침 필요</p>
+
+            <h4>케이스 3: 클릭 반응 없음</h4>
+            <div class="console-example">
+(버튼 클릭 시 아무 메시지도 표시되지 않음)
+            </div>
+            <p><strong>해결:</strong> 이벤트 리스너가 등록되지 않음 - 캐시 삭제 후 새로고침</p>
+        </div>
+
+        <h2>🛠️ 해결 방법</h2>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>강력한 새로고침</strong>
+            <ul>
+                <li>Windows: <code>Ctrl + Shift + R</code></li>
+                <li>Mac: <code>Cmd + Shift + R</code></li>
+            </ul>
+            <p>이 방법은 캐시를 무시하고 페이지를 다시 로드합니다.</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>브라우저 캐시 완전 삭제</strong>
+            <ul>
+                <li><code>Ctrl + Shift + Delete</code> (또는 설정 → 개인정보 및 보안)</li>
+                <li>"캐시된 이미지 및 파일" 체크</li>
+                <li>"데이터 삭제" 클릭</li>
+                <li>페이지 다시 열기</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>팝업 차단 해제 확인</strong>
+            <ul>
+                <li>주소창 오른쪽에 <strong>팝업 차단 아이콘</strong>이 있는지 확인</li>
+                <li>있다면 클릭하여 "이 사이트의 팝업 허용" 선택</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>다른 브라우저에서 테스트</strong>
+            <ul>
+                <li>Chrome이 안 되면 → Edge, Firefox 시도</li>
+                <li>정상 작동하면 원래 브라우저의 캐시/설정 문제</li>
+            </ul>
+        </div>
+
+        <h2>🚀 테스트 페이지로 확인</h2>
+
+        <div class="success">
+            <p>아래 테스트 페이지를 열어서 API가 정상 작동하는지 먼저 확인하세요:</p>
+            <a href="test-address-search.html" class="btn">🧪 주소 검색 API 테스트</a>
+        </div>
+
+        <h2>💡 직접 입력 방법 (임시 해결책)</h2>
+
+        <div class="step">
+            <p>주소 검색이 작동하지 않을 경우:</p>
+            <ol>
+                <li><strong>"주소 검색" 버튼 클릭</strong> → Alert 메시지 표시</li>
+                <li><strong>Alert에서 "확인"</strong> 클릭</li>
+                <li><strong>우편번호와 주소 필드가 자동으로 활성화</strong>됨</li>
+                <li><strong>직접 입력</strong>:
+                    <div class="console-example">
+우편번호: 03080<br>
+주소: 서울특별시 종로구 청와대로 1<br>
+상세주소: 101호
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+        <h2>📞 지원이 필요한 경우</h2>
+
+        <div class="step">
+            <p>다음 정보를 제공해주세요:</p>
+            <ol>
+                <li>F12 콘솔에 표시된 모든 메시지 (스크린샷)</li>
+                <li>사용 중인 브라우저 (Chrome, Edge, Firefox 등)</li>
+                <li>버튼 클릭 시 팝업 차단 아이콘이 나타나는지 여부</li>
+                <li>test-address-search.html에서는 작동하는지 여부</li>
+            </ol>
+        </div>
+
+        <div class="warning" style="margin-top: 2rem;">
+            <strong>🔔 중요:</strong><br>
+            회원가입 페이지를 열 때는 반드시 <code>signup-direct.html</code>을 통해 열거나,<br>
+            <code>dquant/signup.html</code>을 직접 브라우저로 드래그 앤 드롭하여 여세요.<br>
+            메인 페이지(index.html)를 통해 열면 다른 JavaScript 오류가 발생할 수 있습니다.
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="signup-direct.html" class="btn">🚀 회원가입 페이지 열기</a>
+            <a href="test-address-search.html" class="btn" style="background: linear-gradient(135deg, #a855f7, #ec4899);">🧪 주소 검색 테스트</a>
+        </div>
+    </div>
+</body>
+</html>

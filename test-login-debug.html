@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 디버그 테스트</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #12162e 100%);
+            color: #ffffff;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(18, 22, 46, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        h1 {
+            color: #00f2ff;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            color: #00ff88;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .info-box {
+            background: rgba(0, 242, 255, 0.1);
+            border-left: 4px solid #00f2ff;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .member-card {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 10px;
+        }
+        .test-section {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+        }
+        .btn {
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        pre {
+            background: #0a0e27;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+        }
+        .error {
+            background: rgba(244, 63, 94, 0.2);
+            border: 1px solid #f43f5e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 로그인 디버그 테스트</h1>
+        
+        <div class="info-box">
+            <strong>⚠️ 테스트 목적:</strong> localStorage에 저장된 회원 데이터를 확인하고 로그인 기능을 테스트합니다.
+        </div>
+
+        <h2>📊 저장된 회원 데이터</h2>
+        <div id="membersList"></div>
+
+        <div class="test-section">
+            <h2>🔐 로그인 테스트</h2>
+            <p>등록된 이메일과 비밀번호로 로그인을 테스트하세요.</p>
+            
+            <input type="email" id="testEmail" placeholder="이메일 (예: crenah@daum.net)">
+            <input type="password" id="testPassword" placeholder="비밀번호">
+            
+            <button class="btn" onclick="testLogin()">로그인 테스트</button>
+            <button class="btn" onclick="showAllPasswords()">모든 비밀번호 표시</button>
+            
+            <div id="loginResult"></div>
+        </div>
+
+        <h2>🛠️ 관리 도구</h2>
+        <button class="btn" onclick="refreshData()">데이터 새로고침</button>
+        <button class="btn" onclick="clearAllData()">모든 데이터 삭제</button>
+        <button class="btn" onclick="exportData()">데이터 내보내기</button>
+    </div>
+
+    <script>
+        function loadMembers() {
+            const membersData = localStorage.getItem('members_v2');
+            const membersList = document.getElementById('membersList');
+            
+            if (!membersData) {
+                membersList.innerHTML = '<div class="error">❌ 저장된 회원 데이터가 없습니다.</div>';
+                return;
+            }
+            
+            try {
+                const members = JSON.parse(membersData);
+                
+                if (members.length === 0) {
+                    membersList.innerHTML = '<div class="error">❌ 회원 목록이 비어있습니다.</div>';
+                    return;
+                }
+                
+                membersList.innerHTML = `
+                    <div class="success">✅ 총 ${members.length}명의 회원이 등록되어 있습니다.</div>
+                `;
+                
+                members.forEach((member, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'member-card';
+                    card.innerHTML = `
+                        <h3>👤 회원 #${index + 1}</h3>
+                        <p><strong>ID:</strong> ${member.id || 'N/A'}</p>
+                        <p><strong>성명:</strong> ${member.memberName || 'N/A'}</p>
+                        <p><strong>이메일:</strong> ${member.email || 'N/A'}</p>
+                        <p><strong>비밀번호:</strong> <span id="pwd-${index}" style="background: #0a0e27; padding: 2px 8px; border-radius: 4px;">●●●●●●</span> 
+                        <button class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="togglePassword(${index}, '${member.password}')">보기</button></p>
+                        <p><strong>전화번호:</strong> ${member.phoneNumber || 'N/A'}</p>
+                        <p><strong>가입일:</strong> ${member.signupDate ? new Date(member.signupDate).toLocaleString('ko-KR') : 'N/A'}</p>
+                        <p><strong>투자등급:</strong> ${member.investorLevel || 'N/A'}</p>
+                        <p><strong>투자금액:</strong> ${(member.investmentAmount || 0).toLocaleString()}원</p>
+                    `;
+                    membersList.appendChild(card);
+                });
+            } catch (e) {
+                membersList.innerHTML = `<div class="error">❌ 데이터 파싱 오류: ${e.message}</div>`;
+            }
+        }
+
+        function togglePassword(index, password) {
+            const pwdElement = document.getElementById(`pwd-${index}`);
+            if (pwdElement.textContent === '●●●●●●') {
+                pwdElement.textContent = password;
+            } else {
+                pwdElement.textContent = '●●●●●●';
+            }
+        }
+
+        function testLogin() {
+            const email = document.getElementById('testEmail').value.trim();
+            const password = document.getElementById('testPassword').value;
+            const resultDiv = document.getElementById('loginResult');
+            
+            if (!email || !password) {
+                resultDiv.innerHTML = '<div class="error result">❌ 이메일과 비밀번호를 입력해주세요.</div>';
+                return;
+            }
+            
+            const membersData = localStorage.getItem('members_v2');
+            
+            if (!membersData) {
+                resultDiv.innerHTML = '<div class="error result">❌ 저장된 회원 데이터가 없습니다.</div>';
+                return;
+            }
+            
+            try {
+                const members = JSON.parse(membersData);
+                const member = members.find(m => m.email === email);
+                
+                if (!member) {
+                    resultDiv.innerHTML = `
+                        <div class="error result">
+                            <h3>❌ 로그인 실패</h3>
+                            <p><strong>이유:</strong> 해당 이메일로 등록된 회원이 없습니다.</p>
+                            <p><strong>입력한 이메일:</strong> ${email}</p>
+                            <p><strong>등록된 이메일 목록:</strong></p>
+                            <pre>${members.map(m => m.email).join('\n')}</pre>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                if (member.password !== password) {
+                    resultDiv.innerHTML = `
+                        <div class="error result">
+                            <h3>❌ 로그인 실패</h3>
+                            <p><strong>이유:</strong> 비밀번호가 일치하지 않습니다.</p>
+                            <p><strong>입력한 비밀번호:</strong> ${password}</p>
+                            <p><strong>저장된 비밀번호:</strong> ${member.password}</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 로그인 성공
+                resultDiv.innerHTML = `
+                    <div class="success result">
+                        <h3>✅ 로그인 성공!</h3>
+                        <p><strong>성명:</strong> ${member.memberName}</p>
+                        <p><strong>이메일:</strong> ${member.email}</p>
+                        <p><strong>투자등급:</strong> ${member.investorLevel}</p>
+                        <p>실제 로그인 페이지에서도 동일하게 작동해야 합니다.</p>
+                    </div>
+                `;
+                
+            } catch (e) {
+                resultDiv.innerHTML = `<div class="error result">❌ 오류: ${e.message}</div>`;
+            }
+        }
+
+        function showAllPasswords() {
+            const membersData = localStorage.getItem('members_v2');
+            if (!membersData) return;
+            
+            const members = JSON.parse(membersData);
+            const passwords = members.map((m, i) => `${i + 1}. ${m.email} → ${m.password}`).join('\n');
+            alert('등록된 비밀번호:\n\n' + passwords);
+        }
+
+        function refreshData() {
+            loadMembers();
+            document.getElementById('loginResult').innerHTML = '';
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ 정말로 모든 회원 데이터를 삭제하시겠습니까?')) {
+                localStorage.removeItem('members_v2');
+                loadMembers();
+                alert('✅ 모든 데이터가 삭제되었습니다.');
+            }
+        }
+
+        function exportData() {
+            const membersData = localStorage.getItem('members_v2');
+            if (!membersData) {
+                alert('❌ 저장된 데이터가 없습니다.');
+                return;
+            }
+            
+            const blob = new Blob([membersData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'members_data_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('✅ 데이터가 다운로드되었습니다.');
+        }
+
+        // 페이지 로드 시 데이터 표시
+        loadMembers();
+    </script>
+</body>
+</html>

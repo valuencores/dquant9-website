@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 대시보드 - D-QUANT 9.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-dark: #0a0a0a;
+            --secondary-dark: #1a1a1a;
+            --accent-cyan: #00F2FF;
+            --cyan-glow: #00F2FF;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-tertiary: #707070;
+            --emerald-safe: #10b981;
+            --ruby-risk: #ef4444;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 헤더 */
+        .admin-header {
+            background: rgba(26, 26, 26, 0.95);
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .admin-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--cyan-glow);
+        }
+        
+        .admin-logo i {
+            font-size: 1.5rem;
+        }
+        
+        .admin-header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .admin-user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+        }
+        
+        .admin-user-info i {
+            color: var(--cyan-glow);
+        }
+        
+        .admin-user-email {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .btn-logout {
+            padding: 0.6rem 1.2rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 6px;
+            color: #ef4444;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* 메인 페이지 이동 버튼 */
+        .btn-home {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--cyan-glow);
+            border-radius: 6px;
+            color: var(--cyan-glow);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-home:hover {
+            background: rgba(0, 242, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 242, 255, 0.3);
+        }
+        
+        .btn-home i {
+            font-size: 1rem;
+        }
+        
+        /* 메인 컨테이너 */
+        .admin-container {
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 2rem 3rem;
+        }
+        
+        /* 데스크톱 모드: 전체 컨테이너 확대 */
+        @media (min-width: 1200px) {
+            .admin-container {
+                max-width: 3200px; /* 2000px * 1.6 = 3200px (60% 증가) */
+            }
+        }
+        
+        /* 통계 카드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* 데스크톱 모드: 통계 카드 영역도 140%로 확대 (레벨별 회원 분류와 동일) */
+        @media (min-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3열 고정 */
+                gap: 2.5rem;
+                width: 140%; /* 레벨별 회원 분류와 동일한 너비 */
+                max-width: none;
+                margin-left: -20%; /* 좌우 균등 확장 */
+            }
+            
+            .stat-card {
+                padding: 2.5rem;
+                min-height: 180px;
+            }
+            
+            .stat-card-title {
+                font-size: 1.1rem;
+            }
+            
+            .stat-card-icon {
+                font-size: 2rem;
+            }
+            
+            .stat-card-value {
+                font-size: 2.8rem;
+            }
+            
+            .stat-card-change {
+                font-size: 1rem;
+            }
+        }
+        
+        /* 와이드 데스크톱: 3열 유지 */
+        @media (min-width: 1600px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 3rem;
+            }
+            
+            .stat-card {
+                padding: 3rem;
+                min-height: 200px;
+            }
+            
+            .stat-card-value {
+                font-size: 3.2rem;
+            }
+        }
+        
+        .stat-card {
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 242, 255, 0.15);
+        }
+        
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .stat-card-icon {
+            font-size: 1.5rem;
+            color: var(--cyan-glow);
+        }
+        
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card-change {
+            font-size: 0.85rem;
+            color: var(--emerald-safe);
+        }
+        
+        .stat-card-change.negative {
+            color: var(--ruby-risk);
+        }
+        
+        /* 레벨별 회원 분류 섹션 */
+        .level-stats-section {
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* 데스크톱: 레벨별 회원 분류 섹션 40% 확대 */
+        @media (min-width: 1200px) {
+            .level-stats-section {
+                width: 140%; /* 100% + 40% = 140% */
+                max-width: none;
+                margin-left: -20%; /* 좌우 균등 확장 */
+                padding: 3rem;
+            }
+        }
+        
+        .level-stats-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .level-stats-header h2 {
+            font-size: 1.3rem;
+            color: var(--cyan-glow);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .level-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.8rem;
+        }
+        
+        /* 태블릿: 2줄로 표시 */
+        @media (max-width: 1199px) and (min-width: 768px) {
+            .level-stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1rem;
+            }
+        }
+        
+        /* 모바일: 2열로 표시 */
+        @media (max-width: 767px) {
+            .level-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+        }
+        
+        /* 데스크톱 모드: 레벨 카드 크기 조정 */
+        @media (min-width: 1200px) {
+            .level-stats-grid {
+                grid-template-columns: repeat(7, 1fr);
+                gap: 1.2rem;
+            }
+            
+            .level-stat-card {
+                padding: 1.8rem 1rem;
+            }
+            
+            .level-stat-level {
+                font-size: 0.85rem;
+            }
+            
+            .level-stat-count {
+                font-size: 2rem;
+            }
+            
+            .level-stat-percent {
+                font-size: 0.85rem;
+            }
+        }
+        
+        .level-stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .level-stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .level-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 242, 255, 0.2);
+            border-color: rgba(0, 242, 255, 0.5);
+        }
+        
+        .level-stat-card:hover::before {
+            opacity: 1;
+        }
+        
+        .level-stat-card:active {
+            transform: translateY(-1px);
+        }
+        
+        .level-stat-level {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .level-stat-count {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .level-stat-percent {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 컨트롤 바 */
+        .control-bar {
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        /* 데스크톱 모드: 컨트롤 바 크기 조정 */
+        @media (min-width: 1200px) {
+            .control-bar {
+                padding: 2rem;
+                width: 140%; /* 100% + 40% = 140% */
+                max-width: none;
+                margin-left: -20%; /* 좌우 균등 확장 */
+            }
+            
+            .search-wrapper {
+                max-width: 800px;
+            }
+            
+            .search-input {
+                padding: 1rem 1.2rem 1rem 3.5rem;
+                font-size: 1.05rem;
+            }
+            
+            .btn-primary,
+            .btn-secondary {
+                padding: 1rem 2rem;
+                font-size: 1.05rem;
+            }
+        }
+        
+        .search-wrapper {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 0 3px rgba(0, 242, 255, 0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        
+        .control-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-primary {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--cyan-glow) 0%, #0099cc 100%);
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 242, 255, 0.3);
+        }
+        
+        .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: pulse-success 2s ease-in-out infinite;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        
+        @keyframes pulse-success {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+        }
+        
+        .btn-close-section {
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 6px;
+            color: #ef4444;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-close-section:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* 최근 등록 회원 섹션 */
+        .recent-members-section {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(0, 242, 255, 0.05) 100%);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .recent-members-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .recent-members-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .recent-members-title i {
+            font-size: 2rem;
+            color: #10b981;
+        }
+        
+        .recent-members-title h2 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+        
+        .recent-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .recent-stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .recent-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .recent-stat-card.cyan {
+            border-color: rgba(0, 242, 255, 0.3);
+            background: rgba(0, 242, 255, 0.05);
+        }
+        
+        .recent-stat-card.green {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .recent-stat-card.purple {
+            border-color: rgba(168, 85, 247, 0.3);
+            background: rgba(168, 85, 247, 0.05);
+        }
+        
+        .recent-stat-card.pink {
+            border-color: rgba(236, 72, 153, 0.3);
+            background: rgba(236, 72, 153, 0.05);
+        }
+        
+        .recent-stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .recent-stat-card.cyan .recent-stat-icon { color: #00f2ff; }
+        .recent-stat-card.green .recent-stat-icon { color: #10b981; }
+        .recent-stat-card.purple .recent-stat-icon { color: #a855f7; }
+        .recent-stat-card.pink .recent-stat-icon { color: #ec4899; }
+        
+        .recent-stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .recent-stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .recent-members-table-wrapper {
+            background: rgba(26, 26, 26, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+        
+        .recent-members-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .recent-members-table thead {
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .recent-members-table th {
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #10b981;
+            border-bottom: 2px solid rgba(16, 185, 129, 0.2);
+            white-space: nowrap;
+        }
+        
+        .recent-members-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+        
+        .recent-members-table tbody tr:hover {
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .recent-members-table .member-name-link {
+            color: #00f2ff;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .recent-members-table .member-name-link:hover {
+            color: #10b981;
+            border-bottom-color: #10b981;
+            transform: translateX(3px);
+        }
+        
+        .recent-login-info {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .login-info-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .login-info-header i {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+        }
+        
+        .login-info-header h3 {
+            color: #ff6b6b;
+            font-size: 1.25rem;
+        }
+        
+        .login-info-content p {
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+        
+        .password-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            text-align: center;
+            letter-spacing: 0.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .warning-text {
+            color: #fbbf24;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* 회원 상세 정보 모달 */
+        .member-detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .member-detail-modal.active {
+            display: flex;
+        }
+        
+        .member-detail-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%);
+            border: 2px solid rgba(0, 242, 255, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .member-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(0, 242, 255, 0.2);
+        }
+        
+        .member-detail-header h2 {
+            color: #00f2ff;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .btn-close-modal {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #ef4444;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-close-modal:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: rotate(90deg);
+        }
+        
+        .member-detail-info {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .info-group {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-label i {
+            color: #00f2ff;
+        }
+        
+        .info-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .info-value.highlight {
+            color: #10b981;
+            font-size: 1.1rem;
+        }
+        
+        .info-value.level-badge {
+            font-size: 0.95rem;
+        }
+        
+        /* 회원 테이블 */
+        .members-table-container {
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        /* 데스크톱: 회원 테이블 컨테이너 40% 확대 */
+        @media (min-width: 1200px) {
+            .members-table-container {
+                width: 140%; /* 100% + 40% = 140% */
+                max-width: none;
+                margin-left: -20%; /* 좌우 균등 확장 */
+            }
+            
+            .table-header {
+                padding: 2.5rem;
+            }
+            
+            .table-header h2 {
+                font-size: 1.6rem;
+            }
+        }
+        
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-header h2 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+        }
+        
+        /* 탭 버튼 스타일 */
+        .table-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .tab-button {
+            padding: 0.7rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button:hover {
+            background: rgba(0, 242, 255, 0.1);
+            border-color: rgba(0, 242, 255, 0.3);
+            color: var(--text-primary);
+        }
+        
+        .tab-button.active {
+            background: rgba(0, 242, 255, 0.15);
+            border-color: var(--cyan-glow);
+            color: var(--cyan-glow);
+        }
+        
+        /* 탭 컨텐츠 */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .members-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        /* 데스크톱 모드: 테이블 크기 조정 */
+        @media (min-width: 1200px) {
+            .members-table th {
+                padding: 1.8rem;
+                font-size: 1.15rem;
+            }
+            
+            .members-table td {
+                padding: 1.8rem;
+                font-size: 1.15rem;
+            }
+            
+            .level-badge {
+                padding: 0.6rem 1.2rem;
+                font-size: 1.05rem;
+                min-width: 110px;
+            }
+            
+            .action-buttons {
+                gap: 0.8rem;
+            }
+            
+            .btn-action {
+                padding: 0.7rem 1.2rem;
+                font-size: 1rem;
+            }
+        }
+        
+        .members-table thead {
+            background: rgba(0, 242, 255, 0.05);
+        }
+        
+        .members-table th {
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .members-table td {
+            padding: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .members-table tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        .members-table tbody tr:hover {
+            background: rgba(0, 242, 255, 0.05);
+        }
+        
+        /* 투자자 레벨 배지 */
+        .level-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .level-Cosmos {
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+        
+        .level-Quantium {
+            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+        
+        .level-Platinum {
+            background: linear-gradient(135deg, #94A3B8 0%, #CBD5E1 100%);
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(148, 163, 184, 0.4);
+        }
+        
+        .level-Diamond {
+            background: linear-gradient(135deg, #06B6D4 0%, #67E8F9 100%);
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+        
+        .level-Gold {
+            background: linear-gradient(135deg, #F59E0B 0%, #FCD34D 100%);
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+        
+        .level-Silver {
+            background: linear-gradient(135deg, #64748B 0%, #94A3B8 100%);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(100, 116, 139, 0.3);
+        }
+        
+        .level-Bronze {
+            background: linear-gradient(135deg, #92400E 0%, #D97706 100%);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(146, 64, 14, 0.3);
+        }
+        
+        .level-Starter {
+            background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+            color: #0a0a0a;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+        
+        .level-Tester {
+            background: linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(107, 114, 128, 0.3);
+        }
+        
+        /* 액션 버튼 */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-action {
+            padding: 0.4rem 0.8rem;
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--cyan-glow);
+            border-radius: 6px;
+            color: var(--cyan-glow);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-action:hover {
+            background: rgba(0, 242, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .btn-action.danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+        
+        .btn-action.danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.5rem;
+        }
+        
+        /* 데스크톱: 페이지네이션 크기 조정 */
+        @media (min-width: 1200px) {
+            .pagination {
+                padding: 2rem;
+                gap: 0.8rem;
+            }
+            
+            .pagination button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1.05rem;
+            }
+            
+            .page-info {
+                font-size: 1.05rem;
+            }
+        }
+        
+        .pagination button {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination button:hover:not(:disabled) {
+            background: rgba(0, 242, 255, 0.1);
+            border-color: var(--cyan-glow);
+            color: var(--cyan-glow);
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .pagination button.active {
+            background: var(--cyan-glow);
+            color: #0a0a0a;
+            border-color: var(--cyan-glow);
+        }
+        
+        .page-info {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            position: relative;
+            background: rgba(26, 26, 26, 0.98);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 16px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            margin: 2rem auto;
+            padding: 2rem;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--ruby-risk);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group label.required::after {
+            content: ' *';
+            color: var(--ruby-risk);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 0 3px rgba(0, 242, 255, 0.1);
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* 주민번호 입력 스타일 */
+        .id-number-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .id-number-wrapper input:first-of-type {
+            flex: 0 0 45%;
+        }
+        
+        .id-number-wrapper input:last-of-type {
+            flex: 1;
+        }
+        
+        .field-hint {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        
+        .form-group select {
+            cursor: pointer;
+        }
+        
+        .form-group select option {
+            background: #1a1a1a;
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+        
+        .form-group select option:hover {
+            background: rgba(0, 242, 255, 0.1);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-cancel {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-save {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--cyan-glow) 0%, #0099cc 100%);
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 242, 255, 0.3);
+        }
+        
+        /* 토스트 메시지 */
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 242, 255, 0.15);
+            border: 1px solid var(--cyan-glow);
+            color: var(--cyan-glow);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            z-index: 10001;
+            animation: toastSlideUp 0.3s ease-out;
+            box-shadow: 0 4px 12px rgba(0, 242, 255, 0.2);
+        }
+        
+        @keyframes toastSlideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        .toast-message.success {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--emerald-safe);
+            color: var(--emerald-safe);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        
+        .toast-message.error {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #ef4444;
+            color: #ef4444;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .admin-header-left,
+            .admin-header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .admin-logo {
+                font-size: 1.1rem;
+            }
+            
+            .admin-user-info {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+            }
+            
+            .btn-logout {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .admin-container {
+                padding: 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .stat-card {
+                padding: 1.25rem;
+            }
+            
+            .control-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+            
+            .search-wrapper {
+                max-width: 100%;
+            }
+            
+            .control-buttons {
+                justify-content: stretch;
+                flex-wrap: wrap;
+            }
+            
+            .control-buttons button {
+                flex: 1;
+                min-width: calc(50% - 0.5rem);
+            }
+            
+            .members-table-container {
+                overflow-x: visible;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* 모바일에서 테이블을 카드형으로 변경 */
+            .members-table {
+                display: block;
+                min-width: auto;
+            }
+            
+            .members-table thead {
+                display: none;
+            }
+            
+            .members-table tbody {
+                display: block;
+            }
+            
+            .members-table tr {
+                display: block;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                transition: all 0.3s ease;
+            }
+            
+            .members-table tr:hover {
+                background: rgba(255, 255, 255, 0.05);
+                border-color: rgba(0, 242, 255, 0.3);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0, 242, 255, 0.1);
+            }
+            
+            .members-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.6rem 0;
+                border: none;
+                text-align: right;
+            }
+            
+            .members-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--cyan-glow);
+                text-align: left;
+                flex: 0 0 40%;
+                font-size: 0.85rem;
+            }
+            
+            .members-table td:last-child {
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                margin-top: 0.5rem;
+                padding-top: 1rem;
+                justify-content: flex-end;
+            }
+            
+            .members-table td:last-child::before {
+                display: none;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .btn-home-text {
+                display: inline;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                max-width: 500px;
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .btn-close {
+                width: 32px;
+                height: 32px;
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .admin-logo span {
+                display: none;
+            }
+            
+            .btn-home-text {
+                display: none;
+            }
+            
+            .btn-home {
+                padding: 0.6rem;
+            }
+            
+            .admin-user-email {
+                font-size: 0.8rem;
+                max-width: 150px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            
+            .page-title {
+                font-size: 1.3rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .control-buttons button {
+                min-width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .modal-content {
+                padding: 1rem;
+            }
+            
+            .form-group label {
+                font-size: 0.85rem;
+            }
+            
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 0.9rem;
+                padding: 0.7rem;
+            }
+        }
+        
+        /* 푸터 스타일 */
+        .footer {
+            background: #000000;
+            border-top: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 3rem 2rem 2rem;
+            margin-top: auto;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .footer-company {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .company-name {
+            color: #00F2FF;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-address {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-contact {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+        
+        .company-contact a {
+            color: #00F2FF;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .company-contact a:hover {
+            opacity: 0.8;
+        }
+        
+        .footer-disclaimer {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .disclaimer-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .disclaimer-content {
+            flex: 1;
+        }
+        
+        .disclaimer-content strong {
+            color: #00F2FF;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .disclaimer-content p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .footer-copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-copyright p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <div class="admin-logo">
+                <i class="fas fa-chart-line"></i>
+                <span>D-QUANT 9.0 Admin</span>
+            </div>
+            <a href="index.html" class="btn-home" title="메인 페이지로 이동">
+                <i class="fas fa-home"></i>
+                <span class="btn-home-text">메인</span>
+            </a>
+        </div>
+        <div class="admin-header-right">
+            <div class="admin-user-info">
+                <i class="fas fa-user-shield"></i>
+                <span class="admin-user-email" id="adminEmailDisplay"></span>
+            </div>
+            <button class="btn-logout" id="btnLogout">
+                <i class="fas fa-sign-out-alt"></i> 로그아웃
+            </button>
+        </div>
+    </header>
+    
+    <!-- 메인 컨테이너 -->
+    <div class="admin-container">
+        <!-- 통계 카드 -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">전체 회원 수</span>
+                    <i class="fas fa-users stat-card-icon"></i>
+                </div>
+                <div class="stat-card-value" id="totalMembers">0</div>
+                <div class="stat-card-change">
+                    <i class="fas fa-arrow-up"></i> 이번 달 +<span id="newMembersThisMonth">0</span>명
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">투자 회원</span>
+                    <i class="fas fa-chart-line stat-card-icon"></i>
+                </div>
+                <div class="stat-card-value" id="activeMembers">0</div>
+                <div class="stat-card-change">
+                    <i class="fas fa-check-circle"></i> 투자 진행 중
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">총 투자금액</span>
+                    <i class="fas fa-coins stat-card-icon"></i>
+                </div>
+                <div class="stat-card-value" id="totalInvestment">0원</div>
+                <div class="stat-card-change">
+                    <i class="fas fa-arrow-up"></i> 전월 대비 +<span id="investmentGrowth">0</span>%
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">평균 배당률</span>
+                    <i class="fas fa-percentage stat-card-icon"></i>
+                </div>
+                <div class="stat-card-value" id="avgDividend">0%</div>
+                <div class="stat-card-change">
+                    <i class="fas fa-arrow-up"></i> 안정적 운영
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">총 누적 배당금</span>
+                    <i class="fas fa-hand-holding-usd stat-card-icon"></i>
+                </div>
+                <div class="stat-card-value" id="totalDividend">0원</div>
+                <div class="stat-card-change">
+                    <i class="fas fa-check-circle"></i> 배당금 지급
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">증액 회원 (최근 1개월)</span>
+                    <i class="fas fa-arrow-circle-up stat-card-icon"></i>
+                </div>
+                <div class="stat-card-value" id="increasedMembers">0명</div>
+                <div class="stat-card-change">
+                    <i class="fas fa-coins"></i> +<span id="increasedAmount">0원</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 레벨별 회원 분류 -->
+        <div class="level-stats-section">
+            <div class="level-stats-header">
+                <h2><i class="fas fa-layer-group"></i> 레벨별 회원 분류</h2>
+            </div>
+            <div class="level-stats-grid" id="levelStatsGrid">
+                <!-- JavaScript로 동적 생성 -->
+            </div>
+        </div>
+        
+        <!-- 컨트롤 바 -->
+        <div class="control-bar">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="회원명으로 검색...">
+            </div>
+            <div class="control-buttons">
+                <button class="btn-primary" id="btnAddMember">
+                    <i class="fas fa-user-plus"></i> 회원 추가
+                </button>
+                <button class="btn-secondary" id="btnRefresh">
+                    <i class="fas fa-sync-alt"></i> 새로고침
+                </button>
+            </div>
+        </div>
+        
+        <!-- 회원 테이블 -->
+        <div class="members-table-container">
+            <div class="table-header">
+                <h2><i class="fas fa-list"></i> 회원 현황 관리</h2>
+                <div class="table-tabs">
+                    <button class="tab-button active" data-tab="basic">기본 투자현황</button>
+                    <button class="tab-button" data-tab="referral">투자유치배당현황</button>
+                </div>
+            </div>
+            
+            <!-- 기본 투자현황 테이블 -->
+            <div class="tab-content active" id="basicInvestmentTab">
+                <table class="members-table">
+                    <thead>
+                        <tr>
+                            <th>가입일</th>
+                            <th>회원명</th>
+                            <th>투자금액</th>
+                            <th>배당률</th>
+                            <th>누적차월수</th>
+                            <th>누적배당금</th>
+                            <th>다음배당일</th>
+                            <th>투자자 레벨</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="membersTableBody">
+                    <!-- JavaScript로 동적 생성 -->
+                </tbody>
+            </table>
+            <div class="pagination" id="pagination">
+                <!-- JavaScript로 동적 생성 -->
+            </div>
+            </div>
+            
+            <!-- 투자유치배당현황 테이블 -->
+            <div class="tab-content" id="referralInvestmentTab">
+                <table class="members-table">
+                    <thead>
+                        <tr>
+                            <th>회원명</th>
+                            <th>기본투자금액</th>
+                            <th>기본배당률</th>
+                            <th>기본누적배당금</th>
+                            <th>유치투자금액</th>
+                            <th>유치배당률</th>
+                            <th>유치누적배당금</th>
+                            <th>누적차월수</th>
+                            <th>다음배당일</th>
+                            <th>투자자 레벨</th>
+                        </tr>
+                    </thead>
+                    <tbody id="referralTableBody">
+                        <!-- JavaScript로 동적 생성 -->
+                    </tbody>
+                </table>
+                <div class="pagination" id="referralPagination">
+                    <!-- JavaScript로 동적 생성 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 회원 편집 모달 -->
+    <div id="editMemberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">회원 정보 편집</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <form id="memberForm">
+                <input type="hidden" id="memberId">
+                
+                <h3 style="color: var(--cyan-glow); margin-bottom: 1rem; font-size: 1.1rem;">
+                    <i class="fas fa-user"></i> 기본 정보
+                </h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="memberName" class="required">회원명(실명)</label>
+                        <input type="text" id="memberName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="idNumber1">실명확인번호(주민번호)</label>
+                        <div class="id-number-wrapper">
+                            <input type="text" id="idNumber1" placeholder="900101" maxlength="6" required>
+                            <span style="color: var(--text-primary); font-size: 1.2rem;">-</span>
+                            <input type="text" id="idNumber2" placeholder="1******" maxlength="1" required>
+                        </div>
+                        <div class="field-hint">주민번호 앞 6자리와 뒷자리 첫 1자리를 입력하세요</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="required">이메일</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">휴대전화</label>
+                        <input type="tel" id="phoneNumber" placeholder="010-0000-0000">
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <label for="address">우편물수령주소</label>
+                    <textarea id="address" placeholder="우편물 수령 주소를 입력하세요"></textarea>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <label for="referrer">추천인(파트너)</label>
+                    <input type="text" id="referrer" placeholder="추천인 이름을 입력하세요 (예: 디퀀트)">
+                    <small style="color: var(--text-tertiary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">
+                        회원을 소개한 파트너 또는 추천인의 이름을 입력하세요
+                    </small>
+                </div>
+                
+                <h3 style="color: var(--cyan-glow); margin-bottom: 1rem; font-size: 1.1rem;">
+                    <i class="fas fa-chart-line"></i> 투자 정보
+                </h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="investmentDate">투자일자</label>
+                        <input type="date" id="investmentDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="dividendPaymentDate">배당금 지급일자</label>
+                        <input type="date" id="dividendPaymentDate">
+                        <small style="color: var(--text-tertiary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">매월 배당금이 지급되는 날짜</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="investmentAmount">투자금액 (원 단위)</label>
+                        <input type="text" id="investmentAmount" placeholder="예: 100,000,000 (1억원)">
+                        <small style="color: var(--text-tertiary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">최소 10,000,000원 ~ 최대 3,000,000,000원</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="dividendRate">투자배당률 (월 수익률)</label>
+                        <select id="dividendRate" disabled>
+                            <option value="">투자금액 입력 시 자동 설정됨</option>
+                            <option value="2.5%">2.5% (1천만원 이하)</option>
+                            <option value="3.0%">3.0% (5천만원 이하)</option>
+                            <option value="3.5%">3.5% (1억원 미만)</option>
+                            <option value="4.0%">4.0% (1억원 이상)</option>
+                        </select>
+                        <small style="color: var(--text-tertiary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">
+                            투자금액에 따라 자동 설정: 
+                            1천만원↓ 2.5% | 5천만원↓ 3.0% | 1억원↓ 3.5% | 1억원↑ 4.0%
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="investorLevel">투자자 레벨</label>
+                        <select id="investorLevel">
+                            <option value="">선택하세요</option>
+                            <option value="Cosmos">Cosmos (1년, 3억원 초과)</option>
+                            <option value="Quantium">Quantium (1년, 2억원 초과)</option>
+                            <option value="Platinum">Platinum (1년, 1억원 초과)</option>
+                            <option value="Diamond">Diamond (1년, 1억원 이하)</option>
+                            <option value="Gold">Gold (1년, 7천만원 이하)</option>
+                            <option value="Silver">Silver (1년, 5천만원 이하)</option>
+                            <option value="Bronze">Bronze (1년, 3천만원 이하)</option>
+                            <option value="Starter">Starter (1년, 1천만원 이하)</option>
+                            <option value="Tester">Tester (3개월, 1천만원 이하)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="investmentMonths">누적 차월</label>
+                        <input type="number" id="investmentMonths" min="0" max="120" step="1" placeholder="예: 12 (12개월)">
+                        <small style="color: var(--text-tertiary); font-size: 0.85rem; margin-top: 0.25rem; display: block;">개월 수 입력 (0~120개월)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="accumulatedDividend">누적 배당금 (원) - 자동 계산</label>
+                        <input type="text" id="accumulatedDividend" placeholder="자동 계산됩니다" readonly style="background: rgba(255, 255, 255, 0.05); cursor: not-allowed;">
+                        <small style="color: var(--emerald-safe); font-size: 0.85rem; margin-top: 0.25rem; display: block;">
+                            💡 투자금액 × 배당률 × 누적개월 = 자동 계산
+                        </small>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label for="notes">관리자 메모</label>
+                    <textarea id="notes" placeholder="관리자용 메모를 입력하세요"></textarea>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="btnCancelModal">취소</button>
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-save"></i> 저장
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-company">
+                <p class="company-name">밸류앤코어스(주)</p>
+                <p class="company-address">서울특별시 종로구 효자로 1길 5(통의동) 다모여빌딩 2층</p>
+                <p class="company-contact">
+                    전화: 07-356-6771 | 웹사이트: <a href="https://www.valuencores.com" target="_blank" rel="noopener noreferrer">www.valuencores.com</a>
+                </p>
+            </div>
+            
+            <div class="footer-disclaimer">
+                <div class="disclaimer-content">
+                    <strong>법적 면책조항(免責) 안내</strong>
+                    <p>본 플랫폼은 자본시장법, 가상자산이용자보호법 및 협동조합법을 준수하며 투자자 보호를 최우선으로 합니다. 특히 증권성 가상자산과 협동조합의 투자·자금 운용은 관련 법령에 따라 엄격히 규율됩니다. 이용자는 안전한 거래 환경 조성을 위해 법적 컴플라이언스 준수 여부를 상시 확인해야 하며, 당사는 규제 준수를 통한 투명한 서비스 제공에 최선을 다하고 있습니다.</p>
+                </div>
+            </div>
+            
+            <div class="footer-copyright">
+                <p>© 2026 D-Quant 9.0. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 회원 상세 정보 모달 -->
+    <div class="member-detail-modal" id="memberDetailModal">
+        <div class="member-detail-content">
+            <div class="member-detail-header">
+                <h2>
+                    <i class="fas fa-user-circle"></i>
+                    <span id="modalMemberName">회원 상세 정보</span>
+                </h2>
+                <button class="btn-close-modal" id="btnCloseMemberDetail">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="member-detail-info" id="memberDetailInfo">
+                <!-- JavaScript로 동적 생성 -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="admin-dashboard.js"></script>
+    <script src="admin-dashboard-ext.js"></script>
+    
+    <!-- 관리자 로그인 가드 -->
+    <script>
+        // 페이지 로드 시 관리자 로그인 확인
+        (function() {
+            // 방법 1: adminLoggedIn 확인 (admin-login.html에서 로그인)
+            const adminLoggedIn = localStorage.getItem('adminLoggedIn');
+            
+            // 방법 2: loggedInUser 확인 (index.html에서 로그인)
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            
+            // 두 가지 방법 중 하나라도 유효하면 접근 허용
+            if (adminLoggedIn === 'true') {
+                console.log('관리자 인증 성공 (admin-login.html 방식)');
+                return;
+            }
+            
+            if (loggedInUser) {
+                try {
+                    const user = JSON.parse(loggedInUser);
+                    
+                    // 관리자 권한 확인
+                    if (user.isAdmin && user.email === 'valuencores@gmail.com') {
+                        console.log('관리자 인증 성공 (index.html 방식):', user.name);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('로그인 정보 파싱 오류:', error);
+                }
+            }
+            
+            // 둘 다 실패하면 접근 거부
+            alert('관리자 로그인이 필요합니다.');
+            window.location.href = 'admin-login.html';
+        })();
+    </script>
+    
+    <!-- ADMIN 접근 버튼 -->
+    <script src="js/admin-access.js"></script>
+</body>
+</html>

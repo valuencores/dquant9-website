@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>투자 시나리오 비교 | D-QUANT 9.0</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="D-QUANT 9.0 투자 시나리오 비교 분석 - 3,000만원, 5,000만원, 1억원 단리/복리 수익 시뮬레이션. 135일 실제 적용 데이터 기반 장기 투자 전략.">
+<meta name="keywords" content="D-QUANT, 디퀀트, 투자 시나리오, 복리 투자, 단리 투자, 가상자산 투자, 퀀트 트레이딩, 투자 수익률, 장기 투자">
+<meta name="author" content="D-QUANT Nine">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dquant9.com/case-study.html">
+<meta property="og:title" content="투자 시나리오 비교 분석 | D-QUANT 9.0">
+<meta property="og:description" content="단리 vs 복리 투자 수익 비교 - 1년 후 최대 +42.4%, 3년 후 최대 +310.4% 수익 시뮬레이션">
+<meta property="og:image" content="images/dquant-case-study-featured.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="D-QUANT 9.0 투자 시나리오 비교 차트 - 단리 vs 복리">
+<meta property="og:site_name" content="D-QUANT 9.0">
+<meta property="og:locale" content="ko_KR">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://dquant9.com/case-study.html">
+<meta name="twitter:title" content="투자 시나리오 비교 분석 | D-QUANT 9.0">
+<meta name="twitter:description" content="단리 vs 복리 투자 수익 비교 - 1년 후 최대 +42.4%, 3년 후 최대 +310.4% 수익 시뮬레이션">
+<meta name="twitter:image" content="images/dquant-case-study-featured.png">
+
+<!-- Kakao / Naver -->
+<meta property="kakao:title" content="투자 시나리오 비교 | D-QUANT 9.0">
+<meta property="kakao:description" content="3,000만원 투자 시 3년 후 복리 수익 +5,671만원! 단리 vs 복리 투자 전략 비교 분석">
+<meta property="kakao:image" content="images/dquant-case-study-featured.png">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+/* D-QUANT 9.0 Navigation Styles */
+.glass-nav {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    left: 0;
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #00F2FF;
+    font-size: 1.3rem;
+    font-weight: 700;
+    transition: all 0.3s;
+}
+
+.nav-brand:hover {
+    opacity: 0.8;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+    align-items: center;
+    margin: 0;
+}
+
+.nav-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #00F2FF;
+}
+
+.mobile-menu-toggle,
+.mobile-menu-close,
+.mobile-overlay {
+    display: none;
+}
+
+body {
+    padding-top: 70px;
+}
+
+@media (max-width: 1200px) {
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 320px;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.98);
+        padding: 80px 30px 30px;
+        flex-direction: column;
+        align-items: flex-start;
+        transition: right 0.3s ease;
+        overflow-y: auto;
+    }
+    
+    .nav-links.mobile-active {
+        right: 0;
+    }
+    
+    .mobile-menu-toggle,
+    .mobile-menu-close {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    
+    .mobile-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0,0,0,0.7);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+    
+    .mobile-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+:root {
+  --bg: #0f1419; --bg2: #1a1f2e; --bg3: #232938;
+  --border: #2d3748;
+  /* 차분한 블루-그린 톤 (3000만) */
+  --c1: #4a90e2; --c1b: #5dade2;
+  --c2: #6b9fdd; --c2b: #7fb3e6;
+  /* 차분한 퍼플-그레이 톤 (5000만) */
+  --c3: #7c6fa6; --c3b: #9a8db8;
+  --c4: #8b7fae; --c4b: #a89fc5;
+  /* 차분한 앰버-그레이 톤 (1억) */
+  --c5: #c99456; --c5b: #d4a76b;
+  --c6: #b88a5d; --c6b: #c89f75;
+  --text: #d4dae3; --text2: #8b96a8; --muted: #5a6478;
+  --green: #5fb687; --yellow: #d4af37; --orange: #c9915f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);margin:0 auto;max-width:100%;overflow-x:hidden;}
+
+/* ─ PAGE ─ */
+.page{max-width:1200px;min-height:860px;background:var(--bg);padding:28px 34px 60px;page-break-after:always;position:relative;overflow:hidden;margin:0 auto;}
+.page::before{content:'';position:absolute;top:-180px;right:-180px;width:420px;height:420px;background:radial-gradient(circle,rgba(30,144,255,0.05) 0%,transparent 70%);pointer-events:none;}
+
+/* ─ HEADER ─ */
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-box{width:44px;height:44px;background:linear-gradient(135deg,#1e90ff,#00d4ff);border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:#fff;box-shadow:0 0 18px rgba(30,144,255,0.4);}
+.logo h1{font-size:19px;font-weight:700;background:linear-gradient(135deg,#1e90ff,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo p{font-size:10px;color:var(--text2);letter-spacing:1px;text-transform:uppercase;}
+.hdr-r{text-align:right;}
+.hdr-r .period{font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;}
+.hdr-r .pnum{font-size:10px;color:var(--muted);margin-top:2px;}
+.live{display:inline-flex;align-items:center;gap:4px;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.3);color:var(--green);font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;letter-spacing:1px;margin-top:5px;}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* ─ TITLE ─ */
+.ptitle{font-size:20px;font-weight:700;margin-bottom:4px;}
+.psub{font-size:12px;color:var(--text2);margin-bottom:18px;}
+
+/* ─ GRID ─ */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;}
+.g6{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px;}
+.g32{display:grid;grid-template-columns:3fr 2fr;gap:14px;margin-bottom:16px;}
+.g23{display:grid;grid-template-columns:2fr 3fr;gap:14px;margin-bottom:16px;}
+.g13{display:grid;grid-template-columns:1fr 3fr;gap:14px;margin-bottom:16px;}
+
+/* ─ CARD ─ */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:18px 20px;position:relative;overflow:hidden;}
+.bar{position:absolute;top:0;left:0;width:100%;height:3px;border-radius:13px 13px 0 0;}
+
+/* ─ SCENARIO CARD ─ */
+.sc{border-radius:12px;padding:16px 16px 14px;position:relative;overflow:hidden;}
+.sc-badge{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;letter-spacing:0.5px;}
+.sc-type{font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;}
+.sc-principal{font-size:11px;font-weight:600;margin-bottom:10px;padding:4px 8px;border-radius:6px;display:inline-block;}
+.sc-value{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;line-height:1;margin-bottom:5px;}
+.sc-profit{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-bottom:4px;}
+.sc-pct{font-size:12px;margin-bottom:10px;}
+.sc-monthly{font-size:10px;color:var(--text2);}
+.progress{height:5px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden;margin:8px 0 4px;}
+.pfill{height:100%;border-radius:3px;}
+
+/* ─ SECTION TITLE ─ */
+.stitle{font-size:13px;font-weight:600;margin-bottom:13px;display:flex;align-items:center;gap:7px;}
+.stitle::before{content:'';width:3px;height:14px;border-radius:2px;}
+
+/* ─ TABLE ─ */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.7px;padding:7px 8px;text-align:left;border-bottom:1px solid var(--border);}
+.tbl td{font-size:12px;padding:8px 8px;border-bottom:1px solid rgba(26,45,74,0.4);color:var(--text);}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(30,144,255,0.03);}
+.mono{font-family:'JetBrains Mono',monospace;font-size:11px;}
+.green{color:var(--green);}.yellow{color:var(--yellow);}.muted{color:var(--muted);}
+
+/* ─ STAT ROW ─ */
+.sr{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(26,45,74,0.4);}
+.sr:last-child{border-bottom:none;}
+.sr-l{font-size:11px;color:var(--text2);}
+.sr-v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;}
+
+/* ─ TAG ─ */
+.tag{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;}
+.tg{background:rgba(0,229,160,0.12);color:var(--green);border:1px solid rgba(0,229,160,0.25);}
+.to{background:rgba(255,140,66,0.12);color:var(--orange);border:1px solid rgba(255,140,66,0.25);}
+.ty{background:rgba(255,215,0,0.12);color:var(--yellow);border:1px solid rgba(255,215,0,0.25);}
+.tb{background:rgba(30,144,255,0.12);color:var(--c1);border:1px solid rgba(30,144,255,0.25);}
+.tp{background:rgba(168,85,247,0.12);color:var(--c3);border:1px solid rgba(168,85,247,0.25);}
+
+/* ─ INSIGHT BOX ─ */
+.insight{background:linear-gradient(135deg,rgba(0,229,160,0.07),rgba(30,144,255,0.05));border:1px solid rgba(0,229,160,0.2);border-radius:10px;padding:12px 14px;margin-top:12px;}
+.insight-title{font-size:10px;font-weight:700;color:var(--green);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;}
+
+/* ─ FOOTER ─ */
+.footer{position:absolute;bottom:16px;left:34px;right:34px;display:flex;justify-content:space-between;align-items:center;font-size:9px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;}
+
+canvas{display:block;}
+
+/* ─ RESPONSIVE ─ */
+@media (max-width: 768px) {
+  .page{padding:20px 16px 40px;}
+  .g2,.g3,.g23,.g32{grid-template-columns:1fr;gap:12px;}
+  .ptitle{font-size:18px;}
+  .psub{font-size:11px;}
+  .sc{padding:14px;}
+  .sc-value{font-size:20px;}
+  .sc-profit{font-size:12px;}
+  .tbl{font-size:10px;}
+  .tbl th{font-size:8px;padding:6px;}
+  .tbl td{font-size:10px;padding:7px;}
+}
+</style>
+</head>
+<body>
+
+<!-- D-QUANT 9.0 Navigation -->
+<nav class="glass-nav">
+    <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+            <i class="fas fa-chart-line"></i>
+            <span>D-QUANT 9.0</span>
+        </a>
+        
+        <ul class="nav-links" id="navLinks">
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <li><a href="https://www.valuencores.com" target="_blank"><i class="fas fa-building"></i> ValuenCores</a></li>
+            <li><a href="index.html">디퀀트나인</a></li>
+            <li><a href="team.html">D.Insight</a></li>
+            <li><a href="simulation.html">투자운용 시뮬레이션</a></li>
+            <li><a href="case-study.html" class="active">투자 시나리오</a></li>
+            <li><a href="my-assets.html"><i class="fas fa-wallet"></i> 나의 자산</a></li>
+            <li><a href="my-info.html"><i class="fas fa-user-circle"></i> 나의 정보</a></li>
+            <li><a href="support.html"><i class="fas fa-headset"></i> 고객센터</a></li>
+        </ul>
+        
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+        
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════
+  PAGE 1  —  6대 시나리오 종합 비교
+════════════════════════════════════════════════════════════ -->
+<div class="page">
+<div class="hdr">
+  <div class="logo">
+    <div class="logo-box">DQ9</div>
+    <div>
+      <h1>D.Quant Nine</h1>
+      <p>AI Quantitative Trading · Bitget Exchange · 6-Scenario Comparison</p>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="period">📅 2025.10.31 → 2026.03.14 (135일 · 4.45개월)</div>
+    <div class="pnum">투자 시나리오 비교 보고서 · PAGE 1 / 3</div>
+    <div class="live"><span class="dot"></span> LIVE · 무청산 구조</div>
+  </div>
+</div>
+
+<div class="ptitle">💹 6대 투자 시나리오 종합 비교 대시보드</div>
+<div class="psub">원금 3,000만 / 5,000만 / 1억원 × 단리·복리 · 2025.10.31~2026.03.14 실제 적용 시뮬레이션</div>
+
+<!-- 6 SCENARIO CARDS - 2열 배치 -->
+<div class="g2" style="margin-bottom:14px;">
+
+  <!-- S1: 3000만 / 3% 단리 -->
+  <div class="sc" style="background:#1a1f2e;border:1px solid rgba(74,144,226,0.3);box-shadow:0 0 0 1px rgba(74,144,226,0.1),0 4px 15px rgba(74,144,226,0.06);">
+    <div class="bar" style="background:linear-gradient(90deg,#4a90e2,#5dade2);"></div>
+    <span class="sc-badge" style="background:rgba(74,144,226,0.15);color:#5dade2;">단리</span>
+    <div class="sc-type" style="color:#5dade2;">① 3,000만원 · 월 3% 단리</div>
+    <div style="font-size:10px;color:var(--text2);margin-bottom:8px;">월 고정 수익: <strong style="color:#5dade2;font-family:'JetBrains Mono';">+90만원</strong></div>
+    <div class="sc-value" style="color:#5dade2;">3,405<span style="font-size:13px;font-weight:400;">만원</span></div>
+    <div class="sc-profit" style="color:var(--green);">+405만원 수익</div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+      <span style="font-size:13px;font-weight:700;font-family:'JetBrains Mono';color:var(--green);">+13.5%</span>
+      <span class="tag tb" style="font-size:9px;">누적수익률</span>
+    </div>
+    <div class="progress"><div class="pfill" style="width:60%;background:linear-gradient(90deg,#4a90e2,#5dade2);"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+      <span>수익 405만</span><span>원금 3,000만</span>
+    </div>
+    <div style="margin-top:10px;padding:7px 9px;background:rgba(74,144,226,0.08);border-radius:7px;font-size:10px;color:var(--text2);">
+      매월 <strong style="color:#5dade2;">90만원</strong> 고정 · 원금 불변<br>
+      4개월 = 360만 + 3월 14일분 45만
+    </div>
+  </div>
+
+  <!-- S2: 3000만 / 3% 복리 -->
+  <div class="sc" style="background:#1a1f2e;border:1px solid rgba(107,159,221,0.35);box-shadow:0 0 0 1px rgba(107,159,221,0.12),0 4px 15px rgba(107,159,221,0.06);">
+    <div class="bar" style="background:linear-gradient(90deg,#6b9fdd,#7fb3e6);"></div>
+    <span class="sc-badge" style="background:rgba(107,159,221,0.15);color:#7fb3e6;">복리</span>
+    <div class="sc-type" style="color:#7fb3e6;">② 3,000만원 · 월 3% 복리</div>
+    <div style="font-size:10px;color:var(--text2);margin-bottom:8px;">복리 월 이자: <strong style="color:#7fb3e6;font-family:'JetBrains Mono';">매월 증가</strong></div>
+    <div class="sc-value" style="color:#7fb3e6;">3,426<span style="font-size:13px;font-weight:400;">만원</span></div>
+    <div class="sc-profit" style="color:var(--green);">+426만원 수익</div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+      <span style="font-size:13px;font-weight:700;font-family:'JetBrains Mono';color:var(--green);">+14.2%</span>
+      <span class="tag tb" style="font-size:9px;">누적수익률</span>
+    </div>
+    <div class="progress"><div class="pfill" style="width:66%;background:linear-gradient(90deg,#6b9fdd,#7fb3e6);"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+      <span>수익 426만</span><span>원금 3,000만</span>
+    </div>
+    <div style="margin-top:10px;padding:7px 9px;background:rgba(107,159,221,0.08);border-radius:7px;font-size:10px;color:var(--text2);">
+      단리 대비 <strong style="color:#7fb3e6;">+21만원</strong> 추가 수익<br>
+      수익에도 이자 적용 → 복리 효과
+    </div>
+  </div>
+
+  <!-- S3: 5000만 / 3.5% 단리 -->
+  <div class="sc" style="background:#1a1f2e;border:1px solid rgba(124,111,166,0.35);box-shadow:0 0 0 1px rgba(124,111,166,0.12),0 4px 15px rgba(124,111,166,0.06);">
+    <div class="bar" style="background:linear-gradient(90deg,#7c6fa6,#9a8db8);"></div>
+    <span class="sc-badge" style="background:rgba(124,111,166,0.15);color:#9a8db8;">단리</span>
+    <div class="sc-type" style="color:#9a8db8;">③ 5,000만원 · 월 3.5% 단리</div>
+    <div style="font-size:10px;color:var(--text2);margin-bottom:8px;">월 고정 수익: <strong style="color:#9a8db8;font-family:'JetBrains Mono';">+175만원</strong></div>
+    <div class="sc-value" style="color:#9a8db8;">5,779<span style="font-size:13px;font-weight:400;">만원</span></div>
+    <div class="sc-profit" style="color:var(--green);">+779만원 수익</div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+      <span style="font-size:13px;font-weight:700;font-family:'JetBrains Mono';color:var(--green);">+15.58%</span>
+      <span class="tag tp" style="font-size:9px;">누적수익률</span>
+    </div>
+    <div class="progress"><div class="pfill" style="width:75%;background:linear-gradient(90deg,#7c6fa6,#9a8db8);"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+      <span>수익 779만</span><span>원금 5,000만</span>
+    </div>
+    <div style="margin-top:10px;padding:7px 9px;background:rgba(124,111,166,0.08);border-radius:7px;font-size:10px;color:var(--text2);">
+      매월 <strong style="color:#9a8db8;">175만원</strong> 고정 · 원금 불변<br>
+      4개월 = 700만 + 3월 14일분 79만
+    </div>
+  </div>
+
+  <!-- S4: 5000만 / 3.5% 복리 -->
+  <div class="sc" style="background:#1a1f2e;border:1px solid rgba(139,127,174,0.35);box-shadow:0 0 0 1px rgba(139,127,174,0.12),0 4px 15px rgba(139,127,174,0.06);">
+    <div class="bar" style="background:linear-gradient(90deg,#8b7fae,#a89fc5);"></div>
+    <span class="sc-badge" style="background:rgba(139,127,174,0.15);color:#a89fc5;">복리</span>
+    <div class="sc-type" style="color:#a89fc5;">④ 5,000만원 · 월 3.5% 복리</div>
+    <div style="font-size:10px;color:var(--text2);margin-bottom:8px;">복리 월 이자: <strong style="color:#a89fc5;font-family:'JetBrains Mono';">매월 증가</strong></div>
+    <div class="sc-value" style="color:#a89fc5;">5,828<span style="font-size:13px;font-weight:400;">만원</span></div>
+    <div class="sc-profit" style="color:var(--green);">+828만원 수익</div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+      <span style="font-size:13px;font-weight:700;font-family:'JetBrains Mono';color:var(--green);">+16.54%</span>
+      <span class="tag tp" style="font-size:9px;">누적수익률</span>
+    </div>
+    <div class="progress"><div class="pfill" style="width:80%;background:linear-gradient(90deg,#8b7fae,#a89fc5);"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+      <span>수익 828만</span><span>원금 5,000만</span>
+    </div>
+    <div style="margin-top:10px;padding:7px 9px;background:rgba(139,127,174,0.08);border-radius:7px;font-size:10px;color:var(--text2);">
+      단리 대비 <strong style="color:#a89fc5;">+49만원</strong> 추가 수익<br>
+      원금 클수록 복리 효과 증폭
+    </div>
+  </div>
+
+  <!-- S5: 1억 / 4% 단리 -->
+  <div class="sc" style="background:#1a1f2e;border:1px solid rgba(201,148,86,0.35);box-shadow:0 0 0 1px rgba(201,148,86,0.12),0 4px 15px rgba(201,148,86,0.06);">
+    <div class="bar" style="background:linear-gradient(90deg,#c99456,#d4a76b);"></div>
+    <span class="sc-badge" style="background:rgba(201,148,86,0.15);color:#d4a76b;">단리</span>
+    <div class="sc-type" style="color:#d4a76b;">⑤ 1억원 · 월 4% 단리</div>
+    <div style="font-size:10px;color:var(--text2);margin-bottom:8px;">월 고정 수익: <strong style="color:#d4a76b;font-family:'JetBrains Mono';">+400만원</strong></div>
+    <div class="sc-value" style="color:#d4a76b;">1억 1,781<span style="font-size:13px;font-weight:400;">만원</span></div>
+    <div class="sc-profit" style="color:var(--green);">+1,781만원 수익</div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+      <span style="font-size:13px;font-weight:700;font-family:'JetBrains Mono';color:var(--green);">+17.81%</span>
+      <span class="tag ty" style="font-size:9px;">누적수익률</span>
+    </div>
+    <div class="progress"><div class="pfill" style="width:88%;background:linear-gradient(90deg,#c99456,#d4a76b);"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+      <span>수익 1,781만</span><span>원금 10,000만</span>
+    </div>
+    <div style="margin-top:10px;padding:7px 9px;background:rgba(201,148,86,0.08);border-radius:7px;font-size:10px;color:var(--text2);">
+      매월 <strong style="color:#d4a76b;">400만원</strong> 고정 · 원금 불변<br>
+      4개월 = 1,600만 + 3월 14일분 181만
+    </div>
+  </div>
+
+  <!-- S6: 1억 / 4% 복리 -->
+  <div class="sc" style="background:#1a1f2e;border:1px solid rgba(184,138,93,0.35);box-shadow:0 0 0 1px rgba(184,138,93,0.12),0 4px 15px rgba(184,138,93,0.06);">
+    <div class="bar" style="background:linear-gradient(90deg,#b88a5d,#c89f75);"></div>
+    <span class="sc-badge" style="background:rgba(184,138,93,0.15);color:#c89f75;">복리</span>
+    <div class="sc-type" style="color:#c89f75;">⑥ 1억원 · 월 4% 복리</div>
+    <div style="font-size:10px;color:var(--text2);margin-bottom:8px;">복리 월 이자: <strong style="color:#c89f75;font-family:'JetBrains Mono';">매월 증가</strong></div>
+    <div class="sc-value" style="color:#c89f75;">1억 1,908<span style="font-size:13px;font-weight:400;">만원</span></div>
+    <div class="sc-profit" style="color:var(--green);">+1,908만원 수익</div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+      <span style="font-size:13px;font-weight:700;font-family:'JetBrains Mono';color:var(--green);">+19.08%</span>
+      <span class="tag to" style="font-size:9px;">누적수익률</span>
+    </div>
+    <div class="progress"><div class="pfill" style="width:100%;background:linear-gradient(90deg,#b88a5d,#c89f75);"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+      <span>수익 1,908만</span><span>원금 10,000만</span>
+    </div>
+    <div style="margin-top:10px;padding:7px 9px;background:rgba(184,138,93,0.08);border-radius:7px;font-size:10px;color:var(--text2);">
+      단리 대비 <strong style="color:#c89f75;">+127만원</strong> 추가 수익<br>
+      고원금+복리 = 최강 수익 구조
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM: BAR CHART + COMPARISON TABLE - 그래프:표 = 2:3 비율 -->
+<div class="g23">
+  <!-- 수익금 비교 차트 -->
+  <div class="card">
+    <div class="bar" style="background:linear-gradient(90deg,#4a90e2,#7c6fa6,#c99456);"></div>
+    <div class="stitle" style="font-size:13px;"><span style="width:3px;height:14px;border-radius:2px;background:linear-gradient(#4a90e2,#c99456);display:inline-block;"></span>누적 수익금 및 총 평가액 비교 (135일 기준)</div>
+    <div style="height:195px;position:relative;"><canvas id="barChart"></canvas></div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:4px;"><span style="width:8px;height:3px;background:#5dade2;border-radius:2px;display:inline-block;"></span>단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:4px;"><span style="width:8px;height:3px;background:#7fb3e6;border-radius:2px;display:inline-block;border:1px dashed #7fb3e6;"></span>복리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:4px;"><span style="width:8px;height:3px;background:#9a8db8;border-radius:2px;display:inline-block;"></span>단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:4px;"><span style="width:8px;height:3px;background:#a89fc5;border-radius:2px;display:inline-block;border:1px dashed #a89fc5;"></span>복리</span>
+    </div>
+  </div>
+
+  <!-- 핵심 비교 테이블 -->
+  <div class="card">
+    <div class="bar" style="background:linear-gradient(90deg,#7c6fa6,#c99456);"></div>
+    <div class="stitle" style="font-size:13px;"><span style="width:3px;height:14px;border-radius:2px;background:linear-gradient(#7c6fa6,#c99456);display:inline-block;"></span>시나리오별 핵심 지표 요약</div>
+    <table class="tbl">
+      <thead><tr>
+        <th>시나리오</th><th>원금</th><th>최종 평가액</th><th>수익금</th><th>수익률</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><span style="color:#5dade2;font-weight:600;">① 3,000만 3% 단리</span></td><td class="mono muted">3,000만</td><td class="mono" style="color:#5dade2;">3,405만</td><td class="mono green">+405만</td><td class="mono green">+13.5%</td></tr>
+        <tr style="background:rgba(107,159,221,0.05);"><td><span style="color:#7fb3e6;font-weight:600;">② 3,000만 3% 복리</span></td><td class="mono muted">3,000만</td><td class="mono" style="color:#7fb3e6;">3,426만</td><td class="mono green">+426만</td><td class="mono green">+14.2%</td></tr>
+        <tr><td><span style="color:#9a8db8;font-weight:600;">③ 5,000만 3.5% 단리</span></td><td class="mono muted">5,000만</td><td class="mono" style="color:#9a8db8;">5,779만</td><td class="mono green">+779만</td><td class="mono green">+15.58%</td></tr>
+        <tr style="background:rgba(139,127,174,0.05);"><td><span style="color:#a89fc5;font-weight:600;">④ 5,000만 3.5% 복리</span></td><td class="mono muted">5,000만</td><td class="mono" style="color:#a89fc5;">5,828만</td><td class="mono green">+828만</td><td class="mono green">+16.54%</td></tr>
+        <tr><td><span style="color:#d4a76b;font-weight:600;">⑤ 1억 4% 단리</span></td><td class="mono muted">10,000만</td><td class="mono" style="color:#d4a76b;">11,781만</td><td class="mono green">+1,781만</td><td class="mono green">+17.81%</td></tr>
+        <tr style="background:rgba(184,138,93,0.05);"><td><span style="color:#c89f75;font-weight:700;">⑥ 1억 4% 복리 🏆</span></td><td class="mono muted">10,000만</td><td class="mono" style="color:#c89f75;font-weight:700;">11,908만</td><td class="mono green" style="font-weight:700;">+1,908만</td><td class="mono green" style="font-weight:700;">+19.08%</td></tr>
+      </tbody>
+    </table>
+    <div class="insight" style="margin-top:10px;">
+      <div class="insight-title">💡 핵심 인사이트</div>
+      <div style="font-size:10px;color:var(--text2);line-height:1.7;">
+        ✅ 원금이 클수록 <strong style="color:var(--green);">절대 수익금</strong> 차이 극대화<br>
+        ✅ 복리 프리미엄: 3,000만(+21만) < 5,000만(+49만) < 1억(<strong style="color:var(--yellow);">+127만</strong>)<br>
+        ✅ 135일 기준 최대 수익: <strong style="color:#c89f75;">1억 4% 복리 +1,908만원</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>D.Quant Nine — 디퀀트 소시에떼 / 밸류앤코어스(주) | 대외비</span><span>1 / 3</span>
+  <span>기준일: 2026.03.14 | 본 자료는 시뮬레이션 기반 내부 보고용입니다</span>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+  PAGE 2  —  월별 성장 추이 상세
+════════════════════════════════════════════════════════════ -->
+<div class="page">
+<div class="hdr">
+  <div class="logo">
+    <div class="logo-box">DQ9</div>
+    <div>
+      <h1>D.Quant Nine</h1>
+      <p>월별 성장 추이 · Monthly Growth Analysis · All Scenarios</p>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="period">📅 2025.10.31 → 2026.03.14 (135일 · 4.45개월)</div>
+    <div class="pnum">투자 시나리오 비교 보고서 · PAGE 2 / 3</div>
+    <div class="live"><span class="dot"></span> LIVE · 무청산 구조</div>
+  </div>
+</div>
+
+<div class="ptitle">📈 월별 잔액 성장 추이 비교</div>
+<div class="psub">6개 시나리오 동시 비교 · 단리(점선) vs 복리(실선) · 원금 그룹별 색상 구분</div>
+
+<!-- MAIN MULTI-LINE CHART -->
+<div class="card" style="margin-bottom:14px;">
+  <div class="bar" style="background:linear-gradient(90deg,#1e90ff,#a855f7,#f59e0b,#ef4444);"></div>
+  <div class="stitle"><span style="width:3px;height:14px;border-radius:2px;background:linear-gradient(#1e90ff,#ef4444);display:inline-block;"></span>6개 시나리오 자산 성장 곡선 (원금별 2축 분리)</div>
+  <div style="height:260px;position:relative;"><canvas id="multiLine"></canvas></div>
+  <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;padding:0 4px;">
+    <span style="font-size:10px;color:#00d4ff;display:flex;align-items:center;gap:5px;"><span style="width:14px;height:2px;background:#00d4ff;display:inline-block;"></span>① 3,000만 3% 단리</span>
+    <span style="font-size:10px;color:#89b4ff;display:flex;align-items:center;gap:5px;"><span style="width:14px;height:2px;background:#89b4ff;border-top:2px dashed #89b4ff;display:inline-block;"></span>② 3,000만 3% 복리</span>
+    <span style="font-size:10px;color:#c084fc;display:flex;align-items:center;gap:5px;"><span style="width:14px;height:2px;background:#c084fc;display:inline-block;"></span>③ 5,000만 3.5% 단리</span>
+    <span style="font-size:10px;color:#f0abfc;display:flex;align-items:center;gap:5px;"><span style="width:14px;height:2px;background:#f0abfc;border-top:2px dashed #f0abfc;display:inline-block;"></span>④ 5,000만 3.5% 복리</span>
+    <span style="font-size:10px;color:#fcd34d;display:flex;align-items:center;gap:5px;"><span style="width:14px;height:2px;background:#fcd34d;display:inline-block;"></span>⑤ 1억 4% 단리</span>
+    <span style="font-size:10px;color:#fca5a5;display:flex;align-items:center;gap:5px;"><span style="width:14px;height:2px;background:#fca5a5;border-top:2px dashed #fca5a5;display:inline-block;"></span>⑥ 1억 4% 복리</span>
+  </div>
+</div>
+
+<!-- MONTHLY BREAKDOWN TABLES -->
+<div class="g3">
+  <!-- 3000만 월별 -->
+  <div class="card">
+    <div class="bar" style="background:linear-gradient(90deg,#1e90ff,#89b4ff);"></div>
+    <div class="stitle" style="font-size:12px;"><span style="width:3px;height:13px;border-radius:2px;background:linear-gradient(#1e90ff,#89b4ff);display:inline-block;"></span>3,000만원 월별 잔액</div>
+    <table class="tbl">
+      <thead><tr><th>월</th><th style="color:#00d4ff;">단리(3%)</th><th style="color:#89b4ff;">복리(3%)</th><th>차이</th></tr></thead>
+      <tbody>
+        <tr><td class="muted" style="font-size:10px;">시작(10/31)</td><td class="mono" style="color:#00d4ff;">3,000만</td><td class="mono" style="color:#89b4ff;">3,000만</td><td class="mono muted">—</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2025.11</td><td class="mono" style="color:#00d4ff;">3,090만</td><td class="mono" style="color:#89b4ff;">3,090만</td><td class="mono green">+0만</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2025.12</td><td class="mono" style="color:#00d4ff;">3,180만</td><td class="mono" style="color:#89b4ff;">3,183만</td><td class="mono green">+3만</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2026.01</td><td class="mono" style="color:#00d4ff;">3,270만</td><td class="mono" style="color:#89b4ff;">3,278만</td><td class="mono green">+8만</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2026.02</td><td class="mono" style="color:#00d4ff;">3,360만</td><td class="mono" style="color:#89b4ff;">3,377만</td><td class="mono green">+17만</td></tr>
+        <tr style="background:rgba(0,229,160,0.04);"><td class="muted" style="font-size:10px;"><strong>2026.03.14</strong></td><td class="mono" style="color:#00d4ff;font-weight:700;">3,401만</td><td class="mono" style="color:#89b4ff;font-weight:700;">3,424만</td><td class="mono green" style="font-weight:700;">+23만</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px;padding:7px 9px;background:rgba(30,144,255,0.06);border-radius:7px;">
+      <div style="font-size:10px;color:var(--text2);line-height:1.6;">
+        📌 수익: <span style="color:#00d4ff;">단리 +401만</span> | <span style="color:#89b4ff;">복리 +424만</span><br>
+        📌 복리 프리미엄: <strong style="color:var(--green);">+23만원 (4.45개월)</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5000만 월별 -->
+  <div class="card">
+    <div class="bar" style="background:linear-gradient(90deg,#a855f7,#f0abfc);"></div>
+    <div class="stitle" style="font-size:12px;"><span style="width:3px;height:13px;border-radius:2px;background:linear-gradient(#a855f7,#f0abfc);display:inline-block;"></span>5,000만원 월별 잔액</div>
+    <table class="tbl">
+      <thead><tr><th>월</th><th style="color:#c084fc;">단리(3.5%)</th><th style="color:#f0abfc;">복리(3.5%)</th><th>차이</th></tr></thead>
+      <tbody>
+        <tr><td class="muted" style="font-size:10px;">시작(10/31)</td><td class="mono" style="color:#c084fc;">5,000만</td><td class="mono" style="color:#f0abfc;">5,000만</td><td class="mono muted">—</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2025.11</td><td class="mono" style="color:#c084fc;">5,175만</td><td class="mono" style="color:#f0abfc;">5,175만</td><td class="mono green">+0만</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2025.12</td><td class="mono" style="color:#c084fc;">5,350만</td><td class="mono" style="color:#f0abfc;">5,356만</td><td class="mono green">+6만</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2026.01</td><td class="mono" style="color:#c084fc;">5,525만</td><td class="mono" style="color:#f0abfc;">5,544만</td><td class="mono green">+19만</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2026.02</td><td class="mono" style="color:#c084fc;">5,700만</td><td class="mono" style="color:#f0abfc;">5,738만</td><td class="mono green">+38만</td></tr>
+        <tr style="background:rgba(0,229,160,0.04);"><td class="muted" style="font-size:10px;"><strong>2026.03.14</strong></td><td class="mono" style="color:#c084fc;font-weight:700;">5,779만</td><td class="mono" style="color:#f0abfc;font-weight:700;">5,828만</td><td class="mono green" style="font-weight:700;">+49만</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px;padding:7px 9px;background:rgba(168,85,247,0.06);border-radius:7px;">
+      <div style="font-size:10px;color:var(--text2);line-height:1.6;">
+        📌 수익: <span style="color:#c084fc;">단리 +779만</span> | <span style="color:#f0abfc;">복리 +828만</span><br>
+        📌 복리 프리미엄: <strong style="color:var(--green);">+49만원 (4.45개월)</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1억 월별 -->
+  <div class="card">
+    <div class="bar" style="background:linear-gradient(90deg,#f59e0b,#fca5a5);"></div>
+    <div class="stitle" style="font-size:12px;"><span style="width:3px;height:13px;border-radius:2px;background:linear-gradient(#f59e0b,#fca5a5);display:inline-block;"></span>1억원 월별 잔액</div>
+    <table class="tbl">
+      <thead><tr><th>월</th><th style="color:#fcd34d;">단리(4%)</th><th style="color:#fca5a5;">복리(4%)</th><th>차이</th></tr></thead>
+      <tbody>
+        <tr><td class="muted" style="font-size:10px;">시작(10/31)</td><td class="mono" style="color:#fcd34d;">10,000만</td><td class="mono" style="color:#fca5a5;">10,000만</td><td class="mono muted">—</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2025.11</td><td class="mono" style="color:#fcd34d;">10,400만</td><td class="mono" style="color:#fca5a5;">10,400만</td><td class="mono green">+0만</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2025.12</td><td class="mono" style="color:#fcd34d;">10,800만</td><td class="mono" style="color:#fca5a5;">10,816만</td><td class="mono green">+16만</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2026.01</td><td class="mono" style="color:#fcd34d;">11,200만</td><td class="mono" style="color:#fca5a5;">11,249만</td><td class="mono green">+49만</td></tr>
+        <tr><td class="muted" style="font-size:10px;">2026.02</td><td class="mono" style="color:#fcd34d;">11,600만</td><td class="mono" style="color:#fca5a5;">11,699만</td><td class="mono green">+99만</td></tr>
+        <tr style="background:rgba(239,68,68,0.05);"><td class="muted" style="font-size:10px;"><strong>2026.03.14</strong></td><td class="mono" style="color:#fcd34d;font-weight:700;">11,781만</td><td class="mono" style="color:#fca5a5;font-weight:700;">11,908만</td><td class="mono green" style="font-weight:700;">+127만</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px;padding:7px 9px;background:rgba(239,68,68,0.06);border-radius:7px;">
+      <div style="font-size:10px;color:var(--text2);line-height:1.6;">
+        📌 수익: <span style="color:#fcd34d;">단리 +1,781만</span> | <span style="color:#fca5a5;">복리 +1,908만</span><br>
+        📌 복리 프리미엄: <strong style="color:var(--green);">+127만원 (4.45개월)</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>D.Quant Nine — 디퀀트 소시에떼 / 밸류앤코어스(주) | 대외비</span><span>2 / 3</span>
+  <span>기준일: 2026.03.14 | 단리·복리 공식 적용 (135일 = 4 + 14/31개월)</span>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+  PAGE 3  —  단리 vs 복리 분석 + 전략 종합
+════════════════════════════════════════════════════════════ -->
+<div class="page">
+<div class="hdr">
+  <div class="logo">
+    <div class="logo-box">DQ9</div>
+    <div>
+      <h1>D.Quant Nine</h1>
+      <p>단리 vs 복리 심층 분석 · Simple vs Compound Interest Analysis</p>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="period">📅 2025.10.31 → 2026.03.14 (135일 · 4.45개월)</div>
+    <div class="pnum">투자 시나리오 비교 보고서 · PAGE 3 / 3</div>
+    <div class="live"><span class="dot"></span> LIVE · 무청산 구조</div>
+  </div>
+</div>
+
+<div class="ptitle">🔬 단리 vs 복리 심층 분석 & 수익 최적화 전략</div>
+<div class="psub">원금별 복리 프리미엄 시각화 · 누적 수익률 비교 · 투자 의사결정 인사이트</div>
+
+<!-- TOP: 3 COMPARISON CARDS -->
+<div class="g3" style="margin-bottom:14px;">
+  <!-- 3000만 -->
+  <div class="card" style="border:1px solid rgba(30,144,255,0.25);">
+    <div class="bar" style="background:linear-gradient(90deg,#1e90ff,#89b4ff);"></div>
+    <div style="text-align:center;padding:4px 0 10px;">
+      <div style="font-size:11px;font-weight:700;color:#00d4ff;margin-bottom:6px;">💙 3,000만원 플랜</div>
+      <div style="display:flex;justify-content:space-around;margin-bottom:12px;">
+        <div><div style="font-size:9px;color:var(--muted);">단리 최종</div><div style="font-family:'JetBrains Mono';font-size:15px;font-weight:700;color:#00d4ff;">3,401만</div></div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div><div style="font-size:9px;color:var(--muted);">복리 최종</div><div style="font-family:'JetBrains Mono';font-size:15px;font-weight:700;color:#89b4ff;">3,424만</div></div>
+      </div>
+      <div style="height:120px;position:relative;"><canvas id="chart3000"></canvas></div>
+      <div style="margin-top:10px;padding:8px;background:rgba(30,144,255,0.07);border-radius:8px;">
+        <div style="font-size:10px;color:var(--text2);">복리 프리미엄</div>
+        <div style="font-family:'JetBrains Mono';font-size:20px;font-weight:700;color:var(--green);">+23만원</div>
+        <div style="font-size:9px;color:var(--muted);">단리 대비 복리 추가 수익</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5000만 -->
+  <div class="card" style="border:1px solid rgba(168,85,247,0.25);">
+    <div class="bar" style="background:linear-gradient(90deg,#a855f7,#f0abfc);"></div>
+    <div style="text-align:center;padding:4px 0 10px;">
+      <div style="font-size:11px;font-weight:700;color:#c084fc;margin-bottom:6px;">💜 5,000만원 플랜</div>
+      <div style="display:flex;justify-content:space-around;margin-bottom:12px;">
+        <div><div style="font-size:9px;color:var(--muted);">단리 최종</div><div style="font-family:'JetBrains Mono';font-size:15px;font-weight:700;color:#c084fc;">5,779만</div></div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div><div style="font-size:9px;color:var(--muted);">복리 최종</div><div style="font-family:'JetBrains Mono';font-size:15px;font-weight:700;color:#f0abfc;">5,828만</div></div>
+      </div>
+      <div style="height:120px;position:relative;"><canvas id="chart5000"></canvas></div>
+      <div style="margin-top:10px;padding:8px;background:rgba(168,85,247,0.07);border-radius:8px;">
+        <div style="font-size:10px;color:var(--text2);">복리 프리미엄</div>
+        <div style="font-family:'JetBrains Mono';font-size:20px;font-weight:700;color:var(--green);">+49만원</div>
+        <div style="font-size:9px;color:var(--muted);">단리 대비 복리 추가 수익</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1억 -->
+  <div class="card" style="border:1px solid rgba(239,68,68,0.25);">
+    <div class="bar" style="background:linear-gradient(90deg,#f59e0b,#ef4444);"></div>
+    <div style="text-align:center;padding:4px 0 10px;">
+      <div style="font-size:11px;font-weight:700;color:#fca5a5;margin-bottom:6px;">❤️ 1억원 플랜</div>
+      <div style="display:flex;justify-content:space-around;margin-bottom:12px;">
+        <div><div style="font-size:9px;color:var(--muted);">단리 최종</div><div style="font-family:'JetBrains Mono';font-size:15px;font-weight:700;color:#fcd34d;">11,781만</div></div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div><div style="font-size:9px;color:var(--muted);">복리 최종</div><div style="font-family:'JetBrains Mono';font-size:15px;font-weight:700;color:#fca5a5;">11,908만</div></div>
+      </div>
+      <div style="height:120px;position:relative;"><canvas id="chart1ok"></canvas></div>
+      <div style="margin-top:10px;padding:8px;background:rgba(239,68,68,0.07);border-radius:8px;">
+        <div style="font-size:10px;color:var(--text2);">복리 프리미엄</div>
+        <div style="font-family:'JetBrains Mono';font-size:20px;font-weight:700;color:var(--green);">+127만원</div>
+        <div style="font-size:9px;color:var(--muted);">단리 대비 복리 추가 수익</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM: RATE CHART + FORMULA + INSIGHTS -->
+<div class="g32">
+  <!-- 수익률 비교 차트 -->
+  <div class="card">
+    <div class="bar" style="background:linear-gradient(90deg,#1e90ff,#a855f7,#ef4444);"></div>
+    <div class="stitle" style="font-size:12px;"><span style="width:3px;height:13px;border-radius:2px;background:linear-gradient(#1e90ff,#ef4444);display:inline-block;"></span>6개 시나리오 누적 수익률 및 수익금 종합 비교</div>
+    <div style="height:200px;position:relative;"><canvas id="rateChart"></canvas></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;">
+      <div style="background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.2);border-radius:8px;padding:8px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:3px;">복리 프리미엄 합계</div>
+        <div style="font-family:'JetBrains Mono';font-size:14px;font-weight:700;color:var(--green);">+199만원</div>
+        <div style="font-size:9px;color:var(--muted);">3개 플랜 합산</div>
+      </div>
+      <div style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.2);border-radius:8px;padding:8px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:3px;">최고 수익 시나리오</div>
+        <div style="font-family:'JetBrains Mono';font-size:13px;font-weight:700;color:var(--yellow);">1억 4% 복리</div>
+        <div style="font-size:9px;color:var(--muted);">+1,908만 (+19.08%)</div>
+      </div>
+      <div style="background:rgba(30,144,255,0.06);border:1px solid rgba(30,144,255,0.2);border-radius:8px;padding:8px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:3px;">최고 수익률 시나리오</div>
+        <div style="font-family:'JetBrains Mono';font-size:13px;font-weight:700;color:var(--c1b);">1억 4% 복리</div>
+        <div style="font-size:9px;color:var(--muted);">+19.08% (135일)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formula + Decision Guide -->
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <!-- Formulas -->
+    <div class="card" style="padding:14px 16px;">
+      <div class="bar" style="background:linear-gradient(90deg,#a855f7,#00e5a0);"></div>
+      <div class="stitle" style="font-size:12px;margin-bottom:10px;"><span style="width:3px;height:13px;border-radius:2px;background:linear-gradient(#a855f7,#00e5a0);display:inline-block;"></span>계산 공식 요약</div>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="padding:8px 10px;background:rgba(30,144,255,0.07);border-left:3px solid #1e90ff;border-radius:0 7px 7px 0;">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px;">단리 (Simple Interest)</div>
+          <div style="font-family:'JetBrains Mono';font-size:11px;color:#00d4ff;">원금 × (1 + 월이율 × 4.45개월)</div>
+        </div>
+        <div style="padding:8px 10px;background:rgba(0,229,160,0.07);border-left:3px solid var(--green);border-radius:0 7px 7px 0;">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px;">복리 (Compound Interest)</div>
+          <div style="font-family:'JetBrains Mono';font-size:11px;color:var(--green);">원금 × (1 + 월이율)^4.45개월</div>
+        </div>
+        <div style="padding:7px 10px;background:rgba(255,215,0,0.06);border-left:3px solid var(--yellow);border-radius:0 7px 7px 0;">
+          <div style="font-size:9px;color:var(--muted);">* 3월 14일 = 4개월 + 14/31일분 적용</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decision Guide -->
+    <div class="card" style="padding:14px 16px;flex:1;">
+      <div class="bar" style="background:linear-gradient(90deg,#ef4444,#fcd34d);"></div>
+      <div class="stitle" style="font-size:12px;margin-bottom:10px;"><span style="width:3px;height:13px;border-radius:2px;background:linear-gradient(#ef4444,#fcd34d);display:inline-block;"></span>투자 플랜별 월 실수익 정리</div>
+      <table class="tbl">
+        <thead><tr><th>플랜</th><th>월 수익금</th><th>135일 수익</th><th>수익률</th></tr></thead>
+        <tbody>
+          <tr><td style="color:#00d4ff;font-size:10px;">① 3,000만 3% 단리</td><td class="mono" style="color:#00d4ff;">90만/월</td><td class="mono green">405만</td><td class="mono green">13.5%</td></tr>
+          <tr><td style="color:#89b4ff;font-size:10px;">② 3,000만 3% 복리</td><td class="mono" style="color:#89b4ff;">90만+α</td><td class="mono green">426만</td><td class="mono green">14.2%</td></tr>
+          <tr><td style="color:#c084fc;font-size:10px;">③ 5,000만 3.5% 단리</td><td class="mono" style="color:#c084fc;">175만/월</td><td class="mono green">779만</td><td class="mono green">15.58%</td></tr>
+          <tr><td style="color:#f0abfc;font-size:10px;">④ 5,000만 3.5% 복리</td><td class="mono" style="color:#f0abfc;">175만+α</td><td class="mono green">828만</td><td class="mono green">16.54%</td></tr>
+          <tr><td style="color:#fcd34d;font-size:10px;">⑤ 1억 4% 단리</td><td class="mono" style="color:#fcd34d;">400만/월</td><td class="mono green">1,781만</td><td class="mono green">17.81%</td></tr>
+          <tr style="background:rgba(239,68,68,0.06);"><td style="color:#fca5a5;font-size:10px;font-weight:700;">⑥ 1억 4% 복리 🏆</td><td class="mono" style="color:#fca5a5;font-weight:700;">400만+α</td><td class="mono green" style="font-weight:700;">1,908만</td><td class="mono green" style="font-weight:700;">19.08%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>D.Quant Nine — 디퀀트 소시에떼 / 밸류앤코어스(주) | 대외비</span><span>3 / 4</span>
+  <span>기준일: 2026.03.14 | 본 자료는 시뮬레이션 기반 내부 보고용입니다</span>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════ PAGE 4 ═══════════════════════════════════════ -->
+<div class="page">
+<div class="hdr">
+  <div class="hdr-l">
+    <div style="font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.3px;">
+      PAGE 4  —  장기 투자 시뮬레이션 (1년 · 2년 · 3년)
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="live"><span class="dot"></span>LIVE</div>
+    <div class="pnum">투자 시나리오 비교 보고서 · PAGE 4 / 4</div>
+  </div>
+</div>
+
+<div class="ptitle">📈 1년 · 2년 · 3년 후 단리 vs 복리 수익 시뮬레이션</div>
+<div class="psub">원금 3,000만 / 5,000만 / 1억원 × 단리·복리 · 장기 투자 수익 비교 분석</div>
+
+<!-- 1년 후 수익 -->
+<div style="margin-bottom:24px;">
+  <div class="stitle" style="font-size:14px;margin-bottom:14px;">
+    <span style="width:3px;height:16px;border-radius:2px;background:linear-gradient(#4a90e2,#c99456);display:inline-block;"></span>
+    💰 1년 후 (12개월) 예상 수익
+  </div>
+  
+  <div class="g2" style="margin-bottom:14px;">
+    <!-- 3,000만원 1년 -->
+    <div class="card">
+      <div class="bar" style="background:linear-gradient(90deg,#4a90e2,#7fb3e6);"></div>
+      <div style="font-size:12px;font-weight:600;color:#5dade2;margin-bottom:10px;">💵 3,000만원 투자 (월 3%)</div>
+      <table class="tbl">
+        <thead><tr><th>구분</th><th>최종 평가액</th><th>순수익</th><th>수익률</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span style="color:#5dade2;font-weight:600;">단리</span></td>
+            <td class="mono" style="color:#5dade2;">4,080만원</td>
+            <td class="mono green">+1,080만원</td>
+            <td class="mono green">+36.0%</td>
+          </tr>
+          <tr style="background:rgba(127,179,230,0.05);">
+            <td><span style="color:#7fb3e6;font-weight:600;">복리</span></td>
+            <td class="mono" style="color:#7fb3e6;">4,273만원</td>
+            <td class="mono green">+1,273만원</td>
+            <td class="mono green">+42.4%</td>
+          </tr>
+          <tr style="background:rgba(95,182,135,0.08);">
+            <td style="font-weight:700;">복리 프리미엄</td>
+            <td class="mono" style="color:var(--green);font-weight:700;">+193만원</td>
+            <td colspan="2" class="mono" style="color:var(--green);font-weight:700;">단리 대비 +17.9% 추가 수익</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 5,000만원 1년 -->
+    <div class="card">
+      <div class="bar" style="background:linear-gradient(90deg,#7c6fa6,#a89fc5);"></div>
+      <div style="font-size:12px;font-weight:600;color:#9a8db8;margin-bottom:10px;">💵 5,000만원 투자 (월 3.5%)</div>
+      <table class="tbl">
+        <thead><tr><th>구분</th><th>최종 평가액</th><th>순수익</th><th>수익률</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span style="color:#9a8db8;font-weight:600;">단리</span></td>
+            <td class="mono" style="color:#9a8db8;">7,100만원</td>
+            <td class="mono green">+2,100만원</td>
+            <td class="mono green">+42.0%</td>
+          </tr>
+          <tr style="background:rgba(168,159,197,0.05);">
+            <td><span style="color:#a89fc5;font-weight:600;">복리</span></td>
+            <td class="mono" style="color:#a89fc5;">7,530만원</td>
+            <td class="mono green">+2,530만원</td>
+            <td class="mono green">+50.6%</td>
+          </tr>
+          <tr style="background:rgba(95,182,135,0.08);">
+            <td style="font-weight:700;">복리 프리미엄</td>
+            <td class="mono" style="color:var(--green);font-weight:700;">+430만원</td>
+            <td colspan="2" class="mono" style="color:var(--green);font-weight:700;">단리 대비 +20.5% 추가 수익</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 1억원 1년 -->
+    <div class="card">
+      <div class="bar" style="background:linear-gradient(90deg,#c99456,#c89f75);"></div>
+      <div style="font-size:12px;font-weight:600;color:#d4a76b;margin-bottom:10px;">💵 1억원 투자 (월 4%)</div>
+      <table class="tbl">
+        <thead><tr><th>구분</th><th>최종 평가액</th><th>순수익</th><th>수익률</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span style="color:#d4a76b;font-weight:600;">단리</span></td>
+            <td class="mono" style="color:#d4a76b;">1억 4,800만원</td>
+            <td class="mono green">+4,800만원</td>
+            <td class="mono green">+48.0%</td>
+          </tr>
+          <tr style="background:rgba(200,159,117,0.05);">
+            <td><span style="color:#c89f75;font-weight:600;">복리</span></td>
+            <td class="mono" style="color:#c89f75;">1억 6,010만원</td>
+            <td class="mono green">+6,010만원</td>
+            <td class="mono green">+60.1%</td>
+          </tr>
+          <tr style="background:rgba(95,182,135,0.08);">
+            <td style="font-weight:700;">복리 프리미엄 🏆</td>
+            <td class="mono" style="color:var(--green);font-weight:700;">+1,210만원</td>
+            <td colspan="2" class="mono" style="color:var(--green);font-weight:700;">단리 대비 +25.2% 추가 수익</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- 1년 후 비교 차트 -->
+  <div class="card" style="margin-top:14px;">
+    <div class="bar" style="background:linear-gradient(90deg,#4a90e2,#7c6fa6,#c99456);"></div>
+    <div class="stitle" style="font-size:13px;"><span style="width:3px;height:14px;border-radius:2px;background:linear-gradient(#4a90e2,#c99456);display:inline-block;"></span>1년 후 단리 vs 복리 수익 비교</div>
+    <div style="height:240px;position:relative;"><canvas id="chart1Year"></canvas></div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;justify-content:center;">
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#5dade2;border-radius:2px;display:inline-block;"></span>3,000만 단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#7fb3e6;border-radius:2px;display:inline-block;border:1px dashed #7fb3e6;"></span>3,000만 복리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#9a8db8;border-radius:2px;display:inline-block;"></span>5,000만 단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#a89fc5;border-radius:2px;display:inline-block;border:1px dashed #a89fc5;"></span>5,000만 복리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#d4a76b;border-radius:2px;display:inline-block;"></span>1억 단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#c89f75;border-radius:2px;display:inline-block;border:1px dashed #c89f75;"></span>1억 복리</span>
+    </div>
+  </div>
+</div>
+
+<!-- 2년 후 수익 -->
+<div style="margin-bottom:24px;">
+  <div class="stitle" style="font-size:14px;margin-bottom:14px;">
+    <span style="width:3px;height:16px;border-radius:2px;background:linear-gradient(#7c6fa6,#c99456);display:inline-block;"></span>
+    💎 2년 후 (24개월) 예상 수익
+  </div>
+  
+  <div class="g2" style="margin-bottom:14px;">
+    <!-- 3,000만원 2년 -->
+    <div class="card">
+      <div class="bar" style="background:linear-gradient(90deg,#4a90e2,#7fb3e6);"></div>
+      <div style="font-size:12px;font-weight:600;color:#5dade2;margin-bottom:10px;">💵 3,000만원 투자 (월 3%)</div>
+      <table class="tbl">
+        <thead><tr><th>구분</th><th>최종 평가액</th><th>순수익</th><th>수익률</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span style="color:#5dade2;font-weight:600;">단리</span></td>
+            <td class="mono" style="color:#5dade2;">5,160만원</td>
+            <td class="mono green">+2,160만원</td>
+            <td class="mono green">+72.0%</td>
+          </tr>
+          <tr style="background:rgba(127,179,230,0.05);">
+            <td><span style="color:#7fb3e6;font-weight:600;">복리</span></td>
+            <td class="mono" style="color:#7fb3e6;">6,087만원</td>
+            <td class="mono green">+3,087만원</td>
+            <td class="mono green">+102.9%</td>
+          </tr>
+          <tr style="background:rgba(95,182,135,0.08);">
+            <td style="font-weight:700;">복리 프리미엄</td>
+            <td class="mono" style="color:var(--green);font-weight:700;">+927만원</td>
+            <td colspan="2" class="mono" style="color:var(--green);font-weight:700;">단리 대비 +42.9% 추가 수익</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 5,000만원 2년 -->
+    <div class="card">
+      <div class="bar" style="background:linear-gradient(90deg,#7c6fa6,#a89fc5);"></div>
+      <div style="font-size:12px;font-weight:600;color:#9a8db8;margin-bottom:10px;">💵 5,000만원 투자 (월 3.5%)</div>
+      <table class="tbl">
+        <thead><tr><th>구분</th><th>최종 평가액</th><th>순수익</th><th>수익률</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span style="color:#9a8db8;font-weight:600;">단리</span></td>
+            <td class="mono" style="color:#9a8db8;">9,200만원</td>
+            <td class="mono green">+4,200만원</td>
+            <td class="mono green">+84.0%</td>
+          </tr>
+          <tr style="background:rgba(168,159,197,0.05);">
+            <td><span style="color:#a89fc5;font-weight:600;">복리</span></td>
+            <td class="mono" style="color:#a89fc5;">1억 1,316만원</td>
+            <td class="mono green">+6,316만원</td>
+            <td class="mono green">+126.3%</td>
+          </tr>
+          <tr style="background:rgba(95,182,135,0.08);">
+            <td style="font-weight:700;">복리 프리미엄</td>
+            <td class="mono" style="color:var(--green);font-weight:700;">+2,116만원</td>
+            <td colspan="2" class="mono" style="color:var(--green);font-weight:700;">단리 대비 +50.4% 추가 수익</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 1억원 2년 -->
+    <div class="card">
+      <div class="bar" style="background:linear-gradient(90deg,#c99456,#c89f75);"></div>
+      <div style="font-size:12px;font-weight:600;color:#d4a76b;margin-bottom:10px;">💵 1억원 투자 (월 4%)</div>
+      <table class="tbl">
+        <thead><tr><th>구분</th><th>최종 평가액</th><th>순수익</th><th>수익률</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span style="color:#d4a76b;font-weight:600;">단리</span></td>
+            <td class="mono" style="color:#d4a76b;">1억 9,600만원</td>
+            <td class="mono green">+9,600만원</td>
+            <td class="mono green">+96.0%</td>
+          </tr>
+          <tr style="background:rgba(200,159,117,0.05);">
+            <td><span style="color:#c89f75;font-weight:600;">복리</span></td>
+            <td class="mono" style="color:#c89f75;">2억 5,633만원</td>
+            <td class="mono green">+1억 5,633만원</td>
+            <td class="mono green">+156.3%</td>
+          </tr>
+          <tr style="background:rgba(95,182,135,0.08);">
+            <td style="font-weight:700;">복리 프리미엄 🏆</td>
+            <td class="mono" style="color:var(--green);font-weight:700;">+6,033만원</td>
+            <td colspan="2" class="mono" style="color:var(--green);font-weight:700;">단리 대비 +62.8% 추가 수익</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- 2년 후 비교 차트 -->
+  <div class="card" style="margin-top:14px;">
+    <div class="bar" style="background:linear-gradient(90deg,#4a90e2,#7c6fa6,#c99456);"></div>
+    <div class="stitle" style="font-size:13px;"><span style="width:3px;height:14px;border-radius:2px;background:linear-gradient(#4a90e2,#c99456);display:inline-block;"></span>2년 후 단리 vs 복리 수익 비교</div>
+    <div style="height:240px;position:relative;"><canvas id="chart2Year"></canvas></div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;justify-content:center;">
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#5dade2;border-radius:2px;display:inline-block;"></span>3,000만 단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#7fb3e6;border-radius:2px;display:inline-block;border:1px dashed #7fb3e6;"></span>3,000만 복리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#9a8db8;border-radius:2px;display:inline-block;"></span>5,000만 단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#a89fc5;border-radius:2px;display:inline-block;border:1px dashed #a89fc5;"></span>5,000만 복리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#d4a76b;border-radius:2px;display:inline-block;"></span>1억 단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#c89f75;border-radius:2px;display:inline-block;border:1px dashed #c89f75;"></span>1억 복리</span>
+    </div>
+  </div>
+</div>
+
+<!-- 3년 후 수익 -->
+<div style="margin-bottom:20px;">
+  <div class="stitle" style="font-size:14px;margin-bottom:14px;">
+    <span style="width:3px;height:16px;border-radius:2px;background:linear-gradient(#c99456,#5fb687);display:inline-block;"></span>
+    🚀 3년 후 (36개월) 예상 수익
+  </div>
+  
+  <div class="g2">
+    <!-- 3,000만원 3년 -->
+    <div class="card">
+      <div class="bar" style="background:linear-gradient(90deg,#4a90e2,#7fb3e6);"></div>
+      <div style="font-size:12px;font-weight:600;color:#5dade2;margin-bottom:10px;">💵 3,000만원 투자 (월 3%)</div>
+      <table class="tbl">
+        <thead><tr><th>구분</th><th>최종 평가액</th><th>순수익</th><th>수익률</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span style="color:#5dade2;font-weight:600;">단리</span></td>
+            <td class="mono" style="color:#5dade2;">6,240만원</td>
+            <td class="mono green">+3,240만원</td>
+            <td class="mono green">+108.0%</td>
+          </tr>
+          <tr style="background:rgba(127,179,230,0.05);">
+            <td><span style="color:#7fb3e6;font-weight:700;">복리 🎯</span></td>
+            <td class="mono" style="color:#7fb3e6;font-weight:700;">8,671만원</td>
+            <td class="mono green" style="font-weight:700;">+5,671만원</td>
+            <td class="mono green" style="font-weight:700;">+189.0%</td>
+          </tr>
+          <tr style="background:rgba(95,182,135,0.10);">
+            <td style="font-weight:700;">복리 프리미엄</td>
+            <td class="mono" style="color:var(--green);font-weight:700;">+2,431만원</td>
+            <td colspan="2" class="mono" style="color:var(--green);font-weight:700;">단리 대비 +75.0% 추가 수익</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 5,000만원 3년 -->
+    <div class="card">
+      <div class="bar" style="background:linear-gradient(90deg,#7c6fa6,#a89fc5);"></div>
+      <div style="font-size:12px;font-weight:600;color:#9a8db8;margin-bottom:10px;">💵 5,000만원 투자 (월 3.5%)</div>
+      <table class="tbl">
+        <thead><tr><th>구분</th><th>최종 평가액</th><th>순수익</th><th>수익률</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span style="color:#9a8db8;font-weight:600;">단리</span></td>
+            <td class="mono" style="color:#9a8db8;">1억 1,300만원</td>
+            <td class="mono green">+6,300만원</td>
+            <td class="mono green">+126.0%</td>
+          </tr>
+          <tr style="background:rgba(168,159,197,0.05);">
+            <td><span style="color:#a89fc5;font-weight:700;">복리 🎯</span></td>
+            <td class="mono" style="color:#a89fc5;font-weight:700;">1억 7,013만원</td>
+            <td class="mono green" style="font-weight:700;">+1억 2,013만원</td>
+            <td class="mono green" style="font-weight:700;">+240.3%</td>
+          </tr>
+          <tr style="background:rgba(95,182,135,0.10);">
+            <td style="font-weight:700;">복리 프리미엄</td>
+            <td class="mono" style="color:var(--green);font-weight:700;">+5,713만원</td>
+            <td colspan="2" class="mono" style="color:var(--green);font-weight:700;">단리 대비 +90.7% 추가 수익</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 1억원 3년 -->
+    <div class="card">
+      <div class="bar" style="background:linear-gradient(90deg,#c99456,#5fb687);"></div>
+      <div style="font-size:12px;font-weight:600;color:#d4a76b;margin-bottom:10px;">💵 1억원 투자 (월 4%)</div>
+      <table class="tbl">
+        <thead><tr><th>구분</th><th>최종 평가액</th><th>순수익</th><th>수익률</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span style="color:#d4a76b;font-weight:600;">단리</span></td>
+            <td class="mono" style="color:#d4a76b;">2억 4,400만원</td>
+            <td class="mono green">+1억 4,400만원</td>
+            <td class="mono green">+144.0%</td>
+          </tr>
+          <tr style="background:rgba(95,182,135,0.08);">
+            <td><span style="color:#5fb687;font-weight:900;">복리 🏆💎</span></td>
+            <td class="mono" style="color:#5fb687;font-weight:900;">4억 1,039만원</td>
+            <td class="mono" style="color:#5fb687;font-weight:900;">+3억 1,039만원</td>
+            <td class="mono" style="color:#5fb687;font-weight:900;">+310.4%</td>
+          </tr>
+          <tr style="background:rgba(95,182,135,0.15);">
+            <td style="font-weight:900;">복리 프리미엄 🚀</td>
+            <td class="mono" style="color:var(--green);font-weight:900;">+1억 6,639만원</td>
+            <td colspan="2" class="mono" style="color:var(--green);font-weight:900;">단리 대비 +115.5% 추가 수익</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- 3년 후 비교 차트 -->
+  <div class="card" style="margin-top:14px;">
+    <div class="bar" style="background:linear-gradient(90deg,#4a90e2,#7c6fa6,#c99456,#5fb687);"></div>
+    <div class="stitle" style="font-size:13px;"><span style="width:3px;height:14px;border-radius:2px;background:linear-gradient(#4a90e2,#5fb687);display:inline-block;"></span>3년 후 단리 vs 복리 수익 비교 🚀</div>
+    <div style="height:240px;position:relative;"><canvas id="chart3Year"></canvas></div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;justify-content:center;">
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#5dade2;border-radius:2px;display:inline-block;"></span>3,000만 단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#7fb3e6;border-radius:2px;display:inline-block;border:1px dashed #7fb3e6;"></span>3,000만 복리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#9a8db8;border-radius:2px;display:inline-block;"></span>5,000만 단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#a89fc5;border-radius:2px;display:inline-block;border:1px dashed #a89fc5;"></span>5,000만 복리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#d4a76b;border-radius:2px;display:inline-block;"></span>1억 단리</span>
+      <span style="font-size:10px;color:var(--text2);display:flex;align-items:center;gap:5px;"><span style="width:12px;height:3px;background:#5fb687;border-radius:2px;display:inline-block;border:1px dashed #5fb687;"></span>1억 복리 🏆</span>
+    </div>
+  </div>
+</div>
+
+<!-- 핵심 인사이트 -->
+<div class="insight" style="margin-top:16px;">
+  <div class="insight-title">💡 장기 투자 핵심 인사이트</div>
+  <div style="font-size:11px;color:var(--text2);line-height:1.9;">
+    ✅ <strong style="color:var(--green);">복리의 마법</strong>: 투자 기간이 길어질수록 복리 프리미엄이 기하급수적으로 증가<br>
+    ✅ <strong style="color:var(--yellow);">1년 차</strong>: 복리가 단리 대비 <span style="color:#5fb687;font-weight:700;">17.9% ~ 25.2%</span> 추가 수익<br>
+    ✅ <strong style="color:var(--yellow);">2년 차</strong>: 복리가 단리 대비 <span style="color:#5fb687;font-weight:700;">42.9% ~ 62.8%</span> 추가 수익<br>
+    ✅ <strong style="color:var(--yellow);">3년 차</strong>: 복리가 단리 대비 <span style="color:#5fb687;font-weight:700;">75.0% ~ 115.5%</span> 추가 수익 🚀<br>
+    ✅ <strong style="color:#c89f75;">최강 시나리오</strong>: 1억원 × 월 4% 복리 × 3년 = <span style="color:#5fb687;font-weight:900;">+3억 1,039만원 (+310.4%)</span>
+  </div>
+</div>
+
+<div class="footer">
+  <span>D.Quant Nine — 디퀀트 소시에떼 / 밸류앤코어스(주) | 대외비</span><span>4 / 4</span>
+  <span>기준일: 2026.03.14 | 본 자료는 시뮬레이션 기반 장기 투자 예측 분석입니다</span>
+</div>
+</div>
+
+
+<script>
+const GC='rgba(26,45,74,0.5)', TC='#4a6080';
+
+// ─── PAGE 1: BAR CHART ───
+(function(){
+  const ctx=document.getElementById('barChart').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['①3,000만\n3%단리','②3,000만\n3%복리','③5,000만\n3.5%단리','④5,000만\n3.5%복리','⑤1억\n4%단리','⑥1억\n4%복리'],
+      datasets:[
+        {label:'원금',data:[3000,3000,5000,5000,10000,10000],
+          backgroundColor:['rgba(93,173,226,0.25)','rgba(127,179,230,0.25)','rgba(154,141,184,0.25)','rgba(168,159,197,0.25)','rgba(212,167,107,0.25)','rgba(200,159,117,0.25)'],
+          borderColor:['#5dade2','#7fb3e6','#9a8db8','#a89fc5','#d4a76b','#c89f75'],
+          borderWidth:1.5,borderRadius:6,borderSkipped:false},
+        {label:'수익금',data:[405,426,779,828,1781,1908],
+          backgroundColor:['rgba(95,182,135,0.7)','rgba(95,182,135,0.85)','rgba(95,182,135,0.7)','rgba(95,182,135,0.85)','rgba(95,182,135,0.7)','rgba(95,182,135,0.85)'],
+          borderColor:['rgba(95,182,135,0.9)'],borderWidth:1,borderRadius:6,borderSkipped:false}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:true,position:'top',labels:{color:TC,font:{size:9},boxWidth:10,padding:8}},
+        tooltip:{backgroundColor:'#0d1929',borderColor:'#1a2d4a',borderWidth:1,
+          titleColor:'#e8f0fe',bodyColor:'#8ca3c8',
+          callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.raw.toLocaleString()}만원`}}
+      },
+      scales:{
+        x:{grid:{color:'transparent'},ticks:{color:TC,font:{size:8},maxRotation:0}},
+        y:{grid:{color:GC},ticks:{color:TC,font:{size:9},callback:v=>v>=10000?(v/10000)+'억':v.toLocaleString()+'만'},beginAtZero:true}
+      }
+    }
+  });
+})();
+
+// ─── PAGE 2: MULTI-LINE ───
+(function(){
+  const ctx=document.getElementById('multiLine').getContext('2d');
+  const lb=['시작(10/31)','2025.11','2025.12','2026.01','2026.02','2026.03.14'];
+  new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:lb,
+      datasets:[
+        {label:'① 3,000만 3% 단리',data:[3000,3090,3180,3270,3360,3405],borderColor:'#5dade2',backgroundColor:'transparent',borderWidth:2,pointRadius:4,pointBackgroundColor:'#5dade2',tension:0.3},
+        {label:'② 3,000만 3% 복리',data:[3000,3090,3183,3278,3377,3426],borderColor:'#7fb3e6',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:4,pointBackgroundColor:'#7fb3e6',tension:0.3},
+        {label:'③ 5,000만 3.5% 단리',data:[5000,5175,5350,5525,5700,5779],borderColor:'#9a8db8',backgroundColor:'transparent',borderWidth:2,pointRadius:4,pointBackgroundColor:'#9a8db8',tension:0.3},
+        {label:'④ 5,000만 3.5% 복리',data:[5000,5175,5356,5544,5738,5828],borderColor:'#a89fc5',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:4,pointBackgroundColor:'#a89fc5',tension:0.3},
+        {label:'⑤ 1억 4% 단리',data:[10000,10400,10800,11200,11600,11781],borderColor:'#d4a76b',backgroundColor:'transparent',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#d4a76b',tension:0.3},
+        {label:'⑥ 1억 4% 복리',data:[10000,10400,10816,11249,11699,11908],borderColor:'#c89f75',backgroundColor:'transparent',borderWidth:2.5,borderDash:[5,4],pointRadius:5,pointBackgroundColor:'#c89f75',tension:0.3}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#0d1929',borderColor:'#1a2d4a',borderWidth:1,
+          titleColor:'#e8f0fe',bodyColor:'#8ca3c8',
+          callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.raw.toLocaleString()}만원`}}
+      },
+      scales:{
+        x:{grid:{color:GC},ticks:{color:TC,font:{size:9}}},
+        y:{grid:{color:GC},ticks:{color:TC,font:{size:9},callback:v=>v>=10000?(v/10000).toFixed(1)+'억':v.toLocaleString()+'만'}}
+      }
+    }
+  });
+})();
+
+// ─── PAGE 3: 3-MINI CHARTS (grouped bar: 단리 vs 복리) ───
+function makeGroupBar(id, labels, d1, d2, c1, c2){
+  const ctx=document.getElementById(id).getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'단리',data:d1,backgroundColor:c1+'55',borderColor:c1,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+        {label:'복리',data:d2,backgroundColor:c2+'55',borderColor:c2,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:true,position:'top',labels:{color:TC,font:{size:8},boxWidth:8,padding:6}},
+        tooltip:{backgroundColor:'#0d1929',borderColor:'#1a2d4a',borderWidth:1,titleColor:'#e8f0fe',bodyColor:'#8ca3c8',
+          callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.raw.toLocaleString()}만원`}}
+      },
+      scales:{
+        x:{grid:{color:'transparent'},ticks:{color:TC,font:{size:8}}},
+        y:{grid:{color:GC},ticks:{color:TC,font:{size:8},callback:v=>v.toLocaleString()+'만'},beginAtZero:false,min:2900}
+      }
+    }
+  });
+}
+
+makeGroupBar('chart3000',
+  ['11월','12월','1월','2월','3/14'],
+  [3090,3180,3270,3360,3401],
+  [3090,3183,3278,3377,3424],
+  '#00d4ff','#89b4ff'
+);
+
+(function(){
+  const ctx=document.getElementById('chart5000').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['11월','12월','1월','2월','3/14'],
+      datasets:[
+        {label:'단리',data:[5175,5350,5525,5700,5779],backgroundColor:'rgba(192,132,252,0.35)',borderColor:'#c084fc',borderWidth:1.5,borderRadius:4,borderSkipped:false},
+        {label:'복리',data:[5175,5356,5544,5738,5828],backgroundColor:'rgba(240,171,252,0.35)',borderColor:'#f0abfc',borderWidth:1.5,borderRadius:4,borderSkipped:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'top',labels:{color:TC,font:{size:8},boxWidth:8,padding:6}},
+        tooltip:{backgroundColor:'#0d1929',borderColor:'#1a2d4a',borderWidth:1,titleColor:'#e8f0fe',bodyColor:'#8ca3c8',callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.raw.toLocaleString()}만원`}}},
+      scales:{x:{grid:{color:'transparent'},ticks:{color:TC,font:{size:8}}},
+        y:{grid:{color:GC},ticks:{color:TC,font:{size:8},callback:v=>v.toLocaleString()+'만'},beginAtZero:false,min:4900}}}
+  });
+})();
+
+(function(){
+  const ctx=document.getElementById('chart1ok').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['11월','12월','1월','2월','3/14'],
+      datasets:[
+        {label:'단리',data:[10400,10800,11200,11600,11781],backgroundColor:'rgba(252,211,77,0.35)',borderColor:'#fcd34d',borderWidth:1.5,borderRadius:4,borderSkipped:false},
+        {label:'복리',data:[10400,10816,11249,11699,11908],backgroundColor:'rgba(252,165,165,0.35)',borderColor:'#fca5a5',borderWidth:1.5,borderRadius:4,borderSkipped:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'top',labels:{color:TC,font:{size:8},boxWidth:8,padding:6}},
+        tooltip:{backgroundColor:'#0d1929',borderColor:'#1a2d4a',borderWidth:1,titleColor:'#e8f0fe',bodyColor:'#8ca3c8',callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.raw.toLocaleString()}만원`}}},
+      scales:{x:{grid:{color:'transparent'},ticks:{color:TC,font:{size:8}}},
+        y:{grid:{color:GC},ticks:{color:TC,font:{size:8},callback:v=>(v/10000).toFixed(2)+'억'},beginAtZero:false,min:10200}}}
+  });
+})();
+
+// ─── PAGE 3: RATE CHART ───
+(function(){
+  const ctx=document.getElementById('rateChart').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['①3,000\n3%단리','②3,000\n3%복리','③5,000\n3.5%단리','④5,000\n3.5%복리','⑤1억\n4%단리','⑥1억\n4%복리'],
+      datasets:[
+        {label:'수익률(%)',data:[13.5,14.2,15.58,16.54,17.81,19.08],
+          backgroundColor:['rgba(0,212,255,0.6)','rgba(137,180,255,0.6)','rgba(192,132,252,0.6)','rgba(240,171,252,0.6)','rgba(252,211,77,0.6)','rgba(252,165,165,0.8)'],
+          borderColor:['#00d4ff','#89b4ff','#c084fc','#f0abfc','#fcd34d','#fca5a5'],
+          borderWidth:1.5,borderRadius:6,borderSkipped:false},
+        {type:'line',label:'수익금(만원 ÷ 100)',data:[4.05,4.26,7.79,8.28,17.81,19.08],
+          borderColor:'rgba(0,229,160,0.8)',backgroundColor:'transparent',borderWidth:2,
+          pointRadius:5,pointBackgroundColor:'rgba(0,229,160,0.9)',tension:0.3,yAxisID:'y'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:true,position:'top',labels:{color:TC,font:{size:9},boxWidth:10,padding:8}},
+        tooltip:{backgroundColor:'#0d1929',borderColor:'#1a2d4a',borderWidth:1,titleColor:'#e8f0fe',bodyColor:'#8ca3c8'}
+      },
+      scales:{
+        x:{grid:{color:'transparent'},ticks:{color:TC,font:{size:8},maxRotation:0}},
+        y:{grid:{color:GC},ticks:{color:TC,font:{size:9},callback:v=>v+'%'},beginAtZero:true,min:12,max:21}
+      }
+    }
+  });
+})();
+
+// ─── PAGE 4: 1년 후 비교 차트 ───
+(function(){
+  const ctx=document.getElementById('chart1Year').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['3,000만원','5,000만원','1억원'],
+      datasets:[
+        {label:'단리 수익',data:[1080,2100,4800],
+          backgroundColor:['rgba(93,173,226,0.6)','rgba(154,141,184,0.6)','rgba(212,167,107,0.6)'],
+          borderColor:['#5dade2','#9a8db8','#d4a76b'],
+          borderWidth:2,borderRadius:6,borderSkipped:false},
+        {label:'복리 수익',data:[1273,2530,6010],
+          backgroundColor:['rgba(127,179,230,0.7)','rgba(168,159,197,0.7)','rgba(200,159,117,0.7)'],
+          borderColor:['#7fb3e6','#a89fc5','#c89f75'],
+          borderWidth:2,borderRadius:6,borderSkipped:false},
+        {label:'복리 프리미엄',data:[193,430,1210],
+          backgroundColor:['rgba(95,182,135,0.8)','rgba(95,182,135,0.85)','rgba(95,182,135,0.9)'],
+          borderColor:'rgba(95,182,135,1)',
+          borderWidth:2,borderRadius:6,borderSkipped:false}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:true,position:'top',labels:{color:TC,font:{size:10},boxWidth:12,padding:10}},
+        tooltip:{backgroundColor:'#0d1929',borderColor:'#1a2d4a',borderWidth:1,
+          titleColor:'#e8f0fe',bodyColor:'#8ca3c8',
+          callbacks:{label:ctx=>`  ${ctx.dataset.label}: +${ctx.raw.toLocaleString()}만원`}}
+      },
+      scales:{
+        x:{grid:{color:'transparent'},ticks:{color:TC,font:{size:10}}},
+        y:{grid:{color:GC},ticks:{color:TC,font:{size:10},callback:v=>v>=10000?(v/10000)+'억':'+'+v.toLocaleString()+'만'},beginAtZero:true}
+      }
+    }
+  });
+})();
+
+// ─── PAGE 4: 2년 후 비교 차트 ───
+(function(){
+  const ctx=document.getElementById('chart2Year').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['3,000만원','5,000만원','1억원'],
+      datasets:[
+        {label:'단리 수익',data:[2160,4200,9600],
+          backgroundColor:['rgba(93,173,226,0.6)','rgba(154,141,184,0.6)','rgba(212,167,107,0.6)'],
+          borderColor:['#5dade2','#9a8db8','#d4a76b'],
+          borderWidth:2,borderRadius:6,borderSkipped:false},
+        {label:'복리 수익',data:[3087,6316,15633],
+          backgroundColor:['rgba(127,179,230,0.7)','rgba(168,159,197,0.7)','rgba(200,159,117,0.7)'],
+          borderColor:['#7fb3e6','#a89fc5','#c89f75'],
+          borderWidth:2,borderRadius:6,borderSkipped:false},
+        {label:'복리 프리미엄',data:[927,2116,6033],
+          backgroundColor:['rgba(95,182,135,0.8)','rgba(95,182,135,0.85)','rgba(95,182,135,0.9)'],
+          borderColor:'rgba(95,182,135,1)',
+          borderWidth:2,borderRadius:6,borderSkipped:false}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:true,position:'top',labels:{color:TC,font:{size:10},boxWidth:12,padding:10}},
+        tooltip:{backgroundColor:'#0d1929',borderColor:'#1a2d4a',borderWidth:1,
+          titleColor:'#e8f0fe',bodyColor:'#8ca3c8',
+          callbacks:{label:ctx=>`  ${ctx.dataset.label}: +${ctx.raw.toLocaleString()}만원`}}
+      },
+      scales:{
+        x:{grid:{color:'transparent'},ticks:{color:TC,font:{size:10}}},
+        y:{grid:{color:GC},ticks:{color:TC,font:{size:10},callback:v=>v>=10000?(v/10000)+'억':'+'+v.toLocaleString()+'만'},beginAtZero:true}
+      }
+    }
+  });
+})();
+
+// ─── PAGE 4: 3년 후 비교 차트 ───
+(function(){
+  const ctx=document.getElementById('chart3Year').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['3,000만원','5,000만원','1억원'],
+      datasets:[
+        {label:'단리 수익',data:[3240,6300,14400],
+          backgroundColor:['rgba(93,173,226,0.6)','rgba(154,141,184,0.6)','rgba(212,167,107,0.6)'],
+          borderColor:['#5dade2','#9a8db8','#d4a76b'],
+          borderWidth:2,borderRadius:6,borderSkipped:false},
+        {label:'복리 수익',data:[5671,12013,31039],
+          backgroundColor:['rgba(127,179,230,0.7)','rgba(168,159,197,0.7)','rgba(95,182,135,0.8)'],
+          borderColor:['#7fb3e6','#a89fc5','#5fb687'],
+          borderWidth:2,borderRadius:6,borderSkipped:false},
+        {label:'복리 프리미엄 🚀',data:[2431,5713,16639],
+          backgroundColor:['rgba(95,182,135,0.85)','rgba(95,182,135,0.9)','rgba(95,182,135,1)'],
+          borderColor:'rgba(95,182,135,1)',
+          borderWidth:2,borderRadius:6,borderSkipped:false}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:true,position:'top',labels:{color:TC,font:{size:10},boxWidth:12,padding:10}},
+        tooltip:{backgroundColor:'#0d1929',borderColor:'#1a2d4a',borderWidth:1,
+          titleColor:'#e8f0fe',bodyColor:'#8ca3c8',
+          callbacks:{label:ctx=>`  ${ctx.dataset.label}: +${ctx.raw.toLocaleString()}만원`}}
+      },
+      scales:{
+        x:{grid:{color:'transparent'},ticks:{color:TC,font:{size:10}}},
+        y:{grid:{color:GC},ticks:{color:TC,font:{size:10},callback:v=>v>=10000?(v/10000)+'억':'+'+v.toLocaleString()+'만'},beginAtZero:true}
+      }
+    }
+  });
+})();
+</script>
+
+<script>
+// Mobile Menu Toggle
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const mobileMenuClose = document.getElementById('mobileMenuClose');
+const navLinks = document.getElementById('navLinks');
+const mobileOverlay = document.getElementById('mobileOverlay');
+
+if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+        navLinks.classList.add('mobile-active');
+        mobileOverlay.classList.add('active');
+    });
+}
+
+if (mobileMenuClose) {
+    mobileMenuClose.addEventListener('click', () => {
+        navLinks.classList.remove('mobile-active');
+        mobileOverlay.classList.remove('active');
+    });
+}
+
+if (mobileOverlay) {
+    mobileOverlay.addEventListener('click', () => {
+        navLinks.classList.remove('mobile-active');
+        mobileOverlay.classList.remove('active');
+    });
+}
+</script>
+
+</body>
+</html>

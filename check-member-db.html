@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 DB 조회</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #12162e 100%);
+            color: #ffffff;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(18, 22, 46, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        h1 {
+            color: #00f2ff;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        h2 {
+            color: #00ff88;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .search-box {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        .btn {
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+        }
+        .error {
+            background: rgba(244, 63, 94, 0.2);
+            border: 1px solid #f43f5e;
+        }
+        .warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid #f59e0b;
+        }
+        .info {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid #a855f7;
+        }
+        .member-card {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 10px;
+        }
+        .member-card h3 {
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+        .member-card p {
+            margin: 0.5rem 0;
+            line-height: 1.6;
+        }
+        .member-card strong {
+            color: #00f2ff;
+            display: inline-block;
+            width: 150px;
+        }
+        pre {
+            background: #0a0e27;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9rem;
+        }
+        .loading {
+            text-align: center;
+            color: #00f2ff;
+            font-size: 1.2rem;
+            margin: 2rem 0;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00f2ff;
+            margin: 0.5rem 0;
+        }
+        .stat-label {
+            color: #b8c5d6;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 회원 DB 조회 시스템</h1>
+        
+        <div class="search-box">
+            <h2>🎯 특정 회원 검색</h2>
+            <input type="email" id="searchEmail" placeholder="이메일 입력 (예: crenah@daum.net)" value="crenah@daum.net">
+            <button class="btn" onclick="searchMember()">검색</button>
+            <button class="btn" onclick="loadAllMembers()">전체 회원 조회</button>
+        </div>
+
+        <div id="stats"></div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // 페이지 로드 시 자동으로 crenah@daum.net 검색
+        window.addEventListener('DOMContentLoaded', () => {
+            searchMember();
+        });
+
+        async function searchMember() {
+            const email = document.getElementById('searchEmail').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (!email) {
+                resultDiv.innerHTML = '<div class="error result">❌ 이메일을 입력해주세요.</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="loading">🔄 검색 중...</div>';
+            
+            try {
+                // API를 통해 DB에서 회원 조회
+                const response = await fetch(`tables/members_v2?search=${encodeURIComponent(email)}&limit=1000`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                console.log('API 응답:', result);
+                
+                if (!result.data || result.data.length === 0) {
+                    resultDiv.innerHTML = `
+                        <div class="error result">
+                            <h3>❌ 회원을 찾을 수 없습니다</h3>
+                            <p><strong>검색한 이메일:</strong> ${email}</p>
+                            <p><strong>총 검색 결과:</strong> 0건</p>
+                            <p><strong>가능한 원인:</strong></p>
+                            <ul>
+                                <li>회원가입이 완료되지 않았을 수 있습니다.</li>
+                                <li>회원가입 시 DB 저장에 실패했을 수 있습니다.</li>
+                                <li>다른 이메일 주소로 가입되었을 수 있습니다.</li>
+                            </ul>
+                            <p><strong>해결 방법:</strong> 회원가입을 다시 진행해주세요.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 회원 정보 표시
+                let html = `
+                    <div class="success result">
+                        <h3>✅ 회원 정보를 찾았습니다!</h3>
+                        <p><strong>총 ${result.data.length}건의 일치하는 회원이 있습니다.</strong></p>
+                    </div>
+                `;
+                
+                result.data.forEach((member, index) => {
+                    html += `
+                        <div class="member-card">
+                            <h3>👤 회원 정보 #${index + 1}</h3>
+                            <p><strong>ID:</strong> ${member.id || 'N/A'}</p>
+                            <p><strong>성명:</strong> ${member.memberName || 'N/A'}</p>
+                            <p><strong>이메일:</strong> ${member.email || 'N/A'}</p>
+                            <p><strong>비밀번호:</strong> ${member.password || 'N/A'}</p>
+                            <p><strong>주민등록번호:</strong> ${member.idNumber || 'N/A'}</p>
+                            <p><strong>전화번호:</strong> ${member.phoneNumber || 'N/A'}</p>
+                            <p><strong>주소:</strong> ${member.address || 'N/A'}</p>
+                            <p><strong>추천인:</strong> ${member.referrer || 'N/A'}</p>
+                            <p><strong>가입일:</strong> ${member.signupDate ? new Date(member.signupDate).toLocaleString('ko-KR') : 'N/A'}</p>
+                            <p><strong>투자일:</strong> ${member.investmentDate ? new Date(member.investmentDate).toLocaleString('ko-KR') : 'N/A'}</p>
+                            <p><strong>투자금액:</strong> ${(member.investmentAmount || 0).toLocaleString()}원</p>
+                            <p><strong>배당률:</strong> ${member.dividendRate || 'N/A'}</p>
+                            <p><strong>투자등급:</strong> ${member.investorLevel || 'N/A'}</p>
+                            <p><strong>투자개월:</strong> ${member.investmentMonths || 0}개월</p>
+                            <p><strong>누적배당:</strong> ${(member.accumulatedDividend || 0).toLocaleString()}원</p>
+                            <p><strong>생성일시:</strong> ${member.created_at ? new Date(member.created_at).toLocaleString('ko-KR') : 'N/A'}</p>
+                            <p><strong>수정일시:</strong> ${member.updated_at ? new Date(member.updated_at).toLocaleString('ko-KR') : 'N/A'}</p>
+                        </div>
+                        
+                        <div class="info result">
+                            <h3>📋 원본 JSON 데이터</h3>
+                            <pre>${JSON.stringify(member, null, 2)}</pre>
+                        </div>
+                    `;
+                });
+                
+                resultDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('조회 오류:', error);
+                resultDiv.innerHTML = `
+                    <div class="error result">
+                        <h3>❌ 조회 중 오류 발생</h3>
+                        <p><strong>오류 메시지:</strong> ${error.message}</p>
+                        <p><strong>가능한 원인:</strong></p>
+                        <ul>
+                            <li>API 서버 연결 실패</li>
+                            <li>네트워크 오류</li>
+                            <li>테이블이 존재하지 않음</li>
+                        </ul>
+                        <pre>${error.stack || ''}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadAllMembers() {
+            const resultDiv = document.getElementById('result');
+            const statsDiv = document.getElementById('stats');
+            
+            resultDiv.innerHTML = '<div class="loading">🔄 전체 회원 데이터 로딩 중...</div>';
+            
+            try {
+                const response = await fetch('tables/members_v2?limit=1000');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                console.log('전체 회원 데이터:', result);
+                
+                if (!result.data || result.data.length === 0) {
+                    resultDiv.innerHTML = `
+                        <div class="warning result">
+                            <h3>⚠️ 등록된 회원이 없습니다</h3>
+                            <p>DB에 회원 데이터가 하나도 없습니다.</p>
+                        </div>
+                    `;
+                    statsDiv.innerHTML = '';
+                    return;
+                }
+                
+                // 통계 표시
+                const totalMembers = result.data.length;
+                const totalInvestment = result.data.reduce((sum, m) => sum + (m.investmentAmount || 0), 0);
+                const avgInvestment = totalInvestment / totalMembers;
+                
+                const levels = {};
+                result.data.forEach(m => {
+                    const level = m.investorLevel || 'Unknown';
+                    levels[level] = (levels[level] || 0) + 1;
+                });
+                
+                statsDiv.innerHTML = `
+                    <h2>📊 전체 통계</h2>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-label">총 회원 수</div>
+                            <div class="stat-value">${totalMembers}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">총 투자금액</div>
+                            <div class="stat-value">${(totalInvestment / 100000000).toFixed(1)}억</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">평균 투자금액</div>
+                            <div class="stat-value">${(avgInvestment / 10000).toFixed(0)}만</div>
+                        </div>
+                    </div>
+                `;
+                
+                // 회원 목록 표시
+                let html = '<h2>👥 전체 회원 목록</h2>';
+                
+                result.data.forEach((member, index) => {
+                    html += `
+                        <div class="member-card">
+                            <h3>👤 ${index + 1}. ${member.memberName || 'N/A'} (${member.email || 'N/A'})</h3>
+                            <p><strong>투자등급:</strong> ${member.investorLevel || 'N/A'}</p>
+                            <p><strong>투자금액:</strong> ${(member.investmentAmount || 0).toLocaleString()}원</p>
+                            <p><strong>가입일:</strong> ${member.signupDate ? new Date(member.signupDate).toLocaleString('ko-KR') : 'N/A'}</p>
+                            <p><strong>전화번호:</strong> ${member.phoneNumber || 'N/A'}</p>
+                        </div>
+                    `;
+                });
+                
+                resultDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('조회 오류:', error);
+                resultDiv.innerHTML = `
+                    <div class="error result">
+                        <h3>❌ 조회 중 오류 발생</h3>
+                        <p><strong>오류 메시지:</strong> ${error.message}</p>
+                        <pre>${error.stack || ''}</pre>
+                    </div>
+                `;
+                statsDiv.innerHTML = '';
+            }
+        }
+    </script>
+</body>
+</html>

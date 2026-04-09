@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캐시 문제 해결 가이드</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #12162e 100%);
+            color: #ffffff;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(18, 22, 46, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        h1 {
+            color: #00f2ff;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .alert {
+            background: rgba(244, 63, 94, 0.2);
+            border: 2px solid #f43f5e;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        .step {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .step-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        code {
+            background: #0a0e27;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            color: #00f2ff;
+            font-family: 'Courier New', monospace;
+        }
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #00f2ff, #00ff88);
+            color: #0a0e27;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin: 0.5rem;
+            text-align: center;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid #f59e0b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        li {
+            margin: 0.75rem 0;
+        }
+        .keyboard-key {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+        .center {
+            text-align: center;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚨 브라우저 캐시 문제 해결</h1>
+        
+        <div class="alert">
+            <h2 style="color: #f43f5e; margin-top: 0;">⚠️ 중요: 브라우저 캐시 문제</h2>
+            <p><strong>오류:</strong> <code>Uncaught SyntaxError: Identifier 'btnSearchAddress' has already been declared</code></p>
+            <p><strong>원인:</strong> 브라우저가 오래된 JavaScript 파일을 캐시하고 있어 수정사항이 반영되지 않습니다.</p>
+        </div>
+
+        <h2 style="color: #00ff88; margin-top: 3rem;">🔧 즉시 해결 방법</h2>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <div style="display: inline-block; vertical-align: top;">
+                <h3 style="color: #00f2ff; margin-top: 0;">브라우저 캐시 완전 삭제</h3>
+                <p><strong>Chrome/Edge:</strong></p>
+                <ol>
+                    <li><span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">Shift</span> + <span class="keyboard-key">Delete</span> 누르기</li>
+                    <li>"전체 기간" 선택</li>
+                    <li>"캐시된 이미지 및 파일" ✅ 체크</li>
+                    <li>"쿠키 및 기타 사이트 데이터" ✅ 체크 (선택사항)</li>
+                    <li><strong>"데이터 삭제"</strong> 버튼 클릭</li>
+                </ol>
+                
+                <p><strong>Firefox:</strong></p>
+                <ol>
+                    <li><span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">Shift</span> + <span class="keyboard-key">Delete</span> 누르기</li>
+                    <li>"삭제 기간: 전체" 선택</li>
+                    <li>"캐시" ✅ 체크</li>
+                    <li><strong>"지금 삭제"</strong> 클릭</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <div style="display: inline-block; vertical-align: top;">
+                <h3 style="color: #00f2ff; margin-top: 0;">강력한 새로고침 (Hard Refresh)</h3>
+                <p>캐시 삭제 후 반드시 이 방법으로 페이지를 새로고침하세요:</p>
+                <ul>
+                    <li><strong>Windows:</strong> <span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">Shift</span> + <span class="keyboard-key">R</span></li>
+                    <li><strong>Mac:</strong> <span class="keyboard-key">Cmd</span> + <span class="keyboard-key">Shift</span> + <span class="keyboard-key">R</span></li>
+                    <li><strong>또는:</strong> <span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">F5</span></li>
+                </ul>
+                <div class="warning">
+                    <strong>⚠️ 주의:</strong> 일반 새로고침(<span class="keyboard-key">F5</span>)은 캐시를 사용하므로 문제가 해결되지 않습니다!
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <div style="display: inline-block; vertical-align: top;">
+                <h3 style="color: #00f2ff; margin-top: 0;">시크릿/프라이빗 모드 사용</h3>
+                <p>캐시가 없는 깨끗한 환경에서 테스트:</p>
+                <ul>
+                    <li><strong>Chrome:</strong> <span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">Shift</span> + <span class="keyboard-key">N</span></li>
+                    <li><strong>Edge:</strong> <span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">Shift</span> + <span class="keyboard-key">P</span></li>
+                    <li><strong>Firefox:</strong> <span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">Shift</span> + <span class="keyboard-key">P</span></li>
+                </ul>
+                <p>시크릿 모드에서 <code>dquant/signup.html</code> 파일을 다시 열어보세요.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <div style="display: inline-block; vertical-align: top;">
+                <h3 style="color: #00f2ff; margin-top: 0;">개발자 도구로 캐시 비우기</h3>
+                <ol>
+                    <li><span class="keyboard-key">F12</span> 키로 개발자 도구 열기</li>
+                    <li>새로고침 버튼을 <strong>우클릭</strong></li>
+                    <li>"캐시 비우기 및 강력 새로고침" 선택</li>
+                </ol>
+                <div class="success">
+                    <strong>✅ 이 방법이 가장 강력합니다!</strong>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #00ff88; margin-top: 3rem;">✅ 올바른 순서</h2>
+
+        <div class="step" style="background: rgba(16, 185, 129, 0.1); border-color: #10b981;">
+            <ol style="font-size: 1.1rem; line-height: 2;">
+                <li><strong>브라우저 캐시 완전 삭제</strong> (Ctrl + Shift + Delete)</li>
+                <li><strong>브라우저 완전 종료</strong> (모든 창 닫기)</li>
+                <li><strong>브라우저 다시 열기</strong></li>
+                <li><strong>시크릿/프라이빗 모드</strong>로 열기 (Ctrl + Shift + N)</li>
+                <li><code>signup-direct.html</code> 또는 <code>dquant/signup.html</code> 열기</li>
+                <li><strong>F12</strong> 눌러 콘솔 확인</li>
+                <li>오류 메시지가 없는지 확인</li>
+                <li>주소 검색 버튼 테스트</li>
+            </ol>
+        </div>
+
+        <h2 style="color: #00ff88; margin-top: 3rem;">🎯 확인 방법</h2>
+
+        <div class="step">
+            <h3>✅ 캐시가 제대로 삭제되었는지 확인:</h3>
+            <ol>
+                <li>페이지를 새로고침</li>
+                <li><span class="keyboard-key">F12</span> 콘솔 확인</li>
+                <li>다음 메시지가 표시되어야 함:
+                    <pre style="background: #0a0e27; padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">✅ DOM 로드 완료 - 이벤트 리스너 등록 시작
+✅ 주소 검색 버튼 발견 - 이벤트 리스너 등록
+🔍 Daum Postcode API 상태: ✅ 로드됨
+✅ 모든 이벤트 리스너 등록 완료</pre>
+                </li>
+                <li><strong>❌ "SyntaxError" 메시지가 없어야 함!</strong></li>
+            </ol>
+        </div>
+
+        <h2 style="color: #00ff88; margin-top: 3rem;">🚀 테스트 페이지</h2>
+
+        <div class="center">
+            <p>캐시 삭제 후 아래 페이지로 테스트하세요:</p>
+            <a href="signup-direct.html" class="btn">📝 회원가입 페이지</a>
+            <a href="test-address-search.html" class="btn" style="background: linear-gradient(135deg, #a855f7, #ec4899);">🧪 주소 검색 테스트</a>
+        </div>
+
+        <div class="warning" style="margin-top: 2rem;">
+            <h3 style="margin-top: 0;">💡 여전히 안 된다면?</h3>
+            <ul>
+                <li><strong>다른 브라우저</strong>로 시도 (Chrome → Edge, Firefox)</li>
+                <li><strong>컴퓨터 재시작</strong> 후 다시 시도</li>
+                <li><strong>주소 직접 입력</strong> 기능 사용:
+                    <ul>
+                        <li>"주소 검색" 버튼 클릭 → Alert 표시</li>
+                        <li>"확인" 클릭 → 직접 입력 가능</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API 테스트</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            padding: 2rem;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        button {
+            padding: 1rem 2rem;
+            background: #00d9ff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        button:hover {
+            background: #00b8d4;
+        }
+        pre {
+            background: #16213e;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .member {
+            background: #0f3460;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #00d9ff;
+        }
+        .member h3 {
+            margin: 0 0 0.5rem 0;
+            color: #00d9ff;
+        }
+        .member p {
+            margin: 0.25rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 회원 데이터 API 테스트</h1>
+        
+        <button onclick="testAPI()">회원 데이터 로드</button>
+        <button onclick="testNaSungSoo()">나성수 회원 검색</button>
+        
+        <h2>API 응답:</h2>
+        <pre id="response"></pre>
+        
+        <h2>회원 목록:</h2>
+        <div id="members"></div>
+    </div>
+    
+    <script>
+        async function testAPI() {
+            try {
+                console.log('API 호출 시작...');
+                const response = await fetch('tables/members_v2?limit=1000');
+                console.log('Response:', response);
+                
+                const result = await response.json();
+                console.log('Result:', result);
+                
+                document.getElementById('response').textContent = JSON.stringify(result, null, 2);
+                
+                if (result.data && result.data.length > 0) {
+                    const membersHTML = result.data.map(member => `
+                        <div class="member">
+                            <h3>${member.name || member.memberName || '이름 없음'}</h3>
+                            <p><strong>이메일:</strong> ${member.email || '-'}</p>
+                            <p><strong>투자금액:</strong> ${(member.investment_amount || member.investmentAmount || 0).toLocaleString()}원</p>
+                            <p><strong>배당률:</strong> ${member.dividend_rate || member.dividendRate || '-'}</p>
+                            <p><strong>누적차월:</strong> ${member.investment_months || member.investmentMonths || 0}개월</p>
+                            <p><strong>누적배당금:</strong> ${(member.accumulated_dividend || member.accumulatedDividend || 0).toLocaleString()}원</p>
+                            <p><strong>ID:</strong> ${member.id}</p>
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById('members').innerHTML = membersHTML;
+                } else {
+                    document.getElementById('members').innerHTML = '<p>회원 데이터가 없습니다.</p>';
+                }
+                
+            } catch (error) {
+                console.error('API 호출 실패:', error);
+                document.getElementById('response').textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        async function testNaSungSoo() {
+            try {
+                console.log('나성수 회원 검색...');
+                const response = await fetch('tables/members_v2?search=crenah@daum.net&limit=1000');
+                const result = await response.json();
+                
+                console.log('나성수 검색 결과:', result);
+                document.getElementById('response').textContent = JSON.stringify(result, null, 2);
+                
+                if (result.data && result.data.length > 0) {
+                    const member = result.data[0];
+                    document.getElementById('members').innerHTML = `
+                        <div class="member">
+                            <h3>✅ 나성수 회원 찾음!</h3>
+                            <p><strong>이름:</strong> ${member.name || member.memberName}</p>
+                            <p><strong>이메일:</strong> ${member.email}</p>
+                            <p><strong>투자금액:</strong> ${(member.investment_amount || member.investmentAmount).toLocaleString()}원</p>
+                            <p><strong>배당률:</strong> ${member.dividend_rate || member.dividendRate}</p>
+                            <p><strong>누적차월:</strong> ${member.investment_months || member.investmentMonths}개월</p>
+                            <p><strong>누적배당금 (저장값):</strong> ${(member.accumulated_dividend || member.accumulatedDividend || 0).toLocaleString()}원</p>
+                            <p><strong>누적배당금 (계산값):</strong> ${calculateDividend(member)}원</p>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('members').innerHTML = '<p style="color: #ff6b6b;">❌ 나성수 회원을 찾을 수 없습니다.</p>';
+                }
+                
+            } catch (error) {
+                console.error('검색 실패:', error);
+                document.getElementById('response').textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        function calculateDividend(member) {
+            const amount = member.investment_amount || member.investmentAmount || 0;
+            const rateStr = member.dividend_rate || member.dividendRate || '0%';
+            const months = member.investment_months || member.investmentMonths || 0;
+            
+            if (amount > 0 && months > 0) {
+                const rate = parseFloat(rateStr.toString().replace('%', ''));
+                const monthlyDividend = Math.round(amount * rate / 100);
+                return (monthlyDividend * months).toLocaleString();
+            }
+            return '0';
+        }
+        
+        // 페이지 로드 시 자동 실행
+        window.addEventListener('DOMContentLoaded', testAPI);
+    </script>
+</body>
+</html>

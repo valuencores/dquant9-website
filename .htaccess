@@ -1,0 +1,45 @@
+# D-QUANT 9.0 URL Rewrite Rules
+# 루트 접속 시 /dquant/로 리다이렉트
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # 루트 접속 시 dquant/index.html로 리다이렉트
+    RewriteCond %{REQUEST_URI} ^/$
+    RewriteRule ^(.*)$ /dquant/index.html [L,R=301]
+    
+    # admin 관련 경로 리다이렉트
+    RewriteRule ^admin/?$ /dquant/admin-login.html [L,R=301]
+    RewriteRule ^admin/dashboard/?$ /dquant/admin-dashboard.html [L,R=301]
+    
+    # 404 에러 시 dquant/index.html로 리다이렉트
+    ErrorDocument 404 /dquant/index.html
+</IfModule>
+
+# MIME Types
+<IfModule mod_mime.c>
+    AddType text/html .html
+    AddType text/css .css
+    AddType application/javascript .js
+    AddType image/jpeg .jpg .jpeg
+    AddType image/png .png
+    AddType image/gif .gif
+    AddType image/svg+xml .svg
+</IfModule>
+
+# 캐시 설정
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/html "access plus 1 hour"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+</IfModule>
+
+# Gzip 압축
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript
+</IfModule>
